@@ -13,4 +13,9 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_view_profile">ViewProfileActivity</string>
+    <string name="title_activity_search_list">SearchListActivity</string>
+    <string name="title_activity_game_add_edit">GameAddEditActivity</string>
+    <string name="title_activity_game_profile">GameProfileActivity</string>
+    <string name="title_activity_user_profile_edit">UserProfileEditActivity</string>
 </resources>

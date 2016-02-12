@@ -22,6 +22,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".UserProfileViewActivity"
+            android:label="@string/title_activity_view_profile" />
+        <activity
+            android:name=".SearchListActivity"
+            android:label="@string/title_activity_search_list" />
+        <activity
+            android:name=".GameProfileEditActivity"
+            android:label="@string/title_activity_game_add_edit" />
+        <activity
+            android:name=".GameProfileViewActivity"
+            android:label="@string/title_activity_game_profile" />
+        <activity
+            android:name=".UserProfileEditActivity"
+            android:label="@string/title_activity_user_profile_edit"></activity>
     </application>
 
 </manifest>
