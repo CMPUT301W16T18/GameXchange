@@ -11,8 +11,10 @@ public class UserProfileViewActivityTest extends TestCase {
 
     public void testLoadUser() throws Exception {
         UserProfileViewActivity activity = new UserProfileViewActivity ();
-        activity.loadUser("USER-ID");
-
-        assertEquals(activity.me.getName(), "User's Name");
+        User testUser = new User();
+        testUser.setName("John");
+        activity.loadUser(testUser.getID());
+        
+        assertEquals(activity.me.getName(), testUser.getName());
     }
 }
