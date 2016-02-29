@@ -4,6 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -28,8 +31,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+//import android.Manifest;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Manifest;
 
 
 /**
@@ -44,6 +50,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
+    private final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -61,9 +70,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+
+        //Check if we have permission for autocomplete
+        //modified from http://developer.android.com/training/permissions/requesting.html
+        if(ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            //should an explanation be shown?
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.READ_CONTACTS)) {
+                //show an explanation
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.READ_CONTACTS},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+            }
+
+        }
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -90,11 +116,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         //create the intent for the next activity.
         intent = new Intent(this, SearchListActivity.class);
-        startActivity(intent);
+        // Quickstart for testing purposes.
+        // startActivity(intent);
     }
 
-    private void populateAutoComplete() {
-        getLoaderManager().initLoader(0, null, this);
+    // called by ActivityCompat.requestPermissions
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission was granted.
+                    getLoaderManager().initLoader(0, null, this);
+                } else {
+                    // permission was denied. do nothing.
+
+                }
+            }
+        }
     }
 
 
