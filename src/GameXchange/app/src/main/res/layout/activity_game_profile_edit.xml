@@ -15,28 +15,28 @@
         android:layout_height="wrap_content"
         android:id="@+id/game_edit_title"
         android:layout_gravity="center_horizontal"
-        android:text="Game Title" />
+        android:hint="Game Title" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/game_edit_developer"
         android:layout_gravity="center_horizontal"
-        android:text="Developer" />
+        android:hint="Developer" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/game_edit_platform"
         android:layout_gravity="center_horizontal"
-        android:text="Platform" />
+        android:hint="Platform" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/game_edit_genres"
         android:layout_gravity="center_horizontal"
-        android:text="Genre(s)" />
+        android:hint="Genre(s)" />
 
     <EditText
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:ems="10"
         android:id="@+id/game_edit_description"
         android:layout_gravity="center_horizontal"
-        android:text="Description"
+        android:hint="Description"
         android:lines="4"
         android:textAlignment="gravity"
         android:gravity="top|left" />
