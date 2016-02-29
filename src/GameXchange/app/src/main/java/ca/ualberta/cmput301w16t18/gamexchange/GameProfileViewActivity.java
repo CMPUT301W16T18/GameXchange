@@ -2,8 +2,9 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
-public class GameProfileViewActivity extends ActionBarActivity {
+public class GameProfileViewActivity extends AppCompatActivity {
 
     Game test = new Game();
 
