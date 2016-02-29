@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class SearchListActivity extends ActionBarActivity {
 
@@ -23,19 +24,27 @@ public class SearchListActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_list);
 
+        //create dummy data. TODO: remove this.
+        for(int i = 0; i < 10; i++) {
+            games.add(new Game());
+        }
+
         //Initialize ListView
         ListView listView = (ListView) findViewById(R.id.searchListActivityListView);
 
         adapter = new SearchListListViewArrayAdapter(this, games.getGames());
         listView.setAdapter(adapter);
 
+        l
         //Initialize Gesture detector
-        mDetector = new GestureDetectorCompat(this, new CustomGestureDetector(listView));
+
+        mDetector = new GestureDetectorCompat(, new CustomGestureDetector(listView));
 
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        System.out.println("Touch Event Registered. " + event.toString());
         this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
@@ -83,8 +92,8 @@ public class SearchListActivity extends ActionBarActivity {
     // modified from http://stackoverflow.com/questions/12713926/showing-a-delete-button-on-swipe-in-a-listview-for-android
     protected class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
         private ListView listView;
-        private int SWIPE_MIN_DISTANCE = 10;
-        private int SWIPE_THRESHOLD_VELOITY = 10;
+        private int SWIPE_MIN_DISTANCE = 1;
+        private int SWIPE_THRESHOLD_VELOITY = 1;
 
         public CustomGestureDetector(ListView listView) {
             this.listView = listView;
@@ -93,11 +102,11 @@ public class SearchListActivity extends ActionBarActivity {
         //Conditions are going to be velocity and distance
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if(e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOITY) {
+            //if(e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOITY) {
                 if(showEditButton(e1)) {
                     return true;
                 }
-            }
+            //}
             return super.onFling(e1, e2, velocityX, velocityY);
         }
 
@@ -107,7 +116,7 @@ public class SearchListActivity extends ActionBarActivity {
         }
 
         private boolean showEditButton(int position) {
-            View child = listView.getChildAt(position);
+             View child = listView.getChildAt(position);
             if(child != null) {
                 Button edit = (Button) child.findViewById(R.id.SearchListEditButton);
                 if(edit != null) {
@@ -119,6 +128,9 @@ public class SearchListActivity extends ActionBarActivity {
                     }
                 }
                 return true;
+            }
+            else {
+                System.out.println("\n\n\n\n\n\n\n\n\n\nChild is null.\n\n\n\n\n\n");
             }
             return false;
         }

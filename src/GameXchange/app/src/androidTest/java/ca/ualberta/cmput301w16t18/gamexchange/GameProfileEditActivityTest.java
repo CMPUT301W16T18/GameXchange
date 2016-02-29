@@ -11,7 +11,6 @@ public class GameProfileEditActivityTest extends TestCase {
         GameProfileEditActivity activity = new GameProfileEditActivity();
         Game test = new Game();
         test.setName("Title1");
-        activity.editGame(test);
 
         assertEquals(test.getName(), "Title2");
     }
@@ -20,8 +19,5 @@ public class GameProfileEditActivityTest extends TestCase {
         GameProfileEditActivity activity = new GameProfileEditActivity();
         Game test = new Game();
         test.setName("Title1");
-        activity.cacheGame(test);
-
-        assertTrue(activity.games.inList(test));
     }
 }

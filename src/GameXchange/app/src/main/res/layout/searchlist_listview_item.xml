@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/SearchListEditButton"
             android:text="@string/searchlist_edit_button"
+            android:visibility="gone"
             style="?android:attr/borderlessButtonStyle"
             android:background="@color/colorPrimaryDark"/>
 
