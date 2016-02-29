@@ -3,6 +3,7 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class SearchListActivity extends ActionBarActivity {
+public class SearchListActivity extends AppCompatActivity {
 
     //modified from http://developer.android.com/training/gestures/detector.html
     private GestureDetectorCompat mDetector;

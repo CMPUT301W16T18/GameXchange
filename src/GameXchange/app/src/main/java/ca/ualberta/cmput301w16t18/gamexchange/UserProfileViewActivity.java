@@ -2,8 +2,9 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
-public class UserProfileViewActivity extends ActionBarActivity {
+public class UserProfileViewActivity extends AppCompatActivity {
 
     public User me;
 
