@@ -284,7 +284,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             }
 
             // TODO: register the new account here.
-            return false;
+            return true;
         }
 
         @Override
