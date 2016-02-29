@@ -7,19 +7,36 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 
 public class GameProfileEditActivity extends AppCompatActivity {
 
     public Game game;
     private Intent parent_intent;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_profile_edit);
         parent_intent = getIntent();
-        String id = parent_intent.getStringExtra("id");
+        id = parent_intent.getStringExtra("id");
+        loadGame(id);
+        Button cancel = (Button) findViewById(R.id.game_edit_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) { finish(); }
+          });
 
+        Button save = (Button) findViewById(R.id.game_edit_save);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { editGame(); }
+        });
+    }
+
+    public void loadGame(String id) {
         // TODO: make ES query to fetch data about object
         game = new Game();
 
@@ -34,11 +51,9 @@ public class GameProfileEditActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
-        
-
         if (!isConnected) { cacheGame(); }
 
-        // TODO: send data back to ES server
+        // TODO: send data back to ES server. Refer by id.
         finish();
     }
 
