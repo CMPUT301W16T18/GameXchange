@@ -1,14 +1,20 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class SearchListActivity extends ActionBarActivity {
+
+    //modified from http://developer.android.com/training/gestures/detector.html
+    private GestureDetectorCompat mDetector;
+    protected SearchListListViewArrayAdapter adapter;
 
     public GameList games = new GameList();
 
@@ -19,14 +25,19 @@ public class SearchListActivity extends ActionBarActivity {
 
         //Initialize ListView
         ListView listView = (ListView) findViewById(R.id.searchListActivityListView);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                listItemClicked(position);
-            }
-        });
 
+        adapter = new SearchListListViewArrayAdapter(this, games.getGames());
+        listView.setAdapter(adapter);
 
+        //Initialize Gesture detector
+        mDetector = new GestureDetectorCompat(this, new CustomGestureDetector(listView));
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.mDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 
     public void addGame(Game mygame, String userId) {
@@ -65,7 +76,7 @@ public class SearchListActivity extends ActionBarActivity {
         //add a game to my watchlist
     }
 
-    private void listItemClicked(int position) {
+    public void editButtonClicked() {
 
     }
 
@@ -89,6 +100,30 @@ public class SearchListActivity extends ActionBarActivity {
             }
             return super.onFling(e1, e2, velocityX, velocityY);
         }
+
+        private boolean showEditButton(MotionEvent e1) {
+            int pos = listView.pointToPosition((int) e1.getX(), (int) e1.getY());
+            return showEditButton(pos);
+        }
+
+        private boolean showEditButton(int position) {
+            View child = listView.getChildAt(position);
+            if(child != null) {
+                Button edit = (Button) child.findViewById(R.id.SearchListEditButton);
+                if(edit != null) {
+                    if(edit.getVisibility() == View.INVISIBLE) {
+                        edit.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        edit.setVisibility(View.INVISIBLE);
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+
     }
 
 }

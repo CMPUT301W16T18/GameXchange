@@ -16,6 +16,10 @@ public class GameList {
         games.add(game);
     }
 
+    public ArrayList<Game> getGames() {
+        return games;
+    }
+
 // Implement cache and pull new data
 
 }

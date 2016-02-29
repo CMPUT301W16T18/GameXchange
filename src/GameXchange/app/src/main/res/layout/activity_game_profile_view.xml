@@ -48,7 +48,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:scaleType="center"
-        android:src="@drawable/abc_ic_clear_search_api_holo_light"
+        android:src="#de1b1b"
         android:layout_gravity="left|center_vertical"
         android:adjustViewBounds="false"
         android:background="#10000000"

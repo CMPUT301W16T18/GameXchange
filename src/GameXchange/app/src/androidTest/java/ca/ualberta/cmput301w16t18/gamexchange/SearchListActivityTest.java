@@ -22,7 +22,7 @@ public class SearchListActivityTest extends TestCase {
         SearchListActivity activity = new SearchListActivity ();
         Game test = new Game();
         test.setName("Title1");
-        activity.addGame(test);
+        activity.addGame(test, "USER-ID");
         activity.deleteGame(test);
 
         assertFalse(activity.games.inList(test));
@@ -32,7 +32,7 @@ public class SearchListActivityTest extends TestCase {
         SearchListActivity activity = new SearchListActivity ();
         activity.loadOwnedGames("USER-ID");
         Game test = new Game(); //Game that this user definitely owns
-        activity.addGame(test);
+        activity.addGame(test, "USER-ID");
 
         assertTrue(activity.games.inList(test));
     }
@@ -41,7 +41,7 @@ public class SearchListActivityTest extends TestCase {
         SearchListActivity activity = new SearchListActivity ();
         activity.loadBorrowingGames("USER-ID");
         Game test = new Game(); //Game that this user is borrowing
-        activity.addGame(test);
+        activity.addGame(test, "USER-ID");
 
         assertTrue(activity.games.inList(test));
     }
@@ -50,7 +50,7 @@ public class SearchListActivityTest extends TestCase {
         SearchListActivity activity = new SearchListActivity ();
         activity.loadBorrowedGames("USER-ID");
         Game test = new Game(); //Game that this user has lent out
-        activity.addGame(test);
+        activity.addGame(test, "USER-ID");
 
         assertTrue(activity.games.inList(test));
     }
@@ -59,7 +59,7 @@ public class SearchListActivityTest extends TestCase {
         SearchListActivity activity = new SearchListActivity ();
         activity.searchGames("Search String");
         Game test = new Game(); //Game that should appear on this list
-        activity.addGame(test);
+        activity.addGame(test, "USER-ID");
 
         assertTrue(activity.games.inList(test));
     }
