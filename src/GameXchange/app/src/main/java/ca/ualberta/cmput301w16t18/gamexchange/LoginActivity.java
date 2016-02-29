@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         //create the intent for the next activity.
         intent = new Intent(this, SearchListActivity.class);
+        startActivity(intent);
     }
 
     private void populateAutoComplete() {

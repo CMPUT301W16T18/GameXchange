@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -12,11 +14,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class SearchListActivity extends AppCompatActivity {
 
     //modified from http://developer.android.com/training/gestures/detector.html
-    private GestureDetectorCompat mDetector;
+    private CustomGestureDetector mDetector;
     protected SearchListListViewArrayAdapter adapter;
+    protected ListView listView;
 
     public GameList games = new GameList();
 
@@ -26,28 +31,20 @@ public class SearchListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_list);
 
         //create dummy data. TODO: remove this.
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 1000; i++) {
             games.add(new Game());
         }
 
         //Initialize ListView
-        ListView listView = (ListView) findViewById(R.id.searchListActivityListView);
-
+        listView = (ListView) findViewById(R.id.searchListActivityListView);
         adapter = new SearchListListViewArrayAdapter(this, games.getGames());
         listView.setAdapter(adapter);
 
-        l
+
         //Initialize Gesture detector
 
-        mDetector = new GestureDetectorCompat(, new CustomGestureDetector(listView));
-
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        System.out.println("Touch Event Registered. " + event.toString());
-        this.mDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
+        mDetector = new CustomGestureDetector(SearchListActivity.this, listView);
+        listView.setOnTouchListener(mDetector);
     }
 
     public void addGame(Game mygame, String userId) {
@@ -91,52 +88,112 @@ public class SearchListActivity extends AppCompatActivity {
     }
 
     // modified from http://stackoverflow.com/questions/12713926/showing-a-delete-button-on-swipe-in-a-listview-for-android
-    protected class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
+    protected class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener
+            implements ListView.OnTouchListener {
+        private Context context;
         private ListView listView;
-        private int SWIPE_MIN_DISTANCE = 1;
-        private int SWIPE_THRESHOLD_VELOITY = 1;
+        private GestureDetector gestureDetector;
 
-        public CustomGestureDetector(ListView listView) {
+        private int SWIPE_MIN_DISTANCE = 100;
+        private int SWIPE_THRESHOLD_VELOCITY = 10;
+
+        public CustomGestureDetector() {
+            super();
+        }
+
+        public CustomGestureDetector(Context context, ListView listView) {
+            GestureDetector detector = new GestureDetector(context, this);
+
+            this.context = context;
+            this.gestureDetector = detector;
             this.listView = listView;
+        }
+
+        public CustomGestureDetector(Context context, GestureDetector detector) {
+            if(detector == null) {
+                detector = new GestureDetector(context, this);
+            }
+
+            this.context = context;
+            this.gestureDetector = detector;
         }
 
         //Conditions are going to be velocity and distance
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            //if(e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOITY) {
-                if(showEditButton(e1)) {
+
+            final int position = listView.pointToPosition(
+                    Math.round(e1.getX()),
+                    Math.round(e1.getY())
+            );
+
+            if(e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                System.out.println("Swiped Right");
+                if(hideEditButton(position)) {
                     return true;
                 }
-            //}
+            }
+            if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                System.out.println("Swiped Left");
+                if(showEditButton(position)) {
+                    return true;
+                }
+            }
             return super.onFling(e1, e2, velocityX, velocityY);
         }
 
-        private boolean showEditButton(MotionEvent e1) {
-            int pos = listView.pointToPosition((int) e1.getX(), (int) e1.getY());
-            return showEditButton(pos);
-        }
-
-        private boolean showEditButton(int position) {
-             View child = listView.getChildAt(position);
+        private boolean hideEditButton(int position) {
+            View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
             if(child != null) {
                 Button edit = (Button) child.findViewById(R.id.SearchListEditButton);
                 if(edit != null) {
-                    if(edit.getVisibility() == View.INVISIBLE) {
-                        edit.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    if(edit.getVisibility() == View.VISIBLE) {
+                        edit.setOnClickListener(null);
                         edit.setVisibility(View.INVISIBLE);
                     }
                 }
                 return true;
             }
             else {
-                System.out.println("\n\n\n\n\n\n\n\n\n\nChild is null.\n\n\n\n\n\n");
+                System.out.println("Child is null. Position: " + position);
             }
             return false;
         }
 
+        private boolean showEditButton(final int position) {
+            View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
+            if(child != null) {
+                Button edit = (Button) child.findViewById(R.id.SearchListEditButton);
+                if(edit != null) {
+                    if(edit.getVisibility() == View.INVISIBLE) {
+                        edit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent  intent = new Intent(SearchListActivity.this,GameProfileEditActivity.class);
+                                String gameID = games.getGames().get(position).getId();
+                                intent.putExtra("id", gameID);
+                                startActivity(intent);
+                            }
+                        });
+                        edit.setVisibility(View.VISIBLE);
+                    }
+                }
+                return true;
+            }
+            else {
+                System.out.println("Child is null. Position: " + position);
+            }
+            return false;
+        }
 
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return gestureDetector.onTouchEvent(event);
+        }
+
+        public GestureDetector getDetector() {
+            return gestureDetector;
+        }
     }
 
 }
