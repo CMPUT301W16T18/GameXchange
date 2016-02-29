@@ -82,7 +82,7 @@ public class SearchListActivity extends ActionBarActivity {
         //Conditions are going to be velocity and distance
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if(e1. {
+            if(e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOITY) {
                 if(showEditButton(e1)) {
                     return true;
                 }
