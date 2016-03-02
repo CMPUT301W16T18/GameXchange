@@ -120,10 +120,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //startActivity(intent);
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
 
     // called by ActivityCompat.requestPermissions
     @Override
