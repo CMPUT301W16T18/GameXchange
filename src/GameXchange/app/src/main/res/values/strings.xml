@@ -36,8 +36,10 @@
     <string-array name="navigation_drawer_items_section">
         <item>My Games</item>
         <item>Borrowed Games</item>
-        <item>Wishlist</item>
+        <item>Wish List</item>
         <item>Search</item>
+        <item>My Account</item>
+        <item>Log Out</item>
     </string-array>
 
     <string-array name="navigation_drawer_settings_section">

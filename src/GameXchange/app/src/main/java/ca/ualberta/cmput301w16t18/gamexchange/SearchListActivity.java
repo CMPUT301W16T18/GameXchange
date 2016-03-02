@@ -302,6 +302,27 @@ public class SearchListActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             //Use position to navigate to the right dataset.
+            //Added Switch cases to control where the buttons will go
+            //As of right now when clicking my account app crashes but that is because
+            //it is not implemented yet
+            switch (position){
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    Intent intent = new Intent(SearchListActivity.this, UserProfileEditActivity.class);
+                    startActivity(intent);
+                    break;
+                case 5:
+                    finish();
+
+            }
+
         }
     }
 
