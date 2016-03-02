@@ -92,7 +92,7 @@ public class SearchListActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent  intent = new Intent(SearchListActivity.this,GameProfileEditActivity.class);
+                Intent  intent = new Intent(SearchListActivity.this,GameProfileViewActivity.class);
                 String gameID = games.getGames().get(position).getId();
                 intent.putExtra("id", gameID);
                 startActivity(intent);
