@@ -10,6 +10,8 @@ public class Constants {
     public static String GAME_ID = "GAME_ID";
     public static String USER_ID = "USER_ID";
 
+    public static Boolean DEBUG = true;
+
     public static String getPrefix() {
         return serverURL + index + "/";
     }
