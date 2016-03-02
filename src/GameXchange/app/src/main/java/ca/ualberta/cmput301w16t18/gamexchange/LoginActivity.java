@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Quickstart for testing purposes.
         //startActivity(intent);
     }
-    
+
 
     // called by ActivityCompat.requestPermissions
     @Override
