@@ -319,6 +319,8 @@ public class SearchListActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case 5:
+                    Intent intent1 = new Intent(SearchListActivity.this, LoginActivity.class);
+                    startActivity(intent1);
                     finish();
 
             }
