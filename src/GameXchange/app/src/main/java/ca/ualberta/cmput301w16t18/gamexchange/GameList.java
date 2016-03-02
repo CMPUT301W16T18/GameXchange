@@ -8,6 +8,10 @@ import java.util.ArrayList;
 public class GameList {
     ArrayList<Game> games = new ArrayList<Game>();
 
+    public GameList() {
+
+    }
+
     public boolean inList(Game game) {
         return games.contains(game);
     }

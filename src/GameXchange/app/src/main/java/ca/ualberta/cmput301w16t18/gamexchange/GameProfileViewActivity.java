@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 public class GameProfileViewActivity extends AppCompatActivity {
 
@@ -16,8 +17,16 @@ public class GameProfileViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_profile_view);
         parent_intent = getIntent();
-        id = parent_intent.getStringExtra("id");
+        id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        parent_intent = getIntent();
+        id = parent_intent.getStringExtra(Constants.GAME_ID);
+
     }
 
     public void loadGame(String id) {
@@ -27,6 +36,12 @@ public class GameProfileViewActivity extends AppCompatActivity {
         game = new Game();
 
         // TODO: populate fields with received data
+    }
+
+    public void editGameProfile(View view) {
+        Intent intent = new Intent(this,GameProfileEditActivity.class);
+        intent.putExtra(Constants.GAME_ID, id);
+        startActivity(intent);
     }
 
 }
