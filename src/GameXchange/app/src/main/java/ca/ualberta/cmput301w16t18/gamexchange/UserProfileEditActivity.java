@@ -29,7 +29,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
         Button save = (Button) findViewById(R.id.game_edit_save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { editUser(); }
+            public void onClick(View v) { editUser(user); }
         });
     }
 
@@ -40,7 +40,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
         // TODO: populate fields with received data
     }
 
-    public void editUser() {
+    public void editUser(User user) {
         //implements US 03.02.01
 
         // TODO: send data back to ES server. Refer by id.

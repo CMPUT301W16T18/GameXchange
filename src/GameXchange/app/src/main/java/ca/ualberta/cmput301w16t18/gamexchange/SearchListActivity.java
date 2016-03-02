@@ -3,42 +3,68 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class SearchListActivity extends AppCompatActivity {
 
-    //modified from http://developer.android.com/training/gestures/detector.html
+    protected static final String[] lists = {"My Games", "Borrowed Games", "Wishlist", "Search"};
+
+    private DrawerLayout drawerLayout;
+    private ListView drawerListView;
     private CustomGestureDetector mDetector;
     protected SearchListListViewArrayAdapter adapter;
     protected ListView listView;
+
 
     public GameList games = new GameList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle("Search activity");
+
         setContentView(R.layout.activity_search_list);
 
-        //create dummy data. TODO: remove this.
+        //Create Navigation Drawer
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerListView = (ListView) findViewById(R.id.left_drawer);
+        // set adapter for drawer ListView
+        drawerListView.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.fragment_navigation_drawer,lists));
+        //Set onclick listener
+        //TODO: This.
+
+        //create dummy data. TODO: remove this, add actual data.
         for(int i = 0; i < 1000; i++) {
-            games.add(new Game());
+            games.add(new Game((Integer.toString(i)), "Available", "blockbuster Game " + i, "developer", "platform", new ArrayList<String>(), "description"));
         }
 
         //Initialize ListView
         listView = (ListView) findViewById(R.id.searchListActivityListView);
         adapter = new SearchListListViewArrayAdapter(this, games.getGames());
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent  intent = new Intent(SearchListActivity.this,GameProfileEditActivity.class);
+                String gameID = games.getGames().get(position).getId();
+                intent.putExtra("id", gameID);
+                startActivity(intent);
+            }
+        });
 
 
         //Initialize Gesture detector
@@ -56,6 +82,7 @@ public class SearchListActivity extends AppCompatActivity {
     public void deleteGame(Game mygame) {
         //implements US 01.05.01
         //deletes a game from a user's list
+        games.removeGame(mygame);
     }
 
     public void loadOwnedGames(String userId) {
@@ -87,7 +114,8 @@ public class SearchListActivity extends AppCompatActivity {
 
     }
 
-    // modified from http://stackoverflow.com/questions/12713926/showing-a-delete-button-on-swipe-in-a-listview-for-android
+    // modified from http://developer.android.com/training/gestures/detector.html
+    // and http://stackoverflow.com/questions/12713926/showing-a-delete-button-on-swipe-in-a-listview-for-android
     protected class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener
             implements ListView.OnTouchListener {
         private Context context;
@@ -128,13 +156,13 @@ public class SearchListActivity extends AppCompatActivity {
             );
 
             if(e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                System.out.println("Swiped Right");
+                //System.out.println("Swiped Right");
                 if(hideEditButton(position)) {
                     return true;
                 }
             }
             if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                System.out.println("Swiped Left");
+                //System.out.println("Swiped Left");
                 if(showEditButton(position)) {
                     return true;
                 }
@@ -149,6 +177,11 @@ public class SearchListActivity extends AppCompatActivity {
                 if(edit != null) {
                     if(edit.getVisibility() == View.VISIBLE) {
                         edit.setOnClickListener(null);
+
+                        Animation buttonSwipe = AnimationUtils.loadAnimation(child.getContext(),
+                                R.anim.search_delete_button_hide_animation);
+                        edit.setAnimation(buttonSwipe);
+                        edit.animate();
                         edit.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -169,13 +202,16 @@ public class SearchListActivity extends AppCompatActivity {
                         edit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent  intent = new Intent(SearchListActivity.this,GameProfileEditActivity.class);
-                                String gameID = games.getGames().get(position).getId();
-                                intent.putExtra("id", gameID);
-                                startActivity(intent);
+
+                                deleteGame(games.getGames().get(position));
+                                adapter.notifyDataSetChanged();
                             }
                         });
+                        Animation buttonSwipe = AnimationUtils.loadAnimation(child.getContext(),
+                                R.anim.search_delete_button_show_animation);
+                        edit.setAnimation(buttonSwipe);
                         edit.setVisibility(View.VISIBLE);
+                        edit.animate();
                     }
                 }
                 return true;

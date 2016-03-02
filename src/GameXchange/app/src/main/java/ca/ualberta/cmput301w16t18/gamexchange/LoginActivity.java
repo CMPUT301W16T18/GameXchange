@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //create the intent for the next activity.
         intent = new Intent(this, SearchListActivity.class);
         // Quickstart for testing purposes.
-        // startActivity(intent);
+        startActivity(intent);
     }
 
     // called by ActivityCompat.requestPermissions
