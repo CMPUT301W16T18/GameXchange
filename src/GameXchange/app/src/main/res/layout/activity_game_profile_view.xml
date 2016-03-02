@@ -49,7 +49,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scaleType="center"
-        android:src="@drawable/NoPicture"
+        android:src="@drawable/nopicture"
         android:layout_gravity="start|center_vertical"
         android:adjustViewBounds="false"
         android:background="#10000000"
