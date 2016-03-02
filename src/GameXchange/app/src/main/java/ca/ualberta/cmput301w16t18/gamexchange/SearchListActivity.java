@@ -38,6 +38,7 @@ public class SearchListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_search_list);
 
+        /*
         //Create Navigation Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerListView = (ListView) findViewById(R.id.left_drawer);
@@ -46,7 +47,7 @@ public class SearchListActivity extends AppCompatActivity {
                 R.layout.fragment_navigation_drawer,lists));
         //Set onclick listener
         //TODO: This.
-
+        */
         //create dummy data. TODO: remove this, add actual data.
         for(int i = 0; i < 1000; i++) {
             games.add(new Game((Integer.toString(i)), "Available", "blockbuster Game " + i, "developer", "platform", new ArrayList<String>(), "description"));
@@ -122,8 +123,8 @@ public class SearchListActivity extends AppCompatActivity {
         private ListView listView;
         private GestureDetector gestureDetector;
 
-        private int SWIPE_MIN_DISTANCE = 100;
-        private int SWIPE_THRESHOLD_VELOCITY = 10;
+        private int SWIPE_MIN_DISTANCE = 300;
+        private int SWIPE_THRESHOLD_VELOCITY = 150;
 
         public CustomGestureDetector() {
             super();
