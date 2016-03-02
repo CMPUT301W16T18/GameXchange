@@ -13,10 +13,11 @@ public class Game {
     private String platform;
     private ArrayList<String> genres;
     private String description;
+    private String owner;
 
     public Game() {}
 
-    public Game(String id, String status, String name, String developer, String platform, ArrayList<String> genres, String description) {
+    public Game(String id, String status, String name, String developer, String platform, ArrayList<String> genres, String description, String owner) {
         this.id = id;
         this.status = status;
         this.name = name;
@@ -24,6 +25,7 @@ public class Game {
         this.platform = platform;
         this.genres = genres;
         this.description = description;
+        this.owner = owner;
     }
 
     public String getId() {
@@ -76,5 +78,13 @@ public class Game {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }
