@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,6 +25,9 @@ public class SearchListActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ListView drawerListView;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private CharSequence mTitle, mDrawerTitle;
     private CustomGestureDetector mDetector;
     protected SearchListListViewArrayAdapter adapter;
     protected ListView listView;
@@ -38,7 +43,7 @@ public class SearchListActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_search_list);
 
-        /*
+
         //Create Navigation Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerListView = (ListView) findViewById(R.id.left_drawer);
@@ -46,8 +51,30 @@ public class SearchListActivity extends AppCompatActivity {
         drawerListView.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.fragment_navigation_drawer,lists));
         //Set onclick listener
-        //TODO: This.
-        */
+        drawerListView.setOnItemClickListener(new DrawerItemClickListener());
+
+        mTitle = mDrawerTitle = getTitle();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
         //create dummy data. TODO: remove this, add actual data.
         for(int i = 0; i < 1000; i++) {
             games.add(new Game((Integer.toString(i)), "Available", "blockbuster Game " + i, "developer", "platform", new ArrayList<String>(), "description"));
@@ -72,6 +99,15 @@ public class SearchListActivity extends AppCompatActivity {
 
         mDetector = new CustomGestureDetector(SearchListActivity.this, listView);
         listView.setOnTouchListener(mDetector);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    /* Called whenever we call invalidateOptionsMenu() */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(drawerListView);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     public void addGame(Game mygame, String userId) {
@@ -230,6 +266,13 @@ public class SearchListActivity extends AppCompatActivity {
 
         public GestureDetector getDetector() {
             return gestureDetector;
+        }
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            //Use position to navigate to the right dataset.
         }
     }
 
