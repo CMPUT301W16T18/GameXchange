@@ -42,7 +42,13 @@
         <item>Log Out</item>
     </string-array>
 
-    <string-array name="navigation_drawer_settings_section">
-        <item>Settings</item>
-    </string-array>
+    <string name="game_title_textview">Game Title</string>
+    <string name="game_developer_textview">Developer</string>
+    <string name="platform_textview">Platform</string>
+    <string name="genres_textview">Genres</string>
+    <string name="description_textview">Description</string>
+
+    <string name="edit_button">Edit</string>
+    <string name="take_photo_button">Take Photo</string>
+
 </resources>

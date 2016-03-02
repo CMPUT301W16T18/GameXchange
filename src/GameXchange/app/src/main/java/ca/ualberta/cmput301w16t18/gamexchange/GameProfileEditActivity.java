@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class GameProfileEditActivity extends AppCompatActivity {
 
@@ -21,7 +22,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_profile_edit);
         parent_intent = getIntent();
-        id = parent_intent.getStringExtra("id");
+        id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
         Button cancel = (Button) findViewById(R.id.game_edit_cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +61,10 @@ public class GameProfileEditActivity extends AppCompatActivity {
     public void cacheGame() {
         //implements US 08.01.01
         // TODO: Actually cache the changed game info, along with timestamp
+    }
+
+    public void takePhoto(View view) {
+        Toast.makeText(this, "you don't need a photo, its a game...",Toast.LENGTH_SHORT).show();
     }
 
 }

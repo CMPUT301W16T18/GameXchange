@@ -7,6 +7,9 @@ public class Constants {
     public static String serverURL = "http://elastic.vassi.li:9200/"; // TODO: Change this later
     public static String index = "gamexchange";
 
+    public static String GAME_ID = "GAME_ID";
+    public static String USER_ID = null;
+
     public static String getPrefix() {
         return serverURL + index + "/";
     }
