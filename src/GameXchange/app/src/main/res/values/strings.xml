@@ -32,4 +32,15 @@
     <string name="action_settings">Settings</string>
 
     <string name="searchlist_delete_button">Delete</string>
+
+    <string-array name="navigation_drawer_items_section">
+        <item>My Games</item>
+        <item>Borrowed Games</item>
+        <item>Wishlist</item>
+        <item>Search</item>
+    </string-array>
+
+    <string-array name="navigation_drawer_settings_section">
+        <item>Settings</item>
+    </string-array>
 </resources>

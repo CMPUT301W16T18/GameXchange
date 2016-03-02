@@ -38,13 +38,6 @@
         <activity
             android:name=".UserProfileEditActivity"
             android:label="@string/title_activity_user_profile_edit"/>
-        <activity
-            android:name=".NavigationDrawer"
-            android:label="@string/title_activity_navigation_drawer">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ca.ualberta.cmput301w16t18.gamexchange.SearchListActivity"/>
-        </activity>
     </application>
 
 </manifest>
