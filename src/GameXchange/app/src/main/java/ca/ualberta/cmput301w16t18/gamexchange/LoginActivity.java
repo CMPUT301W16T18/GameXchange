@@ -119,11 +119,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Quickstart for testing purposes.
         //startActivity(intent);
     }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
+    
 
     // called by ActivityCompat.requestPermissions
     @Override
