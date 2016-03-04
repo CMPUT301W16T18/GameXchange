@@ -1,32 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="5sp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:id="@+id/SearchListItemTextView"
-            android:layout_height="wrap_content"
-            android:text="Temp placeholder text"/>
+            android:id="@+id/SearchListItemTitleTextView"
+            android:text="Title"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/SearchListItemDeveloperTextView"
+            android:text="Developer"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/SearchListItemPlatformTextView"
+            android:text="Platform"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/SearchListItemStatusTextView"
+            android:text="Status"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:id="@+id/SearchListEditButton"
             android:text="@string/searchlist_delete_button"
             android:visibility="invisible"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:theme="@style/DeleteButtonOverlay"
             />
-
 
     </LinearLayout>
 

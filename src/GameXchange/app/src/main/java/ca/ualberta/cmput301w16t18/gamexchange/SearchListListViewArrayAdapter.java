@@ -37,7 +37,7 @@ public class SearchListListViewArrayAdapter extends ArrayAdapter<Game> {
 
 
         //Populate data in the view
-        TextView textview = (TextView) convertView.findViewById(R.id.SearchListItemTextView);
+        TextView textview = (TextView) convertView.findViewById(R.id.SearchListItemTitleTextView);
         textview.setText("Title: " + gamelist.get(position).getTitle());
 
         return convertView;
