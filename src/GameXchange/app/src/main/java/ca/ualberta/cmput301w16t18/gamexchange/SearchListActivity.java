@@ -13,6 +13,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 
 public class SearchListActivity extends AppCompatActivity {
@@ -79,6 +84,15 @@ public class SearchListActivity extends AppCompatActivity {
             games.add(new Game((Integer.toString(i)), "Available", "Blockbuster Game " + i, "developer", "platform", new ArrayList<String>(), "description", "owner"));
         }
 
+        ViewTarget target = new ViewTarget(R.id.left_drawer, this);
+
+        /*ShowcaseView tutorial = new ShowcaseView.Builder(this)
+                .setTarget(target)
+                .setContentTitle("ShowcaseView")
+                .setContentText("This is highlighting the Home button")
+                .hideOnTouchOutside()
+                .build();
+        */
         //Initialize ListView
         listView = (ListView) findViewById(R.id.searchListActivityListView);
         adapter = new SearchListListViewArrayAdapter(this, games.getGames());
@@ -178,6 +192,7 @@ public class SearchListActivity extends AppCompatActivity {
     public void editButtonClicked() {
 
     }
+
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
