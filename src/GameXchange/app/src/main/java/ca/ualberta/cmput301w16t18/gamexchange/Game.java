@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Game {
     private String id;
     private String status;
-    private String name;
+    private String title;
     private String developer;
     private String platform;
     private ArrayList<String> genres;
@@ -17,10 +17,11 @@ public class Game {
 
     public Game() {}
 
-    public Game(String id, String status, String name, String developer, String platform, ArrayList<String> genres, String description, String owner) {
+    public Game(String id, String status, String title, String developer, String platform,
+                ArrayList<String> genres, String description, String owner) {
         this.id = id;
         this.status = status;
-        this.name = name;
+        this.title = title;
         this.developer = developer;
         this.platform = platform;
         this.genres = genres;
@@ -40,12 +41,12 @@ public class Game {
         this.status = status;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDeveloper() {

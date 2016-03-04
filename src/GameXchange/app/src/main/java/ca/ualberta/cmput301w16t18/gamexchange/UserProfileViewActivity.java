@@ -2,7 +2,6 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -26,15 +25,12 @@ public class UserProfileViewActivity extends AppCompatActivity {
         super.onResume();
         parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.USER_ID);
+        loadUser(id);
     }
 
     public void loadUser(String userId) {
         //implements US 03.01.01
-
-        // TODO: make ES query to fetch data about object
-        user = new User();
-
-        // TODO: populate fields with received data
+        ElasticSearcher.receiveUser("AVM1KtaDI8oCfzIHasfN", this, "UserProfileViewActivity");
     }
 
     public void editUserProfile(View view) {

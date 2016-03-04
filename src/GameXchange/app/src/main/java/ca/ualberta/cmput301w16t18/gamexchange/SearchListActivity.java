@@ -76,7 +76,7 @@ public class SearchListActivity extends AppCompatActivity {
 
         //create dummy data. TODO: remove this, add actual data.
         for(int i = 0; i < 1000; i++) {
-            games.add(new Game((Integer.toString(i)), "Available", "blockbuster Game " + i, "developer", "platform", new ArrayList<String>(), "description", "owner"));
+            games.add(new Game((Integer.toString(i)), "Available", "Blockbuster Game " + i, "developer", "platform", new ArrayList<String>(), "description", "owner"));
         }
 
         //Initialize ListView

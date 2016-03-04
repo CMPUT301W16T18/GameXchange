@@ -16,6 +16,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Name"
+        android:id="@+id/viewUserName"
+        android:layout_marginBottom="3dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Email"
         android:id="@+id/viewUserEmail"
         android:layout_marginBottom="3dp" />

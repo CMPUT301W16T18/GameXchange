@@ -16,6 +16,14 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
+        android:hint="Name"
+        android:id="@+id/editUserName" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
         android:hint="Email Address"
         android:id="@+id/editUserEmail" />
 
@@ -99,7 +107,8 @@
             android:layout_height="wrap_content"
             android:text="Save Changes"
             android:id="@+id/editUserSave"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:onClick="editUser" />
     </LinearLayout>
 
 

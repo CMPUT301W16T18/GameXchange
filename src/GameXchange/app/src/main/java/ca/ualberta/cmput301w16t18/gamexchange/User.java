@@ -18,6 +18,25 @@ public class User {
     private ArrayList<String> owned_games;
     private ArrayList<String> watchlist;
 
+    /* Do not use ever */
+    public User(){}
+
+    public User(String id, String email, String name, String passhash, String address1,
+                String address2, String city, String phone, String postal,
+                ArrayList<String> owned_games, ArrayList<String> watchlist) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.passhash = passhash;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.city = city;
+        this.phone = phone;
+        this.postal = postal;
+        this.owned_games = owned_games;
+        this.watchlist = watchlist;
+    }
+
     public String getId() {
         return id;
     }
