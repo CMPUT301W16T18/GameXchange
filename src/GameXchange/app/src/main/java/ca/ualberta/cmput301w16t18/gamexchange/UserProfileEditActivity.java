@@ -66,13 +66,13 @@ public class UserProfileEditActivity extends AppCompatActivity {
             return;
         }
 
-        if (! Constants.isPasswordValid(pass2)) {
-            editUserPassword2.setError("The chosen password is invalid.");
+        if (! Hasher.getHash(pass1).equals(user.getPasshash())) {
+            editUserPassword1.setError("The entered password is incorrect.");
             return;
         }
 
-        if (! Hasher.getHash(pass1).equals(user.getPasshash())) {
-            editUserPassword1.setError("The entered password is incorrect.");
+        if (! Constants.isPasswordValid(pass2)) {
+            editUserPassword2.setError("The chosen password is invalid.");
             return;
         }
 
