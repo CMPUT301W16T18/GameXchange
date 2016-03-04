@@ -18,6 +18,7 @@ public class Constants {
 
     public static String GAME_ID = "GAME_ID";
     public static String USER_ID = "USER_ID";
+    public static int REQUEST_IMAGE_CAPTURE = 1;
 
     public static int SWIPE_MIN_DISTANCE = 300;
     public static int SWIPE_THRESHOLD_VELOCITY = 150;
