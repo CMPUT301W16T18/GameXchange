@@ -110,10 +110,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        //create the intent for the next activity.
-        intent = new Intent(this, SearchListActivity.class);
         if (Constants.DEBUG) {
             // Quickstart for testing purposes.
+            //create the intent for the next activity.
+            intent = new Intent(this, SearchListActivity.class);
+            intent.putExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION,Constants.MY_GAMES);
             startActivity(intent);
         }
     }
@@ -323,7 +324,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                intent.putExtra("action", "They just logged in, yo");
+                intent.putExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION, Constants.MY_GAMES);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password) + " or the account doesn't exist");

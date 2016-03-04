@@ -25,6 +25,14 @@ public class Constants {
 
     public static Boolean DEBUG = true;
 
+    public static String MY_GAMES = "MY_GAMES";
+    public static String BORROWED_GAMES = "BORROWED_GAMES";
+    public static String WISH_LIST = "WISH_LIST";
+    public static String SEARCH = "SEARCH";
+    public static String SEARCH_STRING = "SEARCH_STRING";
+
+    public static String SEARCH_LIST_ACTIVITY_ACTION = "SEARCH_LIST_ACTIVITY_ACTION";
+
     public static JSONObject getUserSchema(User user) {
         JSONObject object = new JSONObject();
         try {
