@@ -1,22 +1,16 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -190,8 +184,6 @@ public class SearchListActivity extends AppCompatActivity {
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             //Use position to navigate to the right dataset.
             //Added Switch cases to control where the buttons will go
-            //As of right now when clicking my account app crashes but that is because
-            //it is not implemented yet
             Intent intent;
             switch (position){
                 case 0:
@@ -203,7 +195,7 @@ public class SearchListActivity extends AppCompatActivity {
                 case 3:
                     break;
                 case 4:
-                    intent = new Intent(SearchListActivity.this, UserProfileEditActivity.class);
+                    intent = new Intent(SearchListActivity.this, UserProfileViewActivity.class);
                     startActivity(intent);
                     break;
                 case 5:

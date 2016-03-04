@@ -20,13 +20,13 @@ public class UserProfileEditActivity extends AppCompatActivity {
         parent_intent = getIntent();
         id = parent_intent.getStringExtra("id");
         loadUser();
-        Button cancel = (Button) findViewById(R.id.game_edit_cancel);
+        Button cancel = (Button) findViewById(R.id.editUserCancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { finish(); }
         });
 
-        Button save = (Button) findViewById(R.id.game_edit_save);
+        Button save = (Button) findViewById(R.id.editUserSave);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { editUser(user); }

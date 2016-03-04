@@ -26,7 +26,6 @@ public class GameProfileViewActivity extends AppCompatActivity {
         super.onResume();
         parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
-
     }
 
     public void loadGame(String id) {
@@ -39,7 +38,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
     }
 
     public void editGameProfile(View view) {
-        Intent intent = new Intent(this,GameProfileEditActivity.class);
+        Intent intent = new Intent(this, GameProfileEditActivity.class);
         intent.putExtra(Constants.GAME_ID, id);
         startActivity(intent);
     }

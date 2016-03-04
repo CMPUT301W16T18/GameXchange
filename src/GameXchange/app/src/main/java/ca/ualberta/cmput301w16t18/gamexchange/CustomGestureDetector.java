@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 // modified from http://developer.android.com/training/gestures/detector.html
 // and http://stackoverflow.com/questions/12713926/showing-a-delete-button-on-swipe-in-a-listview-for-android
-class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener
+public class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener
         implements ListView.OnTouchListener {
     private Context context;
     private ListView listView;

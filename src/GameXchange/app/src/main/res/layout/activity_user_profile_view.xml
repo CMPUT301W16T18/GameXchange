@@ -62,5 +62,13 @@
 
     </LinearLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:id="@+id/viewUserEdit"
+        android:layout_gravity="right"
+        android:onClick="editUserProfile" />
+
 
 </LinearLayout>
