@@ -11,7 +11,7 @@ public class UserProfileEditActivityTest extends TestCase {
         UserProfileEditActivity activity = new UserProfileEditActivity();
         User test = new User();
         test.setName("John");
-        activity.editUser(test);
+        //activity.editUser(test);
 
         assertEquals(test.getName(), "Bill");
     }

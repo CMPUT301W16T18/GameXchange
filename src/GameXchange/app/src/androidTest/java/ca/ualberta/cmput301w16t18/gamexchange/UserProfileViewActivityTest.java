@@ -13,7 +13,7 @@ public class UserProfileViewActivityTest extends TestCase {
         UserProfileViewActivity activity = new UserProfileViewActivity ();
         User testUser = new User();
         testUser.setName("John");
-        activity.loadUser(testUser.getID());
+        //activity.loadUser(testUser.getID());
         
         assertEquals(activity.user.getName(), testUser.getName());
     }
