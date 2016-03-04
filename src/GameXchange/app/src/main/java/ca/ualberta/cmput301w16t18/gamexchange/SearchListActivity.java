@@ -102,7 +102,7 @@ public class SearchListActivity extends AppCompatActivity {
 
         //Initialize Gesture detector
 
-        mDetector = new CustomGestureDetector(SearchListActivity.this, listView);
+        mDetector = new CustomGestureDetector(this, SearchListActivity.this, listView);
         listView.setOnTouchListener(mDetector);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
@@ -151,6 +151,11 @@ public class SearchListActivity extends AppCompatActivity {
         games.removeGame(mygame);
     }
 
+    public void deleteGameByPosition(int position) {
+        deleteGame(games.getGames().get(position));
+        adapter.notifyDataSetChanged();
+    }
+
     public void loadOwnedGames(String userId) {
         //implements US 01.02.01
         //pull list of games for specified user and display it
@@ -180,124 +185,6 @@ public class SearchListActivity extends AppCompatActivity {
 
     }
 
-    // modified from http://developer.android.com/training/gestures/detector.html
-    // and http://stackoverflow.com/questions/12713926/showing-a-delete-button-on-swipe-in-a-listview-for-android
-    protected class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener
-            implements ListView.OnTouchListener {
-        private Context context;
-        private ListView listView;
-        private GestureDetector gestureDetector;
-
-        private int SWIPE_MIN_DISTANCE = 300;
-        private int SWIPE_THRESHOLD_VELOCITY = 150;
-
-        public CustomGestureDetector() {
-            super();
-        }
-
-        public CustomGestureDetector(Context context, ListView listView) {
-            GestureDetector detector = new GestureDetector(context, this);
-
-            this.context = context;
-            this.gestureDetector = detector;
-            this.listView = listView;
-        }
-
-        public CustomGestureDetector(Context context, GestureDetector detector) {
-            if(detector == null) {
-                detector = new GestureDetector(context, this);
-            }
-
-            this.context = context;
-            this.gestureDetector = detector;
-        }
-
-        //Conditions are going to be velocity and distance
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-            final int position = listView.pointToPosition(
-                    Math.round(e1.getX()),
-                    Math.round(e1.getY())
-            );
-
-            if(e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                //System.out.println("Swiped Right");
-                if(hideEditButton(position)) {
-                    return true;
-                }
-            }
-            if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                //System.out.println("Swiped Left");
-                if(showEditButton(position)) {
-                    return true;
-                }
-            }
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-
-        private boolean hideEditButton(int position) {
-            View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
-            if(child != null) {
-                Button edit = (Button) child.findViewById(R.id.SearchListEditButton);
-                if(edit != null) {
-                    if(edit.getVisibility() == View.VISIBLE) {
-                        edit.setOnClickListener(null);
-
-                        Animation buttonSwipe = AnimationUtils.loadAnimation(child.getContext(),
-                                R.anim.search_delete_button_hide_animation);
-                        edit.setAnimation(buttonSwipe);
-                        edit.animate();
-                        edit.setVisibility(View.INVISIBLE);
-                    }
-                }
-                return true;
-            }
-            else {
-                System.out.println("Child is null. Position: " + position);
-            }
-            return false;
-        }
-
-        private boolean showEditButton(final int position) {
-            View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
-            if(child != null) {
-                Button edit = (Button) child.findViewById(R.id.SearchListEditButton);
-                if(edit != null) {
-                    if(edit.getVisibility() == View.INVISIBLE) {
-                        edit.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                deleteGame(games.getGames().get(position));
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                        Animation buttonSwipe = AnimationUtils.loadAnimation(child.getContext(),
-                                R.anim.search_delete_button_show_animation);
-                        edit.setAnimation(buttonSwipe);
-                        edit.setVisibility(View.VISIBLE);
-                        edit.animate();
-                    }
-                }
-                return true;
-            }
-            else {
-                System.out.println("Child is null. Position: " + position);
-            }
-            return false;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return gestureDetector.onTouchEvent(event);
-        }
-
-        public GestureDetector getDetector() {
-            return gestureDetector;
-        }
-    }
-
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -305,6 +192,7 @@ public class SearchListActivity extends AppCompatActivity {
             //Added Switch cases to control where the buttons will go
             //As of right now when clicking my account app crashes but that is because
             //it is not implemented yet
+            Intent intent;
             switch (position){
                 case 0:
                     break;
@@ -315,17 +203,15 @@ public class SearchListActivity extends AppCompatActivity {
                 case 3:
                     break;
                 case 4:
-                    Intent intent = new Intent(SearchListActivity.this, UserProfileEditActivity.class);
+                    intent = new Intent(SearchListActivity.this, UserProfileEditActivity.class);
                     startActivity(intent);
                     break;
                 case 5:
-                    Intent intent1 = new Intent(SearchListActivity.this, LoginActivity.class);
-                    startActivity(intent1);
+                    intent = new Intent(SearchListActivity.this, LoginActivity.class);
+                    startActivity(intent);
                     finish();
-
+                    break;
             }
-
         }
     }
-
 }
