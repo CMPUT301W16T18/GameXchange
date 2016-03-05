@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -34,17 +36,33 @@ public class SearchListActivity extends AppCompatActivity {
     protected ListView listView;
 
 
-    public GameList games = new GameList();
+    public GameList games = new GameList(Constants.MY_GAMES);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setTitle("Search activity");
-
+        String type = getIntent().getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
+        if(type == null) {
+            Log.d("NUll Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
+        } else if(type.equals(Constants.BORROWED_GAMES)) {
+            // Load Borrowed Games
+            setTitle("Borrowed Games");
+            games = new GameList(Constants.BORROWED_GAMES);
+        } else if(type.equals(Constants.WISH_LIST)) {
+            // Load Wish List
+            setTitle("Wish List");
+            games = new GameList(Constants.WISH_LIST);
+        } else if(type.equals(Constants.SEARCH)) {
+            // Load Elastic Search Search
+            setTitle("Search");
+            games = new GameList(Constants.SEARCH,getIntent().getStringExtra(Constants.SEARCH_STRING));
+        } else {
+            //Default to my Games
+            setTitle("My Games");
+            games = new GameList(Constants.MY_GAMES);
+        }
         setContentView(R.layout.activity_search_list);
 
-        // Customize navigation drawer with this tutorial http://www.tutecentral.com/android-custom-navigation-drawer/
         //Create Navigation Drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerListView = (ListView) findViewById(R.id.left_drawer);
@@ -66,7 +84,6 @@ public class SearchListActivity extends AppCompatActivity {
              */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
@@ -75,7 +92,6 @@ public class SearchListActivity extends AppCompatActivity {
              */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("GameXchange");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
@@ -215,12 +231,26 @@ public class SearchListActivity extends AppCompatActivity {
             Intent intent;
             switch (position){
                 case 0:
+                    setTitle("My Games");
+                    games = new GameList(Constants.MY_GAMES);
+                    adapter.notifyDataSetChanged();
+                    mDrawerLayout.closeDrawers();
                     break;
                 case 1:
+                    setTitle("Borrowed Games");
+                    games = new GameList(Constants.BORROWED_GAMES);
+                    adapter.notifyDataSetChanged();
+                    mDrawerLayout.closeDrawers();
                     break;
                 case 2:
+                    setTitle("Wish List");
+                    games = new GameList(Constants.WISH_LIST);
+                    adapter.notifyDataSetChanged();
+                    mDrawerLayout.closeDrawers();
                     break;
                 case 3:
+                    mDrawerLayout.closeDrawers();
+                    Toast.makeText(SearchListActivity.this,"No searching for you",Toast.LENGTH_SHORT).show();
                     break;
                 case 4:
                     intent = new Intent(SearchListActivity.this, UserProfileViewActivity.class);

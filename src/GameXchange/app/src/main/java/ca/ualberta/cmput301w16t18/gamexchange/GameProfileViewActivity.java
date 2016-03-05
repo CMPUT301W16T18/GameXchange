@@ -31,7 +31,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
         //implements US 01.03.01 and US 03.03.01
 
         // TODO: make ES query to fetch data about object
-        game = new Game();
+        ElasticSearcher.receiveGame(id,this,this.getLocalClassName());
 
         // TODO: populate fields with received data
     }
