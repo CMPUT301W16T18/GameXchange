@@ -41,7 +41,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
 
     public void loadGame(String id) {
         // TODO: make ES query to fetch data about object
-        game = new Game();
+        ElasticSearcher.receiveGame(id,this,this.getLocalClassName());
 
         // TODO: populate fields with received data
     }
