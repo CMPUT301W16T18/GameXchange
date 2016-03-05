@@ -42,7 +42,7 @@ public class UserProfileViewActivity extends AppCompatActivity {
 
     public void loadUser(String userId) {
         //implements US 03.01.01
-        ElasticSearcher.receiveUser("AVM1KtaDI8oCfzIHasfN", this, "UserProfileViewActivity");
+        ElasticSearcher.receiveUser(Constants.CURRENT_USER, this, "UserProfileViewActivity");
     }
 
     public void editUserProfile(View view) {

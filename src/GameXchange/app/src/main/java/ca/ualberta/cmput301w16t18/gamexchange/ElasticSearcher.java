@@ -171,7 +171,7 @@ public class ElasticSearcher {
                 }
 
                 if (passhash.equals(received_passhash)) {
-                    Constants.USER_ID = id;
+                    Constants.CURRENT_USER = id;
                     loginActivity.onLoginSuccess();
                 }
                 else {

@@ -28,7 +28,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
     }
 
     public void loadUser() {
-        ElasticSearcher.receiveUser("AVM1KtaDI8oCfzIHasfN", this, "UserProfileEditActivity");
+        ElasticSearcher.receiveUser(Constants.CURRENT_USER, this, "UserProfileEditActivity");
     }
 
     public void setUser(User user) {
