@@ -18,12 +18,13 @@ public class Constants {
 
     public static String GAME_ID = "GAME_ID";
     public static String USER_ID = "USER_ID";
+    public static String CURRENT_USER = "";
     public static int REQUEST_IMAGE_CAPTURE = 1;
 
     public static int SWIPE_MIN_DISTANCE = 300;
     public static int SWIPE_THRESHOLD_VELOCITY = 150;
 
-    public static Boolean DEBUG = true;
+    public static Boolean DEBUG = false;
 
     public static String MY_GAMES = "MY_GAMES";
     public static String BORROWED_GAMES = "BORROWED_GAMES";
@@ -51,6 +52,21 @@ public class Constants {
         }
 
         return object;
+    }
+
+    public static JSONObject getUserLoginSchema(String userEmail) {
+        JSONObject query = new JSONObject();
+        JSONObject term = new JSONObject();
+        JSONObject email = new JSONObject();
+        try {
+            email.put("email", userEmail);
+            term.put("match", email);
+            query.put("query", term);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return query;
     }
 
     public static JSONObject getGameSchema(Game game) {

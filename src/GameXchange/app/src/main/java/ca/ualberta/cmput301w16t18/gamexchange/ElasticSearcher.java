@@ -14,6 +14,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -69,8 +71,7 @@ public class ElasticSearcher {
                         parser.getStringValue("developer"),
                         parser.getStringValue("platform"),
                         parser.getArrayValue("genres"),
-                        parser.getStringValue("description"),
-                        parser.getStringValue("owner"));
+                        parser.getStringValue("description"));
                 // TODO: Do stuff with game
                 Log.i("RESPONSE", response);
             }
@@ -116,6 +117,74 @@ public class ElasticSearcher {
                 Constants.getPrefix() + "users/" + id, responseListener, errorListener);
 
         queue.add(stringRequest);
+    }
+
+    public static void receiveAllGames(final Activity activity, final String activityName) {
+        queue = Volley.newRequestQueue(activity);
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Parser parser = new Parser(response);
+                Game game = new Game(parser.getStringValue("_id"),
+                        parser.getStringValue("status"),
+                        parser.getStringValue("title"),
+                        parser.getStringValue("developer"),
+                        parser.getStringValue("platform"),
+                        parser.getArrayValue("genres"),
+                        parser.getStringValue("description"));
+                // TODO: Do stuff with game
+                Log.i("RESPONSE", response);
+            }
+        };
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                Constants.getPrefix() + "games/_search", responseListener, errorListener);
+
+        queue.add(stringRequest);
+    }
+
+    public static void authenticateUser(String email, final String passhash, final LoginActivity loginActivity) {
+        queue = Volley.newRequestQueue(loginActivity);
+
+        Response.Listener<JSONObject> loginListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String received_passhash = "";
+                String id = "";
+                try {
+                    JSONObject hits = response.getJSONObject("hits");
+                    JSONArray hitsArray = hits.getJSONArray("hits");
+                    if (hitsArray.length() > 0) {
+                        JSONObject firstHit = hitsArray.getJSONObject(0);
+                        id = firstHit.getString("_id");
+                        JSONObject source = firstHit.getJSONObject("_source");
+                        received_passhash = source.get("passhash").toString();
+                    }
+                    else {
+                        loginActivity.onNewAccount();
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (passhash.equals(received_passhash)) {
+                    Constants.USER_ID = id;
+                    loginActivity.onLoginSuccess();
+                }
+                else {
+                    loginActivity.onWrongPassword();
+                }
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "users/_search",
+                Constants.getUserLoginSchema(email), loginListener, errorListener);
+
+        queue.add(jsonRequest);
     }
 
     private static void loadUserIntoViewActivity(User user, Activity activity) {
