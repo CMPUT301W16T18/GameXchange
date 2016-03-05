@@ -101,12 +101,6 @@ public class SearchListActivity extends AppCompatActivity {
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        //create dummy data. TODO: remove this, add actual data.
-        for(int i = 0; i < 1000; i++) {
-            games.add(new Game((Integer.toString(i)), "Available", "Blockbuster Game " + i, "developer", "platform", new ArrayList<String>(), "description"));
-        }
-
-
         //Initialize ListView
         listView = (ListView) findViewById(R.id.searchListActivityListView);
         adapter = new SearchListListViewArrayAdapter(this, games.getGames());
@@ -133,9 +127,6 @@ public class SearchListActivity extends AppCompatActivity {
 
 
     }
-
-
-
 
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
