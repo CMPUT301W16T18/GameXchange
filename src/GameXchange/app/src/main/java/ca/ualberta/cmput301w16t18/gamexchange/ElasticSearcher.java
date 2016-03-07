@@ -145,37 +145,38 @@ public class ElasticSearcher {
         queue.add(stringRequest);
     }
 
-    public static void authenticateUser(String email, final String passhash, final LoginActivity loginActivity) {
+    public static void authenticateUser(final String email, final String passhash, final LoginActivity loginActivity) {
         queue = Volley.newRequestQueue(loginActivity);
 
         Response.Listener<JSONObject> loginListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                String received_passhash = "";
-                String id = "";
                 try {
                     JSONObject hits = response.getJSONObject("hits");
                     JSONArray hitsArray = hits.getJSONArray("hits");
-                    if (hitsArray.length() > 0) {
-                        JSONObject firstHit = hitsArray.getJSONObject(0);
-                        id = firstHit.getString("_id");
-                        JSONObject source = firstHit.getJSONObject("_source");
-                        received_passhash = source.get("passhash").toString();
+
+                    Log.i("Object", hitsArray.toString());
+
+                    for (int i = 0; i < hitsArray.length(); i++) {
+                        JSONObject hit = hitsArray.getJSONObject(i);
+                        JSONObject source = hit.getJSONObject("_source");
+
+                        if (email.equals( source.get("email").toString() )) {
+                            if (passhash.equals( source.get("passhash").toString() )) {
+                                Constants.CURRENT_USER = hit.getString("_id");
+                                loginActivity.onLoginSuccess();
+                            }
+                            else {
+                                loginActivity.onWrongPassword();
+                            }
+                            return;
+                        }
                     }
-                    else {
-                        loginActivity.onNewAccount();
-                        return;
-                    }
+
+                    loginActivity.onNewAccount();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-
-                if (passhash.equals(received_passhash)) {
-                    Constants.CURRENT_USER = id;
-                    loginActivity.onLoginSuccess();
-                }
-                else {
-                    loginActivity.onWrongPassword();
                 }
             }
         };
