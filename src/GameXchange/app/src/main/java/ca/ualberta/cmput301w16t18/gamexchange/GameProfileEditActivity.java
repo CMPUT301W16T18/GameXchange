@@ -8,10 +8,16 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameProfileEditActivity extends AppCompatActivity {
 
@@ -40,10 +46,25 @@ public class GameProfileEditActivity extends AppCompatActivity {
     }
 
     public void loadGame(String id) {
-        // TODO: make ES query to fetch data about object
-        ElasticSearcher.receiveGame(id,this,this.getLocalClassName());
+        ElasticSearcher.receiveGame(id, this, this.getLocalClassName());
+    }
 
-        // TODO: populate fields with received data
+    public void populateFields(Game game) {
+        EditText game_edit_title = (EditText) findViewById(R.id.game_edit_title);
+        EditText game_edit_developer = (EditText) findViewById(R.id.game_edit_developer);
+        EditText game_edit_platform = (EditText) findViewById(R.id.game_edit_platform);
+        EditText game_edit_genres = (EditText) findViewById(R.id.game_edit_genres);
+        EditText game_edit_description = (EditText) findViewById(R.id.game_edit_description);
+
+        game_edit_title.setText(game.getTitle());
+        game_edit_developer.setText(game.getDeveloper());
+        game_edit_platform.setText(game.getPlatform());
+        game_edit_genres.setText(TextUtils.join(", ", game.getGenres()));
+        game_edit_description.setText(game.getDescription());
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public void editGame() {
@@ -56,13 +77,26 @@ public class GameProfileEditActivity extends AppCompatActivity {
 
         if (!isConnected) { cacheGame(); }
 
-        // TODO: send data back to ES server. Refer by id.
+        EditText game_edit_title = (EditText) findViewById(R.id.game_edit_title);
+        EditText game_edit_developer = (EditText) findViewById(R.id.game_edit_developer);
+        EditText game_edit_platform = (EditText) findViewById(R.id.game_edit_platform);
+        EditText game_edit_genres = (EditText) findViewById(R.id.game_edit_genres);
+        EditText game_edit_description = (EditText) findViewById(R.id.game_edit_description);
+
+        game.setTitle(game_edit_title.getText().toString());
+        game.setDeveloper(game_edit_developer.getText().toString());
+        game.setPlatform(game_edit_platform.getText().toString());
+        game.setGenres(new ArrayList<String>( Arrays.asList(game_edit_genres.getText().toString().split("\\s*,\\s*"))));
+        game.setDescription(game_edit_description.getText().toString());
+
+        ElasticSearcher.sendGame(game, this);
         finish();
     }
 
     public void cacheGame() {
         //implements US 08.01.01
         // TODO: Actually cache the changed game info, along with timestamp
+        finish();
     }
 
     public void takePhoto(View view) {

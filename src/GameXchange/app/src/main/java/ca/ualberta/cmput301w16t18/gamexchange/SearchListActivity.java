@@ -26,45 +26,44 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class SearchListActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
     private ListView drawerListView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private CharSequence mTitle, mDrawerTitle;
-    private CustomGestureDetector mDetector;
+    //private CharSequence mTitle, mDrawerTitle;
     protected SearchListListViewArrayAdapter adapter;
     protected ListView listView;
+    protected SearchListActivity searchListActivity;
 
-
-    public GameList games = new GameList(Constants.MY_GAMES);
+    public GameList games;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String type = getIntent().getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
+        games = new GameList();
+        searchListActivity = this;
         if(type == null) {
-            Log.d("NUll Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
+            Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
         } else if(type.equals(Constants.BORROWED_GAMES)) {
             // Load Borrowed Games
             setTitle("Borrowed Games");
-            games = new GameList(Constants.BORROWED_GAMES);
+            //TODO: Make specific function for this
+            ElasticSearcher.receiveAllGames(this, "SearchListActivity");
         } else if(type.equals(Constants.WISH_LIST)) {
             // Load Wish List
             setTitle("Wish List");
-            games = new GameList(Constants.WISH_LIST);
-        } else if(type.equals(Constants.SEARCH)) {
-            // Load Elastic Search Search
-            setTitle("Search");
-            games = new GameList(Constants.SEARCH,getIntent().getStringExtra(Constants.SEARCH_STRING));
+            //TODO: Make specific function for this
+            ElasticSearcher.receiveAllGames(this, "SearchListActivity");
         } else {
             //Default to my Games
             setTitle("My Games");
-            games = new GameList(Constants.MY_GAMES);
+            //TODO: Make specific function for this
+            ElasticSearcher.receiveAllGames(this, "SearchListActivity");
         }
         setContentView(R.layout.activity_search_list);
 
         //Create Navigation Drawer
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerListView = (ListView) findViewById(R.id.left_drawer);
         // set adapter for drawer ListView
         drawerListView.setAdapter(new ArrayAdapter<String>(this,
@@ -75,8 +74,7 @@ public class SearchListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mTitle = mDrawerTitle = getTitle().toString();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //mTitle = mDrawerTitle = getTitle().toString();
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
             /**
@@ -96,7 +94,6 @@ public class SearchListActivity extends AppCompatActivity {
             }
         };
         mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -115,17 +112,19 @@ public class SearchListActivity extends AppCompatActivity {
             }
         });
 
-
         //Initialize Gesture detector
 
-        mDetector = new CustomGestureDetector(this, SearchListActivity.this, listView);
+        CustomGestureDetector mDetector = new CustomGestureDetector(this, SearchListActivity.this, listView);
         listView.setOnTouchListener(mDetector);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mDrawerLayout.openDrawer(Gravity.LEFT);
+    }
 
-
-
+    public void setDisplayedList (GameList gameList) {
+        games.clear();
+        games.addAll(gameList);
+        adapter.notifyDataSetChanged();
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
@@ -223,20 +222,20 @@ public class SearchListActivity extends AppCompatActivity {
             switch (position){
                 case 0:
                     setTitle("My Games");
-                    games = new GameList(Constants.MY_GAMES);
-                    adapter.notifyDataSetChanged();
+                    //TODO: Make specific function for this
+                    ElasticSearcher.receiveAllGames(searchListActivity, "SearchListActivity");
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1:
                     setTitle("Borrowed Games");
-                    games = new GameList(Constants.BORROWED_GAMES);
-                    adapter.notifyDataSetChanged();
+                    //TODO: Make specific function for this
+                    ElasticSearcher.receiveAllGames(searchListActivity, "SearchListActivity");
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2:
                     setTitle("Wish List");
-                    games = new GameList(Constants.WISH_LIST);
-                    adapter.notifyDataSetChanged();
+                    //TODO: Make specific function for this
+                    ElasticSearcher.receiveAllGames(searchListActivity, "SearchListActivity");
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:

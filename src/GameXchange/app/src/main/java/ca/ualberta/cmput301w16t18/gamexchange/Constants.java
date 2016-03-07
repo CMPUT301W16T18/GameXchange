@@ -29,8 +29,6 @@ public class Constants {
     public static String MY_GAMES = "MY_GAMES";
     public static String BORROWED_GAMES = "BORROWED_GAMES";
     public static String WISH_LIST = "WISH_LIST";
-    public static String SEARCH = "SEARCH";
-    public static String SEARCH_STRING = "SEARCH_STRING";
 
     public static String SEARCH_LIST_ACTIVITY_ACTION = "SEARCH_LIST_ACTIVITY_ACTION";
 
@@ -74,7 +72,7 @@ public class Constants {
 
         try {
             object.put("status",game.getStatus());
-            object.put("name", game.getTitle());
+            object.put("title", game.getTitle());
             object.put("developer",game.getDeveloper());
             object.put("platform",game.getPlatform());
             object.put("description",game.getDescription());

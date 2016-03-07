@@ -31,6 +31,24 @@ public class UserProfileEditActivity extends AppCompatActivity {
         ElasticSearcher.receiveUser(Constants.CURRENT_USER, this, "UserProfileEditActivity");
     }
 
+    public void populateFields(User user) {
+        EditText editUserName = (EditText) findViewById(R.id.editUserName);
+        EditText editUserEmail = (EditText) findViewById(R.id.editUserEmail);
+        EditText editUserAddress1 = (EditText) findViewById(R.id.editUserAddress1);
+        EditText editUserAddress2 = (EditText) findViewById(R.id.editUserAddress2);
+        EditText editUserCity = (EditText) findViewById(R.id.editUserCity);
+        EditText editUserPhone = (EditText) findViewById(R.id.editUserPhone);
+        EditText editUserPostalCode = (EditText) findViewById(R.id.editUserPostalCode);
+
+        editUserName.setText(user.getName());
+        editUserEmail.setText(user.getEmail());
+        editUserAddress1.setText(user.getAddress1());
+        editUserAddress2.setText(user.getAddress2());
+        editUserCity.setText(user.getCity());
+        editUserPhone.setText(user.getPhone());
+        editUserPostalCode.setText(user.getPostal());
+    }
+
     public void setUser(User user) {
         this.user = user;
     }

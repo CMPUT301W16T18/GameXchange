@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -43,6 +44,24 @@ public class UserProfileViewActivity extends AppCompatActivity {
     public void loadUser(String userId) {
         //implements US 03.01.01
         ElasticSearcher.receiveUser(Constants.CURRENT_USER, this, "UserProfileViewActivity");
+    }
+
+    public void populateFields(User user) {
+        TextView viewUserName = (TextView) findViewById(R.id.viewUserName);
+        TextView viewUserEmail = (TextView) findViewById(R.id.viewUserEmail);
+        TextView viewUserAddress1 = (TextView) findViewById(R.id.viewUserAddress1);
+        TextView viewUserAddress2 = (TextView) findViewById(R.id.viewUserAddress2);
+        TextView viewUserCity = (TextView) findViewById(R.id.viewUserCity);
+        TextView viewUserPhone = (TextView) findViewById(R.id.viewUserPhone);
+        TextView viewUserPostalCode = (TextView) findViewById(R.id.viewUserPostalCode);
+
+        viewUserName.setText(user.getName());
+        viewUserEmail.setText(user.getEmail());
+        viewUserAddress1.setText(user.getAddress1());
+        viewUserAddress2.setText(user.getAddress2());
+        viewUserCity.setText(user.getCity());
+        viewUserPhone.setText(user.getPhone());
+        viewUserPostalCode.setText(user.getPostal());
     }
 
     public void editUserProfile(View view) {

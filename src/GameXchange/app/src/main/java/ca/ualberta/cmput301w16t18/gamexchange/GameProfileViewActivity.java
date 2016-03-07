@@ -3,7 +3,9 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 public class GameProfileViewActivity extends AppCompatActivity {
 
@@ -29,11 +31,21 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
     public void loadGame(String id) {
         //implements US 01.03.01 and US 03.03.01
+        ElasticSearcher.receiveGame(id, this, this.getLocalClassName());
+    }
 
-        // TODO: make ES query to fetch data about object
-        ElasticSearcher.receiveGame(id,this,this.getLocalClassName());
+    public void populateFields(Game game) {
+        TextView game_view_title = (TextView) findViewById(R.id.game_view_title);
+        TextView game_view_developer = (TextView) findViewById(R.id.game_view_developer);
+        TextView game_view_platform = (TextView) findViewById(R.id.game_view_platform);
+        TextView game_view_genres = (TextView) findViewById(R.id.game_view_genres);
+        TextView game_view_description = (TextView) findViewById(R.id.game_view_description);
 
-        // TODO: populate fields with received data
+        game_view_title.setText(game.getTitle());
+        game_view_developer.setText(game.getDeveloper());
+        game_view_platform.setText(game.getPlatform());
+        game_view_genres.setText(TextUtils.join(", ", game.getGenres()));
+        game_view_description.setText(game.getDescription());
     }
 
     public void editGameProfile(View view) {

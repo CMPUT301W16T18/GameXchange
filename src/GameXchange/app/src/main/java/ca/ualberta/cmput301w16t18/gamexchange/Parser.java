@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +17,7 @@ public class Parser {
     }
 
     public String getStringValue(String key) {
-        Pattern r = Pattern.compile("\"" + key + "\"(?::| : )\"([^\"]+)\"");
+        Pattern r = Pattern.compile("\"" + key + "\"(?: ?: ?)\"([^\"]+)\"");
         Matcher m = r.matcher(JSON);
 
         if (m.find()) { return m.group(1); }
@@ -24,13 +26,13 @@ public class Parser {
     }
 
     public ArrayList<String> getArrayValue(String key) {
-        Pattern r = Pattern.compile("\"" + key + "\"(?::| : )\\[([^\"]+)\\]");
+        Pattern r = Pattern.compile("\"" + key + "\"(?: ?: ?)\\[([^\\]]+)\\]");
         Matcher m = r.matcher(JSON);
         ArrayList<String> rv = new ArrayList<String>();
 
         if (m.find()) {
             String items = m.group(1);
-            for (String item : items.split(",")) {
+            for (String item : items.split("\\s*,\\s*")) {
                 rv.add(item.substring(1,item.length()-1));
             }
         }

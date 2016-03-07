@@ -3,8 +3,6 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -58,22 +56,30 @@ public class ElasticSearcher {
         queue.add(jsonRequest);
     }
 
-    public static void receiveGame(String id, final Activity activity, final String activityName) {
+    public static void receiveGame(final String id, final Activity activity, final String activityName) {
         queue = Volley.newRequestQueue(activity);
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Parser parser = new Parser(response);
-                Game game = new Game(parser.getStringValue("_id"),
+                Game game = new Game(id,
                         parser.getStringValue("status"),
                         parser.getStringValue("title"),
                         parser.getStringValue("developer"),
                         parser.getStringValue("platform"),
                         parser.getArrayValue("genres"),
                         parser.getStringValue("description"));
-                // TODO: Do stuff with game
-                Log.i("RESPONSE", response);
+
+                if (activityName.equals("GameProfileViewActivity")) {
+                    GameProfileViewActivity other = (GameProfileViewActivity) activity;
+                    other.populateFields(game);
+                }
+                else if (activityName.equals("GameProfileEditActivity")) {
+                    GameProfileEditActivity other = (GameProfileEditActivity) activity;
+                    other.setGame(game);
+                    other.populateFields(game);
+                }
             }
         };
 
@@ -103,12 +109,13 @@ public class ElasticSearcher {
                         parser.getArrayValue("watchlist"));
 
                 if (activityName.equals("UserProfileViewActivity")) {
-                    loadUserIntoViewActivity(user, activity);
+                    UserProfileViewActivity other = (UserProfileViewActivity) activity;
+                    other.populateFields(user);
                 }
                 else if (activityName.equals("UserProfileEditActivity")) {
                     UserProfileEditActivity other = (UserProfileEditActivity) activity;
                     other.setUser(user);
-                    loadUserIntoEditActivity(user, activity);
+                    other.populateFields(user);
                 }
             }
         };
@@ -122,27 +129,44 @@ public class ElasticSearcher {
     public static void receiveAllGames(final Activity activity, final String activityName) {
         queue = Volley.newRequestQueue(activity);
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(JSONObject response) {
+                GameList games = new GameList();
+                try {
+                    JSONObject hits = response.getJSONObject("hits");
+                    JSONArray hitsArray = hits.getJSONArray("hits");
 
-                Parser parser = new Parser(response);
-                Game game = new Game(parser.getStringValue("_id"),
-                        parser.getStringValue("status"),
-                        parser.getStringValue("title"),
-                        parser.getStringValue("developer"),
-                        parser.getStringValue("platform"),
-                        parser.getArrayValue("genres"),
-                        parser.getStringValue("description"));
-                // TODO: Do stuff with game
-                Log.i("RESPONSE", response);
+                    for (int i = 0; i < hitsArray.length(); i++) {
+                        JSONObject hit = hitsArray.getJSONObject(i);
+                        Parser parser = new Parser(hit.toString());
+                        Game game = new Game(parser.getStringValue("_id"),
+                                parser.getStringValue("status"),
+                                parser.getStringValue("title"),
+                                parser.getStringValue("developer"),
+                                parser.getStringValue("platform"),
+                                parser.getArrayValue("genres"),
+                                parser.getStringValue("description"));
+                        games.add(game);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (activityName.equals("SearchListActivity")) {
+                    SearchListActivity searchListActivity = (SearchListActivity) activity;
+                    searchListActivity.setDisplayedList(games);
+                }
+                else {
+                    //TODO: Are we going to call this method from anywhere else? Probably not.
+                }
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                Constants.getPrefix() + "games/_search", responseListener, errorListener);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/_search",
+                new JSONObject(), responseListener, errorListener);
 
-        queue.add(stringRequest);
+        queue.add(jsonRequest);
     }
 
     public static void authenticateUser(final String email, final String passhash, final LoginActivity loginActivity) {
@@ -154,8 +178,6 @@ public class ElasticSearcher {
                 try {
                     JSONObject hits = response.getJSONObject("hits");
                     JSONArray hitsArray = hits.getJSONArray("hits");
-
-                    Log.i("Object", hitsArray.toString());
 
                     for (int i = 0; i < hitsArray.length(); i++) {
                         JSONObject hit = hitsArray.getJSONObject(i);
@@ -188,39 +210,4 @@ public class ElasticSearcher {
         queue.add(jsonRequest);
     }
 
-    private static void loadUserIntoViewActivity(User user, Activity activity) {
-        TextView viewUserName = (TextView) activity.findViewById(R.id.viewUserName);
-        TextView viewUserEmail = (TextView) activity.findViewById(R.id.viewUserEmail);
-        TextView viewUserAddress1 = (TextView) activity.findViewById(R.id.viewUserAddress1);
-        TextView viewUserAddress2 = (TextView) activity.findViewById(R.id.viewUserAddress2);
-        TextView viewUserCity = (TextView) activity.findViewById(R.id.viewUserCity);
-        TextView viewUserPhone = (TextView) activity.findViewById(R.id.viewUserPhone);
-        TextView viewUserPostalCode = (TextView) activity.findViewById(R.id.viewUserPostalCode);
-
-        viewUserName.setText(user.getName());
-        viewUserEmail.setText(user.getEmail());
-        viewUserAddress1.setText(user.getAddress1());
-        viewUserAddress2.setText(user.getAddress2());
-        viewUserCity.setText(user.getCity());
-        viewUserPhone.setText(user.getPhone());
-        viewUserPostalCode.setText(user.getPostal());
-    }
-
-    private static void loadUserIntoEditActivity(User user, Activity activity) {
-        EditText editUserName = (EditText) activity.findViewById(R.id.editUserName);
-        EditText editUserEmail = (EditText) activity.findViewById(R.id.editUserEmail);
-        EditText editUserAddress1 = (EditText) activity.findViewById(R.id.editUserAddress1);
-        EditText editUserAddress2 = (EditText) activity.findViewById(R.id.editUserAddress2);
-        EditText editUserCity = (EditText) activity.findViewById(R.id.editUserCity);
-        EditText editUserPhone = (EditText) activity.findViewById(R.id.editUserPhone);
-        EditText editUserPostalCode = (EditText) activity.findViewById(R.id.editUserPostalCode);
-
-        editUserName.setText(user.getName());
-        editUserEmail.setText(user.getEmail());
-        editUserAddress1.setText(user.getAddress1());
-        editUserAddress2.setText(user.getAddress2());
-        editUserCity.setText(user.getCity());
-        editUserPhone.setText(user.getPhone());
-        editUserPostalCode.setText(user.getPostal());
-    }
 }
