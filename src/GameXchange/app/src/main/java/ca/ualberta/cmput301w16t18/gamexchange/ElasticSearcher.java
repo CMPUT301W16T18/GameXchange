@@ -164,7 +164,7 @@ public class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
-                new JSONObject(), responseListener, errorListener);
+                Constants.getLongList(), responseListener, errorListener);
 
         queue.add(jsonRequest);
     }

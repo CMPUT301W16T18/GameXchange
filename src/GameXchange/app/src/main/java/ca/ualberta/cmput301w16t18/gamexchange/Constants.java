@@ -84,6 +84,18 @@ public class Constants {
         return object;
     }
 
+    public static JSONObject getLongList() {
+        JSONObject object = new JSONObject();
+
+        try {
+            object.put("size",100);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+    }
+
     public static boolean isEmailValid(String email) {
         return email.contains("@");
     }
