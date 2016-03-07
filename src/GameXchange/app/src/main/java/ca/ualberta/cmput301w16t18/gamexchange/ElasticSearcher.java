@@ -25,7 +25,7 @@ public class ElasticSearcher {
     private static Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.i("ERROR", "Whoops. I couldn't do the thing.");
+            Log.e("ERROR", "Whoops. I couldn't do the thing.");
         }
     };
 

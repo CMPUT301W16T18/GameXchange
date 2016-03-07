@@ -24,7 +24,7 @@ public class Constants {
     public static int SWIPE_MIN_DISTANCE = 300;
     public static int SWIPE_THRESHOLD_VELOCITY = 150;
 
-    public static Boolean DEBUG = false;
+    public static Boolean DEBUG = true;
 
     public static String MY_GAMES = "MY_GAMES";
     public static String BORROWED_GAMES = "BORROWED_GAMES";
