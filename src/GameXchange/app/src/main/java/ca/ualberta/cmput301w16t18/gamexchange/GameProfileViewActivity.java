@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 public class GameProfileViewActivity extends AppCompatActivity {
 
     public Game game;
@@ -20,6 +22,14 @@ public class GameProfileViewActivity extends AppCompatActivity {
         parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
+
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(findViewById(R.id.game_edit_button))
+                .setDismissText("GOT IT")
+                .setContentText("Touch here to edit the info about your game and add an image !!")
+                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("Show edit game") // provide a unique ID used to ensure it is only shown once
+                .show();
     }
 
     @Override

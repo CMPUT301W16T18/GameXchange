@@ -29,7 +29,7 @@ public class UserProfileViewActivity extends AppCompatActivity {
                 .setDismissText("GOT IT")
                 .setContentText("Click here to edit a user!")
                 .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse("Show once") // provide a unique ID used to ensure it is only shown once
+                .singleUse("Show edit") // provide a unique ID used to ensure it is only shown once
                 .show();
     }
 

@@ -118,7 +118,16 @@ public class SearchListActivity extends AppCompatActivity {
         listView.setOnTouchListener(mDetector);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mDrawerLayout.openDrawer(Gravity.LEFT);
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(listView)
+                .setDismissText("GOT IT")
+                .setContentText("Touch a game to get details !!! " +
+                        "Also touch the hamburger icon in the top left corner to navigate around " +
+                        "the app!!")
+                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("list view")// provide a unique ID used to ensure it is only shown once
+                .show();
+
     }
 
     public void setDisplayedList (GameList gameList) {
@@ -132,13 +141,6 @@ public class SearchListActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(drawerListView);
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(drawerListView.getChildAt(0))
-                .setDismissText("GOT IT")
-                .setContentText("In here you can navigate around the app!!")
-                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse("Show toggle") // provide a unique ID used to ensure it is only shown once
-                .show();
         return super.onPrepareOptionsMenu(menu);
     }
 
