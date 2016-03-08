@@ -1,10 +1,12 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -21,6 +23,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -71,7 +74,11 @@ public class SearchListActivity extends AppCompatActivity {
         //Set onclick listener
         drawerListView.setOnItemClickListener(new DrawerItemClickListener());
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch(NullPointerException ex) {
+            Log.d("Navigation Drawer", "Got a null pointer from get support action bar. " + ex.getMessage());
+        }
         getSupportActionBar().setHomeButtonEnabled(true);
 
         //mTitle = mDrawerTitle = getTitle().toString();
@@ -127,8 +134,24 @@ public class SearchListActivity extends AppCompatActivity {
                 .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
                 .singleUse("list view")// provide a unique ID used to ensure it is only shown once
                 .show();
-
     }
+
+    @Override
+    public void onBackPressed() {
+        //Modified from http://stackoverflow.com/questions/2257963/how-to-show-a-dialog-to-confirm-that-the-user-wishes-to-exit-an-android-activity
+        new AlertDialog.Builder(this).setMessage(R.string.alert_dialog_message)
+                .setPositiveButton(R.string.alert_dialog_logout, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Constants.USER_ID = null;
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+
 
     public void setDisplayedList (GameList gameList) {
         games.clear();
@@ -249,8 +272,7 @@ public class SearchListActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case 5:
-                    intent = new Intent(SearchListActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    Constants.USER_ID = null;
                     finish();
                     break;
             }
