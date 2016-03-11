@@ -89,7 +89,7 @@ public class ElasticSearcher {
         queue.add(stringRequest);
     }
 
-    public static void receiveUser(String id, final Activity activity, final String activityName) {
+    public static void receiveUser(final String id, final Activity activity, final String activityName) {
         queue = Volley.newRequestQueue(activity);
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -126,12 +126,15 @@ public class ElasticSearcher {
         queue.add(stringRequest);
     }
 
-    public static void deleteGame(String id, final Activity activity) {
+    public static void deleteGame(final String id, final Activity activity) {
         queue = Volley.newRequestQueue(activity);
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {}
+            public void onResponse(String response) {
+                SearchListActivity searchListActivity = (SearchListActivity) activity;
+                searchListActivity.deleteGame(id);
+            }
         };
 
         StringRequest stringRequest = new StringRequest(Request.Method.DELETE,

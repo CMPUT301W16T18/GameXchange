@@ -192,15 +192,16 @@ public class SearchListActivity extends AppCompatActivity {
         games.add(mygame);
     }
 
-    public void deleteGame(Game mygame) {
-        //implements US 01.05.01
-        //deletes a game from a user's list
-        games.removeGame(mygame);
+    public void deleteGame(String id) {
+        games.removeGame(id);
+        adapter.notifyDataSetChanged();
     }
 
     public void deleteGameByPosition(int position) {
-        deleteGame(games.getGames().get(position));
-        adapter.notifyDataSetChanged();
+        //implements US 01.05.01
+        //deletes a game from a user's list
+        Game mygame = games.getGames().get(position);
+        ElasticSearcher.deleteGame(mygame.getId(), this);
     }
 
     public void loadOwnedGames(String userId) {

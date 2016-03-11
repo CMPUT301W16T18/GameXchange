@@ -24,6 +24,15 @@ public class GameList {
         games.remove(games.indexOf(game));
     }
 
+    public void removeGame(String id) {
+        for (Game game : games) {
+            if (game.getId().equals(id)) {
+                games.remove(game);
+                return;
+            }
+        }
+    }
+
     public ArrayList<Game> getGames() {
         return games;
     }
