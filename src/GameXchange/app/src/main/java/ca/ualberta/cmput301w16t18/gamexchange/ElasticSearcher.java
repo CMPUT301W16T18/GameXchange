@@ -126,6 +126,20 @@ public class ElasticSearcher {
         queue.add(stringRequest);
     }
 
+    public static void deleteGame(String id, final Activity activity) {
+        queue = Volley.newRequestQueue(activity);
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {}
+        };
+
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE,
+                Constants.getPrefix() + "games/" + id, responseListener, errorListener);
+
+        queue.add(stringRequest);
+    }
+
     public static void receiveAllGames(final Activity activity, final String activityName) {
         queue = Volley.newRequestQueue(activity);
 

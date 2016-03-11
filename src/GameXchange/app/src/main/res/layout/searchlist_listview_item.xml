@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:id="@+id/SearchListEditButton"
+            android:id="@+id/SearchListDeleteButton"
             android:text="@string/searchlist_delete_button"
             android:visibility="invisible"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
