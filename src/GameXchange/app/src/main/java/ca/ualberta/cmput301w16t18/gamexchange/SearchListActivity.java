@@ -130,8 +130,8 @@ public class SearchListActivity extends AppCompatActivity {
                 .setTarget(findViewById(R.id.tutorialTextView))
                 .setDismissText("GOT IT")
                 .setContentText("Touch a game to get details !!! " +
-                        "Also touch the hamburger icon in the top left corner to navigate around " +
-                        "the app!!")
+                        "Touch the hamburger icon in the top left corner to navigate around " +
+                        "the app!! Also swipe left on a game to delete!!")
                 .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
                 .singleUse("list view")// provide a unique ID used to ensure it is only shown once
                 .show();
