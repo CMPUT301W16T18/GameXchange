@@ -1,11 +1,17 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.ByteArrayOutputStream;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -50,12 +56,24 @@ public class GameProfileViewActivity extends AppCompatActivity {
         TextView game_view_platform = (TextView) findViewById(R.id.game_view_platform);
         TextView game_view_genres = (TextView) findViewById(R.id.game_view_genres);
         TextView game_view_description = (TextView) findViewById(R.id.game_view_description);
+        ImageView game_view_image = (ImageView) findViewById(R.id.game_view_image);
 
         game_view_title.setText(game.getTitle());
         game_view_developer.setText(game.getDeveloper());
         game_view_platform.setText(game.getPlatform());
         game_view_genres.setText(TextUtils.join(", ", game.getGenres()));
         game_view_description.setText(game.getDescription());
+
+        //Decode base64 string to a bitmap.
+        /*
+        Bitmap imageBitmap;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        */
+
+        //game_view_image.setImageBitmap();
     }
 
     public void editGameProfile(View view) {
