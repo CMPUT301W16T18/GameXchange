@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class SearchListActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         new MaterialShowcaseView.Builder(this)
-                .setTarget(listView)
+                .setTarget(findViewById(R.id.tutorialTextView))
                 .setDismissText("GOT IT")
                 .setContentText("Touch a game to get details !!! " +
                         "Also touch the hamburger icon in the top left corner to navigate around " +
@@ -134,6 +135,8 @@ public class SearchListActivity extends AppCompatActivity {
                 .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
                 .singleUse("list view")// provide a unique ID used to ensure it is only shown once
                 .show();
+        TextView view = (TextView) findViewById(R.id.tutorialTextView);
+        view.setVisibility(View.GONE);
     }
 
     @Override
