@@ -147,14 +147,19 @@ public class SearchListActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Updates the primary ArrayList with a new list of games.
+     * @param gameList
+     */
     public void setDisplayedList (GameList gameList) {
         games.clear();
         games.addAll(gameList);
         adapter.notifyDataSetChanged();
     }
 
-    /* Called whenever we call invalidateOptionsMenu() */
+    /** Called whenever we call invalidateOptionsMenu()
+     *  @param menu
+     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
@@ -186,17 +191,30 @@ public class SearchListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * adds a game to the elastic search database along with the owner.
+     * @param mygame
+     * @param userId
+     */
     public void addGame(Game mygame, String userId) {
         //implements US 01.01.01
         //add a game to a user's list
         games.add(mygame);
     }
 
+    /**
+     * deletes a game from Elastic search by game ID
+     * @param id
+     */
     public void deleteGame(String id) {
         games.removeGame(id);
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Deletes a game from Elastic search by position
+     * @param position
+     */
     public void deleteGameByPosition(int position) {
         //implements US 01.05.01
         //deletes a game from a user's list
@@ -204,32 +222,54 @@ public class SearchListActivity extends AppCompatActivity {
         ElasticSearcher.deleteGame(mygame.getId(), this);
     }
 
+    /**
+     * Loads a list of the games that i own.
+     * @param userId
+     */
     public void loadOwnedGames(String userId) {
         //implements US 01.02.01
         //pull list of games for specified user and display it
     }
 
+    /**
+     * Loads games that i am currently borrowing
+     * @param userId
+     */
     public void loadBorrowingGames(String userId) {
         //implements US 06.01.01
         //pull list of games that I am borrowing and display it
     }
 
+    /**
+     * loads games borrowed from my library specified
+     * @param userId
+     */
     public void loadBorrowedGames(String userId) {
         //implements US 06.02.01
         //pull list of games that are borrowed from me and display it
     }
 
+    /**
+     * Searches the elastic search reource
+     * @param searchString
+     */
     public void searchGames(String searchString) {
         //implements US 04.01.01 and US 04.02.01
         //search for all available games given searchString
     }
 
+    /**
+     * Adds game to the users watchlist
+     * @param mygame
+     */
     public void addToWatchlist(Game mygame) {
         //implements US 04.03.01
         //add a game to my watchlist
     }
 
-
+    /**
+     * Listener for navigation drawer item clicks
+     */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {

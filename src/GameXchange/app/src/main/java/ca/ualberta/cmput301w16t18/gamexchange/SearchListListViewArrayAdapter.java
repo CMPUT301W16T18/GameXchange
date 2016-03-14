@@ -17,6 +17,11 @@ public class SearchListListViewArrayAdapter extends ArrayAdapter<Game> {
     private final Context context;
     private final ArrayList<Game> gamelist;
 
+    /**
+     * Constructor for an android arrayadapter
+     * @param context
+     * @param gamelist
+     */
     public SearchListListViewArrayAdapter(Context context, ArrayList<Game> gamelist) {
         super(context,-1,gamelist);
         this.context = context;
@@ -47,6 +52,11 @@ public class SearchListListViewArrayAdapter extends ArrayAdapter<Game> {
         return convertView;
     }
 
+    /**
+     * returns the game id for the item at the specified position.
+     * @param position
+     * @return
+     */
     public String getID(int position) {
         return gamelist.get(position).getId();
     }

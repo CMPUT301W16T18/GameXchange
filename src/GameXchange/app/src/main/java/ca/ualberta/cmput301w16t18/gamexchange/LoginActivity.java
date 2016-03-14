@@ -285,6 +285,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
+    /**
+     * Callback method for Elastic search for login validation.
+     */
     protected void onLoginSuccess() {
         showProgress(false);
 
@@ -293,12 +296,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         startActivity(intent);
     }
 
+    /**
+     * Callback method for elastic search to indicate wrong password.
+     */
     protected void onWrongPassword() {
         showProgress(false);
         mPasswordView.setError(getString(R.string.error_incorrect_password));
         mPasswordView.requestFocus();
     }
 
+    /**
+     * Callback for elastic search to create a new account.
+     */
     protected void onNewAccount() {
         showProgress(false);
         //TODO: this

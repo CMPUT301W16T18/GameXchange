@@ -27,14 +27,25 @@ public class UserProfileEditActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * returns the current user being displayed
+     * @return
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * call to elastic search to load the user into the view.
+     */
     public void loadUser() {
         ElasticSearcher.receiveUser(Constants.CURRENT_USER, this, "UserProfileEditActivity");
     }
 
+    /**
+     * callback from elastic search to populate the view with the user.
+     * @param user
+     */
     public void populateFields(User user) {
         EditText editUserName = (EditText) findViewById(R.id.editUserName);
         EditText editUserEmail = (EditText) findViewById(R.id.editUserEmail);
@@ -53,10 +64,18 @@ public class UserProfileEditActivity extends AppCompatActivity {
         editUserPostalCode.setText(user.getPostal());
     }
 
+    /**
+     * sets the user for the current view
+     * @param user
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
+    /**
+     * saves the edited user to elastic search.
+     * @param view
+     */
     public void editUser(View view) {
         //implements US 03.02.01
         EditText editUserName = (EditText) findViewById(R.id.editUserName);
