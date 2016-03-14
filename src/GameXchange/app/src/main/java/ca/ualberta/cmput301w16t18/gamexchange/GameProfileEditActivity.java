@@ -80,6 +80,10 @@ public class GameProfileEditActivity extends AppCompatActivity {
         this.game = game;
     }
 
+    public Game getGame() {
+        return game;
+    }
+
     public void editGame() {
         //implements US 01.04.01
 
