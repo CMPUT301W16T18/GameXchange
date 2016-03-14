@@ -23,15 +23,13 @@ public class SearchListListViewArrayAdapter extends ArrayAdapter<Game> {
         this.gamelist = gamelist;
     }
 
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.searchlist_listview_item, parent, false);
         } else {
-            Button button = (Button) convertView.findViewById(R.id.SearchListEditButton);
+            Button button = (Button) convertView.findViewById(R.id.SearchListDeleteButton);
             if(button.getVisibility() == View.VISIBLE) button.setVisibility(View.INVISIBLE);
         }
 

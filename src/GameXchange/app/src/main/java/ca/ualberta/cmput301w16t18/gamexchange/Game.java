@@ -13,11 +13,12 @@ public class Game {
     private String platform;
     private ArrayList<String> genres;
     private String description;
+    private String picture;
 
     public Game() {}
 
     public Game(String id, String status, String title, String developer, String platform,
-                ArrayList<String> genres, String description) {
+                ArrayList<String> genres, String description, String picture) {
         this.id = id;
         this.status = status;
         this.title = title;
@@ -25,6 +26,7 @@ public class Game {
         this.platform = platform;
         this.genres = genres;
         this.description = description;
+        this.picture = picture;
     }
 
     public String getId() {
@@ -77,5 +79,13 @@ public class Game {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

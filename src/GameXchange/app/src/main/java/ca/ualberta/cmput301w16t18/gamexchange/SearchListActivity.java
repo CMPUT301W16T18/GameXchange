@@ -8,22 +8,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ActionMenuView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -126,14 +119,16 @@ public class SearchListActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         new MaterialShowcaseView.Builder(this)
-                .setTarget(listView)
+                .setTarget(findViewById(R.id.tutorialTextView))
                 .setDismissText("GOT IT")
                 .setContentText("Touch a game to get details !!! " +
-                        "Also touch the hamburger icon in the top left corner to navigate around " +
-                        "the app!!")
+                        "Touch the hamburger icon in the top left corner to navigate around " +
+                        "the app!! Also swipe left on a game to delete!!")
                 .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
                 .singleUse("list view")// provide a unique ID used to ensure it is only shown once
                 .show();
+        TextView view = (TextView) findViewById(R.id.tutorialTextView);
+        view.setVisibility(View.GONE);
     }
 
     @Override
@@ -197,15 +192,16 @@ public class SearchListActivity extends AppCompatActivity {
         games.add(mygame);
     }
 
-    public void deleteGame(Game mygame) {
-        //implements US 01.05.01
-        //deletes a game from a user's list
-        games.removeGame(mygame);
+    public void deleteGame(String id) {
+        games.removeGame(id);
+        adapter.notifyDataSetChanged();
     }
 
     public void deleteGameByPosition(int position) {
-        deleteGame(games.getGames().get(position));
-        adapter.notifyDataSetChanged();
+        //implements US 01.05.01
+        //deletes a game from a user's list
+        Game mygame = games.getGames().get(position);
+        ElasticSearcher.deleteGame(mygame.getId(), this);
     }
 
     public void loadOwnedGames(String userId) {
@@ -231,10 +227,6 @@ public class SearchListActivity extends AppCompatActivity {
     public void addToWatchlist(Game mygame) {
         //implements US 04.03.01
         //add a game to my watchlist
-    }
-
-    public void editButtonClicked() {
-
     }
 
 

@@ -62,32 +62,32 @@ public class CustomGestureDetector extends GestureDetector.SimpleOnGestureListen
 
         if(e2.getX() - e1.getX() > Constants.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Constants.SWIPE_THRESHOLD_VELOCITY) {
             //System.out.println("Swiped Right");
-            if(hideEditButton(position)) {
+            if(hideDeleteButton(position)) {
                 return true;
             }
         }
         if(e1.getX() - e2.getX() > Constants.SWIPE_MIN_DISTANCE && Math.abs(velocityX) > Constants.SWIPE_THRESHOLD_VELOCITY) {
             //System.out.println("Swiped Left");
-            if(showEditButton(position)) {
+            if(showDeleteButton(position)) {
                 return true;
             }
         }
         return super.onFling(e1, e2, velocityX, velocityY);
     }
 
-    private boolean hideEditButton(int position) {
+    private boolean hideDeleteButton(int position) {
         View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
         if(child != null) {
-            Button edit = (Button) child.findViewById(R.id.SearchListEditButton);
-            if(edit != null) {
-                if(edit.getVisibility() == View.VISIBLE) {
-                    edit.setOnClickListener(null);
+            Button delete = (Button) child.findViewById(R.id.SearchListDeleteButton);
+            if(delete != null) {
+                if(delete.getVisibility() == View.VISIBLE) {
+                    delete.setOnClickListener(null);
 
                     Animation buttonSwipe = AnimationUtils.loadAnimation(child.getContext(),
                             R.anim.search_delete_button_hide_animation);
-                    edit.setAnimation(buttonSwipe);
-                    edit.animate();
-                    edit.setVisibility(View.INVISIBLE);
+                    delete.setAnimation(buttonSwipe);
+                    delete.animate();
+                    delete.setVisibility(View.INVISIBLE);
                 }
             }
             return true;
@@ -98,13 +98,13 @@ public class CustomGestureDetector extends GestureDetector.SimpleOnGestureListen
         return false;
     }
 
-    private boolean showEditButton(final int position) {
+    private boolean showDeleteButton(final int position) {
         View child = listView.getChildAt(position - listView.getFirstVisiblePosition());
         if(child != null) {
-            Button edit = (Button) child.findViewById(R.id.SearchListEditButton);
-            if(edit != null) {
-                if(edit.getVisibility() == View.INVISIBLE) {
-                    edit.setOnClickListener(new View.OnClickListener() {
+            Button delete = (Button) child.findViewById(R.id.SearchListDeleteButton);
+            if(delete != null) {
+                if(delete.getVisibility() == View.INVISIBLE) {
+                    delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             searchListActivity.deleteGameByPosition(position);
@@ -112,9 +112,9 @@ public class CustomGestureDetector extends GestureDetector.SimpleOnGestureListen
                     });
                     Animation buttonSwipe = AnimationUtils.loadAnimation(child.getContext(),
                             R.anim.search_delete_button_show_animation);
-                    edit.setAnimation(buttonSwipe);
-                    edit.setVisibility(View.VISIBLE);
-                    edit.animate();
+                    delete.setAnimation(buttonSwipe);
+                    delete.setVisibility(View.VISIBLE);
+                    delete.animate();
                 }
             }
             return true;

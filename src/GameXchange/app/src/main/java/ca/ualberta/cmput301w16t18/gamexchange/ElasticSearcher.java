@@ -41,7 +41,7 @@ public class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/" + game.getId(),
-                Constants.getGameSchema(game), jsonListener, errorListener);
+                Schemas.getGameSchema(game), jsonListener, errorListener);
 
         queue.add(jsonRequest);
     }
@@ -51,7 +51,7 @@ public class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "users/" + user.getId(),
-                Constants.getUserSchema(user), jsonListener, errorListener);
+                Schemas.getUserSchema(user), jsonListener, errorListener);
 
         queue.add(jsonRequest);
     }
@@ -69,7 +69,8 @@ public class ElasticSearcher {
                         parser.getStringValue("developer"),
                         parser.getStringValue("platform"),
                         parser.getArrayValue("genres"),
-                        parser.getStringValue("description"));
+                        parser.getStringValue("description"),
+                        parser.getStringValue("picture"));
 
                 if (activityName.equals("GameProfileViewActivity")) {
                     GameProfileViewActivity other = (GameProfileViewActivity) activity;
@@ -89,7 +90,7 @@ public class ElasticSearcher {
         queue.add(stringRequest);
     }
 
-    public static void receiveUser(String id, final Activity activity, final String activityName) {
+    public static void receiveUser(final String id, final Activity activity, final String activityName) {
         queue = Volley.newRequestQueue(activity);
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -126,6 +127,33 @@ public class ElasticSearcher {
         queue.add(stringRequest);
     }
 
+    public static void deleteGame(final String id, final Activity activity) {
+        queue = Volley.newRequestQueue(activity);
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                SearchListActivity searchListActivity = (SearchListActivity) activity;
+                searchListActivity.deleteGame(id);
+            }
+        };
+
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE,
+                Constants.getPrefix() + "games/" + id, responseListener, errorListener);
+
+        queue.add(stringRequest);
+    }
+
+    public static void updateGamePicture(String id, String picture, Activity activity) {
+        queue = Volley.newRequestQueue(activity);
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/" + id + "/_update",
+                Schemas.getPictureSchema(picture), jsonListener, errorListener);
+
+        queue.add(jsonRequest);
+    }
+
     public static void receiveAllGames(final Activity activity, final String activityName) {
         queue = Volley.newRequestQueue(activity);
 
@@ -146,7 +174,8 @@ public class ElasticSearcher {
                                 parser.getStringValue("developer"),
                                 parser.getStringValue("platform"),
                                 parser.getArrayValue("genres"),
-                                parser.getStringValue("description"));
+                                parser.getStringValue("description"),
+                                parser.getStringValue("picture"));
                         games.add(game);
                     }
                 } catch (JSONException e) {
@@ -164,7 +193,7 @@ public class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
-                Constants.getLongList(), responseListener, errorListener);
+                Schemas.getLongList(), responseListener, errorListener);
 
         queue.add(jsonRequest);
     }
@@ -205,7 +234,7 @@ public class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "users/_search",
-                Constants.getUserLoginSchema(email), loginListener, errorListener);
+                Schemas.getUserLoginSchema(email), loginListener, errorListener);
 
         queue.add(jsonRequest);
     }
