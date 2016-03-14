@@ -133,8 +133,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
             //Encode bitmap to a base64 string.
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(65536);
             smallBitmap.compress(Bitmap.CompressFormat.PNG, 90, byteArrayOutputStream);
-            String encoded = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-            encoded = encoded.replace("\n","");
+            String encoded = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.NO_WRAP);
 
             ElasticSearcher.updateGamePicture(game.getId(), encoded, this);
         }
