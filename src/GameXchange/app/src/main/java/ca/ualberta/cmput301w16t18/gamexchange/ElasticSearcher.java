@@ -148,7 +148,7 @@ public class ElasticSearcher {
         queue = Volley.newRequestQueue(activity);
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
-                Constants.getPrefix() + "games/" + id + "_update",
+                Constants.getPrefix() + "games/" + id + "/_update",
                 Schemas.getPictureSchema(picture), jsonListener, errorListener);
 
         queue.add(jsonRequest);

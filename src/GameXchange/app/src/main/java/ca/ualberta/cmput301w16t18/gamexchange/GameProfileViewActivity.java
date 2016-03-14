@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -64,16 +65,13 @@ public class GameProfileViewActivity extends AppCompatActivity {
         game_view_genres.setText(TextUtils.join(", ", game.getGenres()));
         game_view_description.setText(game.getDescription());
 
-        //Decode base64 string to a bitmap.
-        /*
-        Bitmap imageBitmap;
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        */
+        if (!game.getPicture().equals("")) {
+            //Decode base64 string to a bitmap.
+            byte[] decodedBytes = Base64.decode(game.getPicture(), 0);
+            Bitmap imageBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
 
-        //game_view_image.setImageBitmap();
+            game_view_image.setImageBitmap(imageBitmap);
+        }
     }
 
     public void editGameProfile(View view) {

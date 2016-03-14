@@ -75,9 +75,11 @@ public class Schemas {
 
     public static JSONObject getPictureSchema(String picture) {
         JSONObject object = new JSONObject();
+        JSONObject doc = new JSONObject();
 
         try {
-            object.put("status",picture);
+            doc.put("picture",picture);
+            object.put("doc", doc);
         } catch (JSONException e) {
             e.printStackTrace();
         }
