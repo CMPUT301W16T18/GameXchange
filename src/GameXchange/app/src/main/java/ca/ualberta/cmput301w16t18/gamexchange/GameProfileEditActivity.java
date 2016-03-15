@@ -134,8 +134,9 @@ public class GameProfileEditActivity extends AppCompatActivity {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(65536);
             smallBitmap.compress(Bitmap.CompressFormat.PNG, 90, byteArrayOutputStream);
             String encoded = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.NO_WRAP);
+            game.setPicture(encoded);
 
-            ElasticSearcher.updateGamePicture(game.getId(), encoded, this);
+            //ElasticSearcher.updateGamePicture(game.getId(), encoded, this);
         }
     }
 }
