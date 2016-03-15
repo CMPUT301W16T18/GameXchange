@@ -41,11 +41,13 @@ public class UserProfileViewActivity extends AppCompatActivity {
         loadUser(id);
     }
 
+    //Async loader for user information from elastic search
     public void loadUser(String userId) {
         //implements US 03.01.01
         ElasticSearcher.receiveUser(Constants.CURRENT_USER, this, "UserProfileViewActivity");
     }
 
+    // Callback method for elastic search to populate the view.
     public void populateFields(User user) {
         TextView viewUserName = (TextView) findViewById(R.id.viewUserName);
         TextView viewUserEmail = (TextView) findViewById(R.id.viewUserEmail);
@@ -64,6 +66,7 @@ public class UserProfileViewActivity extends AppCompatActivity {
         viewUserPostalCode.setText(user.getPostal());
     }
 
+    // onClick method for the edit User button.
     public void editUserProfile(View view) {
         Intent intent = new Intent(this, UserProfileEditActivity.class);
         intent.putExtra(Constants.USER_ID, id);
