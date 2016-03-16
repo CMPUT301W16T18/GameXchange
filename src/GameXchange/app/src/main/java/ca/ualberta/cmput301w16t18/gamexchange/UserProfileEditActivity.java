@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class UserProfileEditActivity extends AppCompatActivity {
 
@@ -20,11 +21,6 @@ public class UserProfileEditActivity extends AppCompatActivity {
         parent_intent = getIntent();
         id = parent_intent.getStringExtra("id");
         loadUser();
-        Button cancel = (Button) findViewById(R.id.editUserCancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { finish(); }
-        });
     }
 
     /**
@@ -103,7 +99,10 @@ public class UserProfileEditActivity extends AppCompatActivity {
 
         if (pass1.equals("") && pass2.equals("") && pass3.equals("")) {
             ElasticSearcher.sendUser(user, this);
-            finish();
+            CharSequence text = "Saved!";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(this, text, duration);
+            toast.show();
             return;
         }
 
@@ -124,6 +123,9 @@ public class UserProfileEditActivity extends AppCompatActivity {
 
         user.setPasshash(Hasher.getHash(pass2));
         ElasticSearcher.sendUser(user, this);
-        finish();
+        CharSequence text = "Saved!";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
     }
 }
