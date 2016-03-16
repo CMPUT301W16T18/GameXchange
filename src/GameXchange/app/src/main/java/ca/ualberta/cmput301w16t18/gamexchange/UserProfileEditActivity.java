@@ -127,5 +127,9 @@ public class UserProfileEditActivity extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(this, text, duration);
         toast.show();
+        editUserPassword1.setText("");
+        editUserPassword2.setText("");
+        editUserPassword3.setText("");
+
     }
 }
