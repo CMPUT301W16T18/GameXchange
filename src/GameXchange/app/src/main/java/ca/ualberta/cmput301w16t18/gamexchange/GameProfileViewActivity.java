@@ -44,6 +44,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
         super.onResume();
         parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
+        loadGame(id);
     }
 
     public void loadGame(String id) {

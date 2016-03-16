@@ -1,7 +1,9 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -36,11 +38,6 @@ public class GameProfileEditActivity extends AppCompatActivity {
         parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
-        Button cancel = (Button) findViewById(R.id.game_edit_cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) { finish(); }
-          });
 
         Button save = (Button) findViewById(R.id.game_edit_save);
         save.setOnClickListener(new View.OnClickListener() {
@@ -103,11 +100,14 @@ public class GameProfileEditActivity extends AppCompatActivity {
         game.setTitle(game_edit_title.getText().toString());
         game.setDeveloper(game_edit_developer.getText().toString());
         game.setPlatform(game_edit_platform.getText().toString());
-        game.setGenres(new ArrayList<String>( Arrays.asList(game_edit_genres.getText().toString().split("\\s*,\\s*"))));
+        game.setGenres(new ArrayList<String>(Arrays.asList(game_edit_genres.getText().toString().split("\\s*,\\s*"))));
         game.setDescription(game_edit_description.getText().toString());
 
         ElasticSearcher.sendGame(game, this);
-        finish();
+        CharSequence text = "Saved!";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
     }
 
     public void cacheGame() {
