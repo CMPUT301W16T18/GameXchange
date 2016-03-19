@@ -53,7 +53,7 @@ public class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void receiveGame(final String id, final Activity activity, final String activityName) {
+    public static void receiveGame(final String id, final Activity activity) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -67,11 +67,11 @@ public class ElasticSearcher {
                         parser.getStringValue("description"),
                         parser.getStringValue("picture"));
 
-                if (activityName.equals("GameProfileViewActivity")) {
+                if (activity.getLocalClassName().equals("GameProfileViewActivity")) {
                     GameProfileViewActivity other = (GameProfileViewActivity) activity;
                     other.populateFields(game);
                 }
-                else if (activityName.equals("GameProfileEditActivity")) {
+                else if (activity.getLocalClassName().equals("GameProfileEditActivity")) {
                     GameProfileEditActivity other = (GameProfileEditActivity) activity;
                     other.setGame(game);
                     other.populateFields(game);
@@ -85,7 +85,7 @@ public class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 
-    public static void receiveUser(final String id, final Activity activity, final String activityName) {
+    public static void receiveUser(final String id, final Activity activity) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -102,11 +102,11 @@ public class ElasticSearcher {
                         parser.getArrayValue("owned_games"),
                         parser.getArrayValue("watchlist"));
 
-                if (activityName.equals("UserProfileViewActivity")) {
+                if (activity.getLocalClassName().equals("UserProfileViewActivity")) {
                     UserProfileViewActivity other = (UserProfileViewActivity) activity;
                     other.populateFields(user);
                 }
-                else if (activityName.equals("UserProfileEditActivity")) {
+                else if (activity.getLocalClassName().equals("UserProfileEditActivity")) {
                     UserProfileEditActivity other = (UserProfileEditActivity) activity;
                     other.setUser(user);
                     other.populateFields(user);
@@ -143,10 +143,10 @@ public class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void receiveGames(final String which, final Activity activity, final String activityName) {
+    public static void receiveGames(final String which, final Activity activity) {
 
         if (which.equals(Constants.ALL_GAMES)) {
-            receiveAllGames(activity, activityName);
+            receiveAllGames(activity);
             return;
         }
 
@@ -161,7 +161,7 @@ public class ElasticSearcher {
                 else if (which.equals(Constants.WATCH_LIST)) {
                     gameIDs = parser.getArrayValue("watchlist");
                 }
-                receiveListOfGames(gameIDs, activity, activityName);
+                receiveListOfGames(gameIDs, activity);
             }
         };
 
@@ -171,13 +171,13 @@ public class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 
-    public static void receiveAllGames(final Activity activity, final String activityName) {
+    public static void receiveAllGames(final Activity activity) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 GameList games = responseToGameList(response);
 
-                if (activityName.equals("SearchListActivity")) {
+                if (activity.getLocalClassName().equals("SearchListActivity")) {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
                 }
@@ -194,13 +194,13 @@ public class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void receiveListOfGames(final ArrayList<String> gameList, final Activity activity, final String activityName) {
+    public static void receiveListOfGames(final ArrayList<String> gameList, final Activity activity) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 GameList games = responseToGameList(response);
 
-                if (activityName.equals("SearchListActivity")) {
+                if (activity.getLocalClassName().equals("SearchListActivity")) {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
                 }

@@ -47,7 +47,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
     }
 
     public void loadGame(String id) {
-        ElasticSearcher.receiveGame(id, this, this.getLocalClassName());
+        ElasticSearcher.receiveGame(id, this);
     }
 
     public void populateFields(Game game) {

@@ -48,7 +48,7 @@ public class SearchListActivity extends AppCompatActivity {
             //Default to my Games
             setTitle("My Games");
         }
-        ElasticSearcher.receiveGames(type, this, "SearchListActivity");
+        ElasticSearcher.receiveGames(type, this);
         setContentView(R.layout.activity_search_list);
 
         //Create Navigation Drawer
@@ -272,17 +272,17 @@ public class SearchListActivity extends AppCompatActivity {
             switch (position){
                 case 0:
                     setTitle("My Games");
-                    ElasticSearcher.receiveGames(Constants.MY_GAMES, searchListActivity, "SearchListActivity");
+                    ElasticSearcher.receiveGames(Constants.MY_GAMES, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1:
                     setTitle("Borrowed Games");
-                    ElasticSearcher.receiveGames(Constants.ALL_GAMES, searchListActivity, "SearchListActivity");
+                    ElasticSearcher.receiveGames(Constants.ALL_GAMES, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2:
                     setTitle("Watch List");
-                    ElasticSearcher.receiveGames(Constants.WATCH_LIST, searchListActivity, "SearchListActivity");
+                    ElasticSearcher.receiveGames(Constants.WATCH_LIST, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:

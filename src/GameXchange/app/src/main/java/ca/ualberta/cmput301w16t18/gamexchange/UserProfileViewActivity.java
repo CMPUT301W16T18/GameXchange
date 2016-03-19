@@ -44,7 +44,7 @@ public class UserProfileViewActivity extends AppCompatActivity {
     //Async loader for user information from elastic search
     public void loadUser(String userId) {
         //implements US 03.01.01
-        ElasticSearcher.receiveUser(Constants.CURRENT_USER, this, "UserProfileViewActivity");
+        ElasticSearcher.receiveUser(Constants.CURRENT_USER, this);
     }
 
     // Callback method for elastic search to populate the view.

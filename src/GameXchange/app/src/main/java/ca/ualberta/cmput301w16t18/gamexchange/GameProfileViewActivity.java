@@ -49,7 +49,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
     public void loadGame(String id) {
         //implements US 01.03.01 and US 03.03.01
-        ElasticSearcher.receiveGame(id, this, this.getLocalClassName());
+        ElasticSearcher.receiveGame(id, this);
     }
 
     public void populateFields(Game game) {
