@@ -16,11 +16,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by Vassili Minaev on 2/29/2016.
  */
 public class ElasticSearcher {
-    private static RequestQueue queue;
 
     private static Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
@@ -36,29 +37,23 @@ public class ElasticSearcher {
         }
     };
 
-    public static void sendGame(final Game game, Context context) {
-        queue = Volley.newRequestQueue(context);
-
+    public static void sendGame(final Game game) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/" + game.getId(),
                 Schemas.getGameSchema(game), jsonListener, errorListener);
 
-        queue.add(jsonRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void sendUser(final User user, Context context) {
-        queue = Volley.newRequestQueue(context);
-
+    public static void sendUser(final User user) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "users/" + user.getId(),
                 Schemas.getUserSchema(user), jsonListener, errorListener);
 
-        queue.add(jsonRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
     public static void receiveGame(final String id, final Activity activity, final String activityName) {
-        queue = Volley.newRequestQueue(activity);
-
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -87,12 +82,10 @@ public class ElasticSearcher {
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 Constants.getPrefix() + "games/" + id, responseListener, errorListener);
 
-        queue.add(stringRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 
     public static void receiveUser(final String id, final Activity activity, final String activityName) {
-        queue = Volley.newRequestQueue(activity);
-
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -124,12 +117,10 @@ public class ElasticSearcher {
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 Constants.getPrefix() + "users/" + id, responseListener, errorListener);
 
-        queue.add(stringRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 
     public static void deleteGame(final String id, final Activity activity) {
-        queue = Volley.newRequestQueue(activity);
-
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -141,46 +132,51 @@ public class ElasticSearcher {
         StringRequest stringRequest = new StringRequest(Request.Method.DELETE,
                 Constants.getPrefix() + "games/" + id, responseListener, errorListener);
 
-        queue.add(stringRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 
-    public static void updateGamePicture(String id, String picture, Activity activity) {
-        queue = Volley.newRequestQueue(activity);
-
+    public static void updateGamePicture(String id, String picture) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/" + id + "/_update",
                 Schemas.getPictureSchema(picture), jsonListener, errorListener);
 
-        queue.add(jsonRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void receiveGames(final String which, final Activity activity, final String activityName) {
+
+        if (which.equals(Constants.ALL_GAMES)) {
+            receiveAllGames(activity, activityName);
+            return;
+        }
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Parser parser = new Parser(response);
+                ArrayList<String> gameIDs = new ArrayList<>();
+                if (which.equals(Constants.MY_GAMES)) {
+                    gameIDs = parser.getArrayValue("owned_games");
+                }
+                else if (which.equals(Constants.WATCH_LIST)) {
+                    gameIDs = parser.getArrayValue("watchlist");
+                }
+                receiveListOfGames(gameIDs, activity, activityName);
+            }
+        };
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                Constants.getPrefix() + "users/" + Constants.CURRENT_USER, responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 
     public static void receiveAllGames(final Activity activity, final String activityName) {
-        queue = Volley.newRequestQueue(activity);
-
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                GameList games = new GameList();
-                try {
-                    JSONObject hits = response.getJSONObject("hits");
-                    JSONArray hitsArray = hits.getJSONArray("hits");
+                GameList games = responseToGameList(response);
 
-                    for (int i = 0; i < hitsArray.length(); i++) {
-                        JSONObject hit = hitsArray.getJSONObject(i);
-                        Parser parser = new Parser(hit.toString());
-                        Game game = new Game(parser.getStringValue("_id"),
-                                parser.getStringValue("status"),
-                                parser.getStringValue("title"),
-                                parser.getStringValue("developer"),
-                                parser.getStringValue("platform"),
-                                parser.getArrayValue("genres"),
-                                parser.getStringValue("description"),
-                                parser.getStringValue("picture"));
-                        games.add(game);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
                 if (activityName.equals("SearchListActivity")) {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
@@ -195,12 +191,59 @@ public class ElasticSearcher {
                 Constants.getPrefix() + "games/_search",
                 Schemas.getLongList(), responseListener, errorListener);
 
-        queue.add(jsonRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void receiveListOfGames(final ArrayList<String> gameList, final Activity activity, final String activityName) {
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                GameList games = responseToGameList(response);
+
+                if (activityName.equals("SearchListActivity")) {
+                    SearchListActivity searchListActivity = (SearchListActivity) activity;
+                    searchListActivity.setDisplayedList(games);
+                }
+                else {
+                    //TODO: Are we going to call this method from anywhere else? Probably not.
+                }
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/_search",
+                Schemas.getSpecificList(gameList), responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    private static GameList responseToGameList(JSONObject response) {
+        GameList games = new GameList();
+        try {
+            JSONObject hits = response.getJSONObject("hits");
+            JSONArray hitsArray = hits.getJSONArray("hits");
+
+            for (int i = 0; i < hitsArray.length(); i++) {
+                JSONObject hit = hitsArray.getJSONObject(i);
+                Parser parser = new Parser(hit.toString());
+                Game game = new Game(parser.getStringValue("_id"),
+                        parser.getStringValue("status"),
+                        parser.getStringValue("title"),
+                        parser.getStringValue("developer"),
+                        parser.getStringValue("platform"),
+                        parser.getArrayValue("genres"),
+                        parser.getStringValue("description"),
+                        parser.getStringValue("picture"));
+                games.add(game);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return games;
     }
 
     public static void authenticateUser(final String email, final String passhash, final LoginActivity loginActivity) {
-        queue = Volley.newRequestQueue(loginActivity);
-
         Response.Listener<JSONObject> loginListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -236,7 +279,7 @@ public class ElasticSearcher {
                 Constants.getPrefix() + "users/_search",
                 Schemas.getUserLoginSchema(email), loginListener, errorListener);
 
-        queue.add(jsonRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
 }

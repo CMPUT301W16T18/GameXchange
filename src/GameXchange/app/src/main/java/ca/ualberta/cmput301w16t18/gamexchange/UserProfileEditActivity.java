@@ -98,7 +98,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
         String pass3 = editUserPassword3.getText().toString();
 
         if (pass1.equals("") && pass2.equals("") && pass3.equals("")) {
-            ElasticSearcher.sendUser(user, this);
+            ElasticSearcher.sendUser(user);
             CharSequence text = "Saved!";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(this, text, duration);
@@ -122,7 +122,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
         }
 
         user.setPasshash(Hasher.getHash(pass2));
-        ElasticSearcher.sendUser(user, this);
+        ElasticSearcher.sendUser(user);
         CharSequence text = "Saved!";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(this, text, duration);

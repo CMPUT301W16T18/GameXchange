@@ -41,21 +41,14 @@ public class SearchListActivity extends AppCompatActivity {
         if(type == null) {
             Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
         } else if(type.equals(Constants.BORROWED_GAMES)) {
-            // Load Borrowed Games
             setTitle("Borrowed Games");
-            //TODO: Make specific function for this
-            ElasticSearcher.receiveAllGames(this, "SearchListActivity");
-        } else if(type.equals(Constants.WISH_LIST)) {
-            // Load Wish List
-            setTitle("Wish List");
-            //TODO: Make specific function for this
-            ElasticSearcher.receiveAllGames(this, "SearchListActivity");
+        } else if(type.equals(Constants.WATCH_LIST)) {
+            setTitle("Watch List");
         } else {
             //Default to my Games
             setTitle("My Games");
-            //TODO: Make specific function for this
-            ElasticSearcher.receiveAllGames(this, "SearchListActivity");
         }
+        ElasticSearcher.receiveGames(type, this, "SearchListActivity");
         setContentView(R.layout.activity_search_list);
 
         //Create Navigation Drawer
@@ -279,20 +272,17 @@ public class SearchListActivity extends AppCompatActivity {
             switch (position){
                 case 0:
                     setTitle("My Games");
-                    //TODO: Make specific function for this
-                    ElasticSearcher.receiveAllGames(searchListActivity, "SearchListActivity");
+                    ElasticSearcher.receiveGames(Constants.MY_GAMES, searchListActivity, "SearchListActivity");
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1:
                     setTitle("Borrowed Games");
-                    //TODO: Make specific function for this
-                    ElasticSearcher.receiveAllGames(searchListActivity, "SearchListActivity");
+                    ElasticSearcher.receiveGames(Constants.ALL_GAMES, searchListActivity, "SearchListActivity");
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2:
-                    setTitle("Wish List");
-                    //TODO: Make specific function for this
-                    ElasticSearcher.receiveAllGames(searchListActivity, "SearchListActivity");
+                    setTitle("Watch List");
+                    ElasticSearcher.receiveGames(Constants.WATCH_LIST, searchListActivity, "SearchListActivity");
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:

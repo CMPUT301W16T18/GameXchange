@@ -1,8 +1,12 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Vassili Minaev on 3/11/2016.
@@ -85,5 +89,22 @@ public class Schemas {
         }
 
         return object;
+    }
+
+    public static JSONObject getSpecificList(ArrayList<String> gameIDs) {
+        JSONObject query = new JSONObject();
+        JSONObject object = new JSONObject();
+        JSONObject ids = new JSONObject();
+
+        try {
+            ids.put("type","games");
+            ids.put("values", new JSONArray(gameIDs));
+            object.put("ids", ids);
+            query.put("query", object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return query;
     }
 }

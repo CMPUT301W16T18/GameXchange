@@ -103,7 +103,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
         game.setGenres(new ArrayList<String>(Arrays.asList(game_edit_genres.getText().toString().split("\\s*,\\s*"))));
         game.setDescription(game_edit_description.getText().toString());
 
-        ElasticSearcher.sendGame(game, this);
+        ElasticSearcher.sendGame(game);
         CharSequence text = "Saved!";
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(this, text, duration);

@@ -19,9 +19,10 @@ public class Constants {
 
     public static Boolean DEBUG = false;
 
+    public static String ALL_GAMES = "ALL_GAMES";
     public static String MY_GAMES = "MY_GAMES";
     public static String BORROWED_GAMES = "BORROWED_GAMES";
-    public static String WISH_LIST = "WISH_LIST";
+    public static String WATCH_LIST = "WATCH_LIST";
 
     public static String SEARCH_LIST_ACTIVITY_ACTION = "SEARCH_LIST_ACTIVITY_ACTION";
 
