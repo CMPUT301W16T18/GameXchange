@@ -8,19 +8,47 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class UserProfileEditActivity extends AppCompatActivity {
 
     private User user;
     private Intent parent_intent;
-    String id;
+    String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_edit);
         parent_intent = getIntent();
-        id = parent_intent.getStringExtra("id");
-        loadUser();
+        action = parent_intent.getStringExtra("ACTION");
+
+        if (action.equals("NEW")) {
+            user = new User("","","","","","","","","", new ArrayList<String>(), new ArrayList<String>());
+
+            setTitle("Let's create a new account!");
+            String email = parent_intent.getStringExtra("USER_EMAIL");
+            String password = parent_intent.getStringExtra("USER_PASS");
+
+            Button editUserSave = (Button) findViewById(R.id.editUserSave);
+            editUserSave.setText("Register");
+
+            EditText editUserEmail = (EditText) findViewById(R.id.editUserEmail);
+            EditText editUserPassword1 = (EditText) findViewById(R.id.editUserPassword1);
+            EditText editUserPassword2 = (EditText) findViewById(R.id.editUserPassword2);
+            EditText editUserPassword3 = (EditText) findViewById(R.id.editUserPassword3);
+
+            editUserEmail.setText(email);
+            editUserEmail.setEnabled(false);
+            editUserPassword1.setHint("Password");
+            editUserPassword1.setText(password);
+            editUserPassword2.setVisibility(View.GONE);
+            editUserPassword3.setVisibility(View.GONE);
+
+        }
+        else {
+            loadUser();
+        }
     }
 
     /**
@@ -97,39 +125,49 @@ public class UserProfileEditActivity extends AppCompatActivity {
         String pass2 = editUserPassword2.getText().toString();
         String pass3 = editUserPassword3.getText().toString();
 
-        if (pass1.equals("") && pass2.equals("") && pass3.equals("")) {
+        if (action.equals("NEW")) {
+            user.setPasshash(Hasher.getHash(pass1));
+            ElasticSearcher.sendUser(user);
+            CharSequence text = "User account created!";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(this, text, duration);
+            toast.show();
+            finish();
+        }
+        else {
+            if (pass1.equals("") && pass2.equals("") && pass3.equals("")) {
+                ElasticSearcher.sendUser(user);
+                CharSequence text = "Saved!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this, text, duration);
+                toast.show();
+                return;
+            }
+
+            if (! Hasher.getHash(pass1).equals(user.getPasshash())) {
+                editUserPassword1.setError("The entered password is incorrect.");
+                return;
+            }
+
+            if (! Constants.isPasswordValid(pass2)) {
+                editUserPassword2.setError("The chosen password is invalid.");
+                return;
+            }
+
+            if (! pass2.equals(pass3)) {
+                editUserPassword3.setError("The new passwords do not match.");
+                return;
+            }
+
+            user.setPasshash(Hasher.getHash(pass2));
             ElasticSearcher.sendUser(user);
             CharSequence text = "Saved!";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(this, text, duration);
             toast.show();
-            return;
+            editUserPassword1.setText("");
+            editUserPassword2.setText("");
+            editUserPassword3.setText("");
         }
-
-        if (! Hasher.getHash(pass1).equals(user.getPasshash())) {
-            editUserPassword1.setError("The entered password is incorrect.");
-            return;
-        }
-
-        if (! Constants.isPasswordValid(pass2)) {
-            editUserPassword2.setError("The chosen password is invalid.");
-            return;
-        }
-
-        if (! pass2.equals(pass3)) {
-            editUserPassword3.setError("The new passwords do not match.");
-            return;
-        }
-
-        user.setPasshash(Hasher.getHash(pass2));
-        ElasticSearcher.sendUser(user);
-        CharSequence text = "Saved!";
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
-        editUserPassword1.setText("");
-        editUserPassword2.setText("");
-        editUserPassword3.setText("");
-
     }
 }
