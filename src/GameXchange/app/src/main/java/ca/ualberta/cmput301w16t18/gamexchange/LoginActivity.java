@@ -313,7 +313,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     protected void onNewAccount() {
         showProgress(false);
-        //TODO: this
+        Intent intent = new Intent(this, UserProfileEditActivity.class);
+        intent.putExtra("ACTION", "NEW");
+        intent.putExtra("USER_EMAIL", mEmailView.getText().toString());
+        intent.putExtra("USER_PASS", mPasswordView.getText().toString());
+        startActivity(intent);
     }
 }
 
