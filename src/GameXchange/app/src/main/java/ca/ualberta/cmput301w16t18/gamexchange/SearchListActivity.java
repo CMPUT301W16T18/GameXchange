@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -107,6 +108,15 @@ public class SearchListActivity extends AppCompatActivity {
                 String gameID = games.getGames().get(position).getId();
                 intent.putExtra(Constants.GAME_ID, gameID);
                 startActivity(intent);
+            }
+        });
+
+        //Initialise FAB
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
             }
         });
 
