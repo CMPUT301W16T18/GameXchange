@@ -33,7 +33,13 @@
             android:label="@string/title_activity_view_profile"/>
         <activity
             android:name=".SearchListActivity"
-            android:label="@string/title_activity_search_list"/>
+            android:label="@string/title_activity_search_list">
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".GameProfileEditActivity"
             android:label="@string/title_activity_game_add_edit"/>
