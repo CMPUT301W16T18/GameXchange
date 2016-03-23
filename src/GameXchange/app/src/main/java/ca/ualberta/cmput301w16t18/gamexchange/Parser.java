@@ -1,7 +1,5 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Vassili Minaev on 3/4/2016.
  */
-public class Parser {
+class Parser {
     private String JSON;
 
     public Parser(String JSON) {

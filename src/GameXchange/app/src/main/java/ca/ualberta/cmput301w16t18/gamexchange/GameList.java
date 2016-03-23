@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Vassili Minaev on 2/12/2016.
  */
 public class GameList {
-    ArrayList<Game> games = new ArrayList<Game>();
+    private ArrayList<Game> games = new ArrayList<Game>();
 
     public boolean inList(Game game) {
         return games.contains(game);
@@ -20,9 +20,11 @@ public class GameList {
         games.addAll(other.getGames());
     }
 
-    public void removeGame(Game game) {
-        games.remove(games.indexOf(game));
-    }
+// --Commented out by Inspection START (3/22/16 6:39 PM):
+//    public void removeGame(Game game) {
+//        games.remove(games.indexOf(game));
+//    }
+// --Commented out by Inspection STOP (3/22/16 6:39 PM)
 
     public void removeGame(String id) {
         for (Game game : games) {

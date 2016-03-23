@@ -1,16 +1,13 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,16 +18,16 @@ import java.util.ArrayList;
 /**
  * Created by Vassili Minaev on 2/29/2016.
  */
-public class ElasticSearcher {
+class ElasticSearcher {
 
-    private static Response.ErrorListener errorListener = new Response.ErrorListener() {
+    private static final Response.ErrorListener errorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             Log.e("ERROR", "Whoops. I couldn't do the thing.");
         }
     };
 
-    private static Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
+    private static final Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
             /*Log.i("RESPONSE", response.toString());*/
@@ -135,13 +132,15 @@ public class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 
-    public static void updateGamePicture(String id, String picture) {
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(
-                Constants.getPrefix() + "games/" + id + "/_update",
-                Schemas.getPictureSchema(picture), jsonListener, errorListener);
-
-        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
-    }
+// --Commented out by Inspection START (3/22/16 6:39 PM):
+//    public static void updateGamePicture(String id, String picture) {
+//        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+//                Constants.getPrefix() + "games/" + id + "/_update",
+//                Schemas.getPictureSchema(picture), jsonListener, errorListener);
+//
+//        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+//    }
+// --Commented out by Inspection STOP (3/22/16 6:39 PM)
 
     public static void receiveGames(final String which, final Activity activity) {
 
@@ -171,7 +170,7 @@ public class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 
-    public static void receiveAllGames(final Activity activity) {
+    private static void receiveAllGames(final Activity activity) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -194,7 +193,7 @@ public class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void receiveListOfGames(final ArrayList<String> gameList, final Activity activity) {
+    private static void receiveListOfGames(final ArrayList<String> gameList, final Activity activity) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

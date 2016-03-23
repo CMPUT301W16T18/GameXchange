@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by Vassili Minaev on 3/2/2016.
  */
-public class Hasher {
+class Hasher {
     public static String getHash(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");

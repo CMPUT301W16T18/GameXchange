@@ -1,9 +1,7 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -13,12 +11,10 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -27,15 +23,14 @@ import java.util.Arrays;
 
 public class GameProfileEditActivity extends AppCompatActivity {
 
-    public Game game;
-    private Intent parent_intent;
-    String id;
+    private Game game;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_profile_edit);
-        parent_intent = getIntent();
+        Intent parent_intent = getIntent(); //fixed as per lint.
         id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
 
@@ -81,7 +76,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
         return game;
     }
 
-    public void editGame() {
+    private void editGame() {
         //implements US 01.04.01
 
         // Get connection status
@@ -110,12 +105,13 @@ public class GameProfileEditActivity extends AppCompatActivity {
         toast.show();
     }
 
-    public void cacheGame() {
+    private void cacheGame() {
         //implements US 08.01.01
         // TODO: Actually cache the changed game info, along with timestamp
         finish();
     }
 
+    @SuppressWarnings({"unused", "UnusedParameters"})
     public void takePhoto(View view) {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

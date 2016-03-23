@@ -18,9 +18,6 @@ public class User {
     private ArrayList<String> owned_games;
     private ArrayList<String> watchlist;
 
-    /* Do not use ever */
-    public User(){}
-
     public User(String id, String email, String name, String passhash, String address1,
                 String address2, String city, String phone, String postal,
                 ArrayList<String> owned_games, ArrayList<String> watchlist) {
