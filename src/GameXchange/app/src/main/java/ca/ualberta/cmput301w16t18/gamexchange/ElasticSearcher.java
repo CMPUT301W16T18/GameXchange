@@ -144,6 +144,8 @@ class ElasticSearcher {
 
     public static void receiveGames(final String which, final Activity activity) {
 
+        if (which == null) { return; }
+
         if (which.equals(Constants.ALL_GAMES)) {
             receiveAllGames(activity);
             return;
@@ -212,6 +214,29 @@ class ElasticSearcher {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
                 Schemas.getSpecificList(gameList), responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void receiveGamesBySearchTerm(final String search, final Activity activity) {
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                GameList games = responseToGameList(response);
+
+                if (activity.getLocalClassName().equals("SearchListActivity")) {
+                    SearchListActivity searchListActivity = (SearchListActivity) activity;
+                    searchListActivity.setDisplayedList(games);
+                }
+                else {
+                    //TODO: Are we going to call this method from anywhere else? Probably not.
+                }
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/_search",
+                Schemas.getTextSearch(search), responseListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }

@@ -9,8 +9,8 @@ class Constants {
 
     public static String getPrefix() { return serverURL + index + "/"; }
 
-    public static String GAME_ID = "GAME_ID";
-    public static String USER_ID = "USER_ID";
+    public static final String GAME_ID = "GAME_ID";
+    public static final String USER_ID = "USER_ID";
     public static String CURRENT_USER = "";
     public static String SEARCHLIST_CONTEXT = "";
     public static final int REQUEST_IMAGE_CAPTURE = 1;

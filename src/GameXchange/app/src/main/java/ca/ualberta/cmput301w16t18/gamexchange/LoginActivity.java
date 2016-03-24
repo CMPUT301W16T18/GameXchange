@@ -61,7 +61,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
-
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -84,12 +83,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         if (Constants.DEBUG) {
             // Quickstart for testing purposes.
-            //create the intent for the next activity.
-            intent = new Intent(this, SearchListActivity.class);
-            intent.putExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION,Constants.MY_GAMES);
             // Default to log in as Vassili
             Constants.CURRENT_USER = "AVM1KtaDI8oCfzIHasfN";
-            startActivity(intent);
+            onLoginSuccess();
         }
 
         populateAutoComplete();

@@ -34,17 +34,16 @@ public class SearchListActivity extends AppCompatActivity {
     private ListView listView;
     private SearchListActivity searchListActivity;
     FloatingActionButton fab;
+    private String type;
 
     public GameList games;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent parent_intent = getIntent();
-        handleIntent(parent_intent);
-        String type = parent_intent.getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
-        games = new GameList();
         searchListActivity = this;
+        games = new GameList();
+        handleIntent(getIntent());
         setContentView(R.layout.activity_search_list);
 
         //Initialise FAB
@@ -128,7 +127,6 @@ public class SearchListActivity extends AppCompatActivity {
         });
 
         //Initialize Gesture detector
-
         CustomGestureDetector mDetector = new CustomGestureDetector(this, SearchListActivity.this, listView);
         listView.setOnTouchListener(mDetector);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -167,10 +165,12 @@ public class SearchListActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
+        type = intent.getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
+            ElasticSearcher.receiveGamesBySearchTerm(query, searchListActivity);
+            setTitle("Results for \"" + query + "\"");
         }
     }
 
@@ -181,7 +181,7 @@ public class SearchListActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.alert_dialog_logout, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Constants.USER_ID = null;
+                        Constants.CURRENT_USER = "";
                         finish();
                     }
                 })
@@ -290,18 +290,18 @@ public class SearchListActivity extends AppCompatActivity {
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:
-                    setTitle("Search");
+                    setTitle("Notifications");
                     fab.setVisibility(View.GONE);
                     mDrawerLayout.closeDrawers();
-                    Toast.makeText(SearchListActivity.this,"No searching for you",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchListActivity.this,"No notifications for you",Toast.LENGTH_SHORT).show();
                     break;
                 case 4:
                     intent = new Intent(SearchListActivity.this, UserProfileViewActivity.class);
-                    intent.putExtra(Constants.USER_ID,Constants.CURRENT_USER);
+                    intent.putExtra(Constants.USER_ID, Constants.CURRENT_USER);
                     startActivity(intent);
                     break;
                 case 5:
-                    Constants.USER_ID = "";
+                    Constants.CURRENT_USER = "";
                     finish();
                     break;
             }

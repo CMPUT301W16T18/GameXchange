@@ -105,4 +105,27 @@ public class Schemas {
 
         return query;
     }
+
+    public static JSONObject getTextSearch(String search) {
+        JSONObject rv = new JSONObject();
+        JSONObject query = new JSONObject();
+        JSONObject multi_match = new JSONObject();
+        ArrayList<String> searchFields = new ArrayList<>();
+        searchFields.add("title");
+        searchFields.add("developer");
+        searchFields.add("genres");
+        searchFields.add("platform");
+        searchFields.add("description");
+
+        try {
+            multi_match.put("query", search);
+            multi_match.put("fields", new JSONArray(searchFields));
+            query.put("multi_match", multi_match);
+            rv.put("query", query);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return rv;
+    }
 }

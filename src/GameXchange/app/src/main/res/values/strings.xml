@@ -13,21 +13,14 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_view_profile">ViewProfileActivity</string>
-    <string name="title_activity_search_list">SearchListActivity</string>
-    <string name="title_activity_game_add_edit">GameAddEditActivity</string>
-    <string name="title_activity_game_profile">GameProfileActivity</string>
-    <string name="title_activity_user_profile_edit">UserProfileEditActivity</string>
-    <string name="title_activity_navigation_drawer">NavigationDrawer</string>
+    <string name="title_activity_search_list">List of games</string>
+    <string name="title_activity_game_add_edit">Edit your game</string>
+    <string name="title_activity_game_profile">Game info</string>
+    <string name="title_activity_view_profile">User profile</string>
+    <string name="title_activity_user_profile_edit">Edit your profile</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_example">Example action</string>
+    <string name="navigation_drawer_open"></string>
+    <string name="navigation_drawer_close"></string>
 
     <string name="action_settings">Settings</string>
 
@@ -37,7 +30,7 @@
         <item>My Games</item>
         <item>Borrowed Games</item>
         <item>Wish List</item>
-        <item>Search</item>
+        <item>Notifications</item>
         <item>My Account</item>
         <item>Log Out</item>
     </string-array>
@@ -51,7 +44,7 @@
     <string name="edit_button">Edit</string>
     <string name="take_photo_button">Take Photo</string>
 
-    <string name="alert_dialog_message">Are you sure you want to logout?</string>
+    <string name="alert_dialog_message">Are you sure you want to log out?</string>
     <string name="alert_dialog_logout">Log Out</string>
 
 </resources>
