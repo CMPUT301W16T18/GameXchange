@@ -23,7 +23,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
         parent_intent = getIntent();
         action = parent_intent.getStringExtra("ACTION");
 
-        if (action.equals("NEW")) {
+        if (action != null && action.equals("NEW")) {
             user = new User("","","","","","","","","", new ArrayList<String>(), new ArrayList<String>());
 
             setTitle("Let's create a new account!");
@@ -125,7 +125,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
         String pass2 = editUserPassword2.getText().toString();
         String pass3 = editUserPassword3.getText().toString();
 
-        if (action.equals("NEW")) {
+        if (action != null && action.equals("NEW")) {
             user.setPasshash(Hasher.getHash(pass1));
             ElasticSearcher.sendUser(user);
             CharSequence text = "User account created!";

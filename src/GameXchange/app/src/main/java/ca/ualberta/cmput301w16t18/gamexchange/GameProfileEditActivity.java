@@ -37,7 +37,14 @@ public class GameProfileEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_profile_edit);
         parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
-        loadGame(id);
+        if (id.equals("")) {
+            game = new Game("", "", "", "", "", new ArrayList<String>(), "", "");
+
+            setTitle("Let's add a game to your list!");
+        }
+        else {
+            loadGame(id);
+        }
 
         Button save = (Button) findViewById(R.id.game_edit_save);
         save.setOnClickListener(new View.OnClickListener() {

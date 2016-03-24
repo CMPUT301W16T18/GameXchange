@@ -34,6 +34,7 @@ public class SearchListActivity extends AppCompatActivity {
     protected SearchListListViewArrayAdapter adapter;
     protected ListView listView;
     protected SearchListActivity searchListActivity;
+    FloatingActionButton fab;
 
     public GameList games;
 
@@ -44,15 +45,30 @@ public class SearchListActivity extends AppCompatActivity {
         String type = getIntent().getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
         games = new GameList();
         searchListActivity = this;
+
+        //Initialise FAB
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+/*        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchListActivity.this, GameProfileEditActivity.class);
+                intent.putExtra(Constants.GAME_ID, "");
+                startActivity(intent);
+            }
+        });*/
+
         if(type == null) {
             Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
         } else if(type.equals(Constants.BORROWED_GAMES)) {
             setTitle("Borrowed Games");
+            fab.setVisibility(View.GONE);
         } else if(type.equals(Constants.WATCH_LIST)) {
             setTitle("Watch List");
+            fab.setVisibility(View.GONE);
         } else {
             //Default to my Games
             setTitle("My Games");
+//            fab.setVisibility(View.VISIBLE);
         }
         ElasticSearcher.receiveGames(type, this);
         setContentView(R.layout.activity_search_list);
@@ -108,15 +124,6 @@ public class SearchListActivity extends AppCompatActivity {
                 String gameID = games.getGames().get(position).getId();
                 intent.putExtra(Constants.GAME_ID, gameID);
                 startActivity(intent);
-            }
-        });
-
-        //Initialise FAB
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                
             }
         });
 
@@ -315,20 +322,25 @@ public class SearchListActivity extends AppCompatActivity {
             switch (position){
                 case 0:
                     setTitle("My Games");
+//                    fab.setVisibility(View.VISIBLE);
                     ElasticSearcher.receiveGames(Constants.MY_GAMES, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1:
                     setTitle("Borrowed Games");
+//                    fab.setVisibility(View.GONE);
                     ElasticSearcher.receiveGames(Constants.ALL_GAMES, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2:
                     setTitle("Watch List");
+//                    fab.setVisibility(View.GONE);
                     ElasticSearcher.receiveGames(Constants.WATCH_LIST, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:
+                    setTitle("Search");
+                    fab.setVisibility(View.GONE);
                     mDrawerLayout.closeDrawers();
                     Toast.makeText(SearchListActivity.this,"No searching for you",Toast.LENGTH_SHORT).show();
                     break;
