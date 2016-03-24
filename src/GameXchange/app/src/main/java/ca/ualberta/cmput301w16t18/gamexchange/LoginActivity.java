@@ -10,34 +10,28 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import android.Manifest;
-
 import static android.Manifest.permission.READ_CONTACTS;
+
+//import android.Manifest;
 
 
 /**
@@ -46,7 +40,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
-    protected LoginActivity loginActivity = this;
+    protected final LoginActivity loginActivity = this;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -285,7 +279,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     /**

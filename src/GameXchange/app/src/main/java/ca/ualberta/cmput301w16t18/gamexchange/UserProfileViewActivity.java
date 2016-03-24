@@ -11,15 +11,13 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class UserProfileViewActivity extends AppCompatActivity {
 
-    public User user;
-    private Intent parent_intent;
-    String id;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_view);
-        parent_intent = getIntent();
+        Intent parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.USER_ID);
         loadUser(id);
 
@@ -36,15 +34,13 @@ public class UserProfileViewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        parent_intent = getIntent();
-        id = parent_intent.getStringExtra(Constants.USER_ID);
         loadUser(id);
     }
 
     //Async loader for user information from elastic search
-    public void loadUser(String userId) {
+    private void loadUser(String userId) {
         //implements US 03.01.01
-        ElasticSearcher.receiveUser(Constants.CURRENT_USER, this);
+        ElasticSearcher.receiveUser(userId, this);
     }
 
     // Callback method for elastic search to populate the view.
@@ -67,6 +63,7 @@ public class UserProfileViewActivity extends AppCompatActivity {
     }
 
     // onClick method for the edit User button.
+    @SuppressWarnings({"unused", "UnusedParameters"})
     public void editUserProfile(View view) {
         Intent intent = new Intent(this, UserProfileEditActivity.class);
         intent.putExtra(Constants.USER_ID, id);

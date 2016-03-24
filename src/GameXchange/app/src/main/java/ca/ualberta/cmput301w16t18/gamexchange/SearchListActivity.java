@@ -30,10 +30,9 @@ public class SearchListActivity extends AppCompatActivity {
     private ListView drawerListView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    //private CharSequence mTitle, mDrawerTitle;
-    protected SearchListListViewArrayAdapter adapter;
-    protected ListView listView;
-    protected SearchListActivity searchListActivity;
+    private SearchListListViewArrayAdapter adapter;
+    private ListView listView;
+    private SearchListActivity searchListActivity;
     FloatingActionButton fab;
 
     public GameList games;
@@ -41,21 +40,23 @@ public class SearchListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handleIntent(getIntent());
-        String type = getIntent().getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
+        Intent parent_intent = getIntent();
+        handleIntent(parent_intent);
+        String type = parent_intent.getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
         games = new GameList();
         searchListActivity = this;
+        setContentView(R.layout.activity_search_list);
 
         //Initialise FAB
         fab = (FloatingActionButton) findViewById(R.id.fab);
-/*        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SearchListActivity.this, GameProfileEditActivity.class);
                 intent.putExtra(Constants.GAME_ID, "");
                 startActivity(intent);
             }
-        });*/
+        });
 
         if(type == null) {
             Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
@@ -68,10 +69,9 @@ public class SearchListActivity extends AppCompatActivity {
         } else {
             //Default to my Games
             setTitle("My Games");
-//            fab.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.VISIBLE);
         }
         ElasticSearcher.receiveGames(type, this);
-        setContentView(R.layout.activity_search_list);
 
         //Create Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -192,7 +192,7 @@ public class SearchListActivity extends AppCompatActivity {
 
     /**
      * Updates the primary ArrayList with a new list of games.
-     * @param gameList
+     * @param gameList list of games.
      */
     public void setDisplayedList (GameList gameList) {
         games.clear();
@@ -200,15 +200,15 @@ public class SearchListActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    /** Called whenever we call invalidateOptionsMenu()
-     *  @param menu
-     */
+    /* Called whenever we call invalidateOptionsMenu()
+     *  @param menu android menu
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(drawerListView);
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(drawerListView); //fixed according to lint
         return super.onPrepareOptionsMenu(menu);
     }
+    */
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -227,19 +227,15 @@ public class SearchListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        // Fixed as per lint.
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     /**
      * adds a game to the elastic search database along with the owner.
-     * @param mygame
-     * @param userId
+     * @param mygame game to be added
      */
-    public void addGame(Game mygame, String userId) {
+    public void addGame(Game mygame) {
         //implements US 01.01.01
         //add a game to a user's list
         games.add(mygame);
@@ -247,7 +243,7 @@ public class SearchListActivity extends AppCompatActivity {
 
     /**
      * deletes a game from Elastic search by game ID
-     * @param id
+     * @param id game id to be deleted
      */
     public void deleteGame(String id) {
         games.removeGame(id);
@@ -256,58 +252,13 @@ public class SearchListActivity extends AppCompatActivity {
 
     /**
      * Deletes a game from Elastic search by position
-     * @param position
+     * @param position position in the gameslist to be deleted
      */
     public void deleteGameByPosition(int position) {
         //implements US 01.05.01
         //deletes a game from a user's list
         Game mygame = games.getGames().get(position);
         ElasticSearcher.deleteGame(mygame.getId(), this);
-    }
-
-    /**
-     * Loads a list of the games that i own.
-     * @param userId
-     */
-    public void loadOwnedGames(String userId) {
-        //implements US 01.02.01
-        //pull list of games for specified user and display it
-    }
-
-    /**
-     * Loads games that i am currently borrowing
-     * @param userId
-     */
-    public void loadBorrowingGames(String userId) {
-        //implements US 06.01.01
-        //pull list of games that I am borrowing and display it
-    }
-
-    /**
-     * loads games borrowed from my library specified
-     * @param userId
-     */
-    public void loadBorrowedGames(String userId) {
-        //implements US 06.02.01
-        //pull list of games that are borrowed from me and display it
-    }
-
-    /**
-     * Searches the elastic search reource
-     * @param searchString
-     */
-    public void searchGames(String searchString) {
-        //implements US 04.01.01 and US 04.02.01
-        //search for all available games given searchString
-    }
-
-    /**
-     * Adds game to the users watchlist
-     * @param mygame
-     */
-    public void addToWatchlist(Game mygame) {
-        //implements US 04.03.01
-        //add a game to my watchlist
     }
 
     /**
@@ -322,19 +273,19 @@ public class SearchListActivity extends AppCompatActivity {
             switch (position){
                 case 0:
                     setTitle("My Games");
-//                    fab.setVisibility(View.VISIBLE);
+                    fab.setVisibility(View.VISIBLE);
                     ElasticSearcher.receiveGames(Constants.MY_GAMES, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1:
                     setTitle("Borrowed Games");
-//                    fab.setVisibility(View.GONE);
+                    fab.setVisibility(View.GONE);
                     ElasticSearcher.receiveGames(Constants.ALL_GAMES, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2:
                     setTitle("Watch List");
-//                    fab.setVisibility(View.GONE);
+                    fab.setVisibility(View.GONE);
                     ElasticSearcher.receiveGames(Constants.WATCH_LIST, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
@@ -346,10 +297,11 @@ public class SearchListActivity extends AppCompatActivity {
                     break;
                 case 4:
                     intent = new Intent(SearchListActivity.this, UserProfileViewActivity.class);
+                    intent.putExtra(Constants.USER_ID,Constants.CURRENT_USER);
                     startActivity(intent);
                     break;
                 case 5:
-                    Constants.USER_ID = null;
+                    Constants.USER_ID = "";
                     finish();
                     break;
             }

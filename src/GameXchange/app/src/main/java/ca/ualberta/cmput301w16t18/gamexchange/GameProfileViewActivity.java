@@ -3,7 +3,6 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -12,21 +11,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
-
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class GameProfileViewActivity extends AppCompatActivity {
 
-    public Game game;
-    private Intent parent_intent;
-    String id;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_profile_view);
-        parent_intent = getIntent();
+        Intent parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
 
@@ -42,12 +37,10 @@ public class GameProfileViewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        parent_intent = getIntent();
-        id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
     }
 
-    public void loadGame(String id) {
+    private void loadGame(String id) {
         //implements US 01.03.01 and US 03.03.01
         ElasticSearcher.receiveGame(id, this);
     }
@@ -75,6 +68,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings({"unused", "UnusedParameters"})
     public void editGameProfile(View view) {
         Intent intent = new Intent(this, GameProfileEditActivity.class);
         intent.putExtra(Constants.GAME_ID, id);

@@ -13,14 +13,13 @@ import java.util.ArrayList;
 public class UserProfileEditActivity extends AppCompatActivity {
 
     private User user;
-    private Intent parent_intent;
-    String action;
+    private String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile_edit);
-        parent_intent = getIntent();
+        Intent parent_intent = getIntent(); //Fixed as per lint.
         action = parent_intent.getStringExtra("ACTION");
 
         if (action != null && action.equals("NEW")) {
@@ -53,7 +52,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
 
     /**
      * returns the current user being displayed
-     * @return
+     * @return user.
      */
     public User getUser() {
         return user;
@@ -62,13 +61,13 @@ public class UserProfileEditActivity extends AppCompatActivity {
     /**
      * call to elastic search to load the user into the view.
      */
-    public void loadUser() {
+    private void loadUser() {
         ElasticSearcher.receiveUser(Constants.CURRENT_USER, this);
     }
 
     /**
      * callback from elastic search to populate the view with the user.
-     * @param user
+     * @param user to populate in the fields.
      */
     public void populateFields(User user) {
         EditText editUserName = (EditText) findViewById(R.id.editUserName);
@@ -90,7 +89,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
 
     /**
      * sets the user for the current view
-     * @param user
+     * @param user to be set in the current view.
      */
     public void setUser(User user) {
         this.user = user;
@@ -98,8 +97,9 @@ public class UserProfileEditActivity extends AppCompatActivity {
 
     /**
      * saves the edited user to elastic search.
-     * @param view
+     * @param view the view that is going to be used to change the user.
      */
+    @SuppressWarnings({"unused", "UnusedParameters"})
     public void editUser(View view) {
         //implements US 03.02.01
         EditText editUserName = (EditText) findViewById(R.id.editUserName);
