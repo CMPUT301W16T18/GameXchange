@@ -120,13 +120,25 @@ public class Schemas {
 
         try {
             multi_match.put("query", search);
+            multi_match.put("type", "cross_fields");
             multi_match.put("fields", new JSONArray(searchFields));
+            multi_match.put("operator", "and");
             query.put("multi_match", multi_match);
             rv.put("query", query);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        return rv;
+    }
+
+    public static JSONObject getAddGameToListSchema(String whichList, String gameID) {
+        JSONObject rv = new JSONObject();
+        return rv;
+    }
+
+    public static JSONObject getRemoveGameFromListSchema(String whichList, String gameID) {
+        JSONObject rv = new JSONObject();
         return rv;
     }
 }
