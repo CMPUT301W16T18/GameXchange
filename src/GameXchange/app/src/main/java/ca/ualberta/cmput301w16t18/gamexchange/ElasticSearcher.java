@@ -50,6 +50,22 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    public static void addGameToList(String whichList, String gameID, String userID) {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "users/" + userID,
+                Schemas.getAddGameToListSchema(whichList, gameID), jsonListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void removeGameFromList(String whichList, String gameID, String userID) {
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "users/" + userID,
+                Schemas.getRemoveGameFromListSchema(whichList, gameID), jsonListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
     public static void receiveGame(final String id, final Activity activity) {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -143,8 +159,6 @@ class ElasticSearcher {
 // --Commented out by Inspection STOP (3/22/16 6:39 PM)
 
     public static void receiveGames(final String which, final Activity activity) {
-
-        if (which == null) { return; }
 
         if (which.equals(Constants.ALL_GAMES)) {
             receiveAllGames(activity);
