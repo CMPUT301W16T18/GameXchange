@@ -144,6 +144,11 @@ public class SearchListActivity extends AppCompatActivity {
         view.setVisibility(View.GONE);
     }
 
+    /**
+     * Used to create the search bar and use it
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

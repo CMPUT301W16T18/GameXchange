@@ -33,6 +33,7 @@
             android:label="@string/title_activity_view_profile"/>
         <activity
             android:name=".SearchListActivity"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_search_list">
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
