@@ -160,9 +160,11 @@ public class SearchListActivity extends AppCompatActivity {
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconified(false);
 
         return true;
     }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
