@@ -17,6 +17,7 @@ public class User {
     private String postal;
     private ArrayList<String> owned_games;
     private ArrayList<String> watchlist;
+    private ArrayList<Review> reviews;
 
     public User(String id, String email, String name, String passhash, String address1,
                 String address2, String city, String phone, String postal,

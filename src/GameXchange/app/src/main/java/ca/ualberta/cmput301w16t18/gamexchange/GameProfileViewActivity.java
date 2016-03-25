@@ -7,15 +7,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 public class GameProfileViewActivity extends AppCompatActivity {
 
     private String id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +40,36 @@ public class GameProfileViewActivity extends AppCompatActivity {
                 .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
                 .singleUse("Show edit game") // provide a unique ID used to ensure it is only shown once
                 .show();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if(v.getId() == R.id.game_profile_ListView) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.bid_context_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+            case R.id.bid_accept:
+                //  stuff here
+                return true;
+            case R.id.bid_view_location:
+                //  stuff here
+                return true;
+            case R.id.bid_view_bidder:
+                //  stuff here
+                return true;
+            case R.id.bid_decline:
+                //  stuff here
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override
@@ -66,6 +104,9 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
             game_view_image.setImageBitmap(imageBitmap);
         }
+
+        setupListView(game.getBids());
+
     }
 
     @SuppressWarnings({"unused", "UnusedParameters"})
@@ -73,6 +114,14 @@ public class GameProfileViewActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GameProfileEditActivity.class);
         intent.putExtra(Constants.GAME_ID, id);
         startActivity(intent);
+    }
+
+    private void setupListView(ArrayList<Bid> bids) {
+        ListView listView = (ListView) findViewById(R.id.game_profile_ListView);
+        BidListViewArrayAdapter adapter = new BidListViewArrayAdapter(this, bids);
+        listView.setAdapter(adapter);
+
+        registerForContextMenu(listView);
     }
 
 }

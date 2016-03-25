@@ -47,4 +47,11 @@
     <string name="alert_dialog_message">Are you sure you want to log out?</string>
     <string name="alert_dialog_logout">Log Out</string>
 
+    <string name="bid_listview_item_accept">Accept Bid</string>
+    <string name="bid_listview_item_decline">Decline Bid</string>
+
+    <string name="bid_accept">Accept Bid</string>
+    <string name="bid_view_location">View Location</string>
+    <string name="bid_view_user">View Bidder</string>
+    <string name="bid_decline">Decline Bid</string>
 </resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/bid_accept"
+        android:title="@string/bid_accept" />
+
+    <item android:id="@+id/bid_view_location"
+        android:title="@string/bid_view_location" />
+
+    <item android:id="@+id/bid_view_bidder"
+        android:title="@string/bid_view_user" />
+
+    <item android:id="@+id/bid_decline"
+        android:title="@string/bid_decline" />
+
+</menu>

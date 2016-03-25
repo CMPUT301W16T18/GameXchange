@@ -12,7 +12,7 @@ public class SearchListActivityTest extends TestCase {
         //test.setName("Test Game");
 
         SearchListActivity activity = new SearchListActivity ();
-        activity.addGame(test, "USER-ID");
+        activity.addGame(test);
 
         assertTrue(activity.games.inList(test));
 
