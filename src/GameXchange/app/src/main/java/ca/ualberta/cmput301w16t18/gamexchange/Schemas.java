@@ -56,6 +56,7 @@ public class Schemas {
             object.put("description",game.getDescription());
             object.put("genres", new JSONArray(game.getGenres()));
             object.put("picture",game.getPicture());
+            object.put("bids",game.getBids());
         } catch (JSONException e) {
             e.printStackTrace();
         }

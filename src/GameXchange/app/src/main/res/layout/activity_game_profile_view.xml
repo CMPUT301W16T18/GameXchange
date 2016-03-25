@@ -66,6 +66,8 @@
         android:onClick="editGameProfile"
         android:text="@string/edit_button"/>
 
+
+
 </LinearLayout>
 
 </ScrollView>
