@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -105,6 +106,7 @@ public class SearchListActivity extends AppCompatActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+
             }
         };
         mDrawerToggle.setDrawerIndicatorEnabled(true);
@@ -160,7 +162,7 @@ public class SearchListActivity extends AppCompatActivity {
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconified(false);
+        searchView.setIconifiedByDefault(false);
 
         return true;
     }
@@ -193,8 +195,8 @@ public class SearchListActivity extends AppCompatActivity {
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
-                .show();
-    }
+        .show();
+        }
 
 
     /**
@@ -206,16 +208,6 @@ public class SearchListActivity extends AppCompatActivity {
         games.addAll(gameList);
         adapter.notifyDataSetChanged();
     }
-
-    /* Called whenever we call invalidateOptionsMenu()
-     *  @param menu android menu
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(drawerListView); //fixed according to lint
-        return super.onPrepareOptionsMenu(menu);
-    }
-    */
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
