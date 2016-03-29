@@ -54,4 +54,7 @@
     <string name="bid_view_location">View Location</string>
     <string name="bid_view_user">View Bidder</string>
     <string name="bid_decline">Decline Bid</string>
+
+    <string name="reviews_string">Reviews:</string>
+    <string name="bids_string">Bids:</string>
 </resources>

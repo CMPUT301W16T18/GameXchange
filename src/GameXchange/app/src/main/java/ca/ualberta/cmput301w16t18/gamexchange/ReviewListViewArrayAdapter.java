@@ -6,26 +6,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
  * Created by cawthorn on 2/28/16.
  */
-public class ReviewListViewArrayAdapter extends ArrayAdapter<Game> {
+public class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
     private final Context context;
-    private final ArrayList<Game> gamelist;
+    private final ArrayList<Review> reviews;
 
     /**
      * Constructor for an android arrayadapter
      * @param context context to create the arrayadapter
-     * @param gamelist arrayList to be adaptered.
+     * @param reviews arrayList to be adaptered.
      */
-    public ReviewListViewArrayAdapter(Context context, ArrayList<Game> gamelist) {
-        super(context,-1,gamelist);
+    public ReviewListViewArrayAdapter(Context context, ArrayList<Review> reviews) {
+        super(context,-1,reviews);
         this.context = context;
-        this.gamelist = gamelist;
+        this.reviews = reviews;
     }
 
     @Override
@@ -33,31 +35,18 @@ public class ReviewListViewArrayAdapter extends ArrayAdapter<Game> {
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.searchlist_listview_item, parent, false);
-        } else {
-            Button button = (Button) convertView.findViewById(R.id.SearchListDeleteButton);
-            if(button.getVisibility() == View.VISIBLE) button.setVisibility(View.INVISIBLE);
         }
 
-
         //Populate data in the view
-        TextView textview = (TextView) convertView.findViewById(R.id.SearchListItemTitleTextView);
-        textview.setText(gamelist.get(position).getTitle());
+        TextView textview = (TextView) convertView.findViewById(R.id.ReviewDateTextView);
+        textview.setText(reviews.get(position).getDate().toString());
 
-        textview = (TextView) convertView.findViewById(R.id.SearchListItemPlatformTextView);
-        textview.setText(gamelist.get(position).getPlatform());
+        textview = (TextView) convertView.findViewById(R.id.ReviewBodyTextView);
+        textview.setText(reviews.get(position).getReviewBody());
 
-        textview = (TextView) convertView.findViewById(R.id.SearchListItemStatusTextView);
-        textview.setText(gamelist.get(position).getStatus());
+        RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ReviewRatingBar);
+        ratingBar.setNumStars(reviews.get(position).getRating());
 
         return convertView;
-    }
-
-    /**
-     * returns the game id for the item at the specified position.
-     * @param position position to return game id for.
-     * @return the gameid
-     */
-    public String getID(int position) {
-        return gamelist.get(position).getId();
     }
 }
