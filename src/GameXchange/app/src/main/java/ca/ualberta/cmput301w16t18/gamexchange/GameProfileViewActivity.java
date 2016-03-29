@@ -34,14 +34,6 @@ public class GameProfileViewActivity extends AppCompatActivity {
         Intent parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
-
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(findViewById(R.id.game_edit_button))
-                .setDismissText("GOT IT")
-                .setContentText("Touch here to edit the info about your game and add an image !!")
-                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse("Show edit game") // provide a unique ID used to ensure it is only shown once
-                .show();
     }
 
     @Override
@@ -86,32 +78,31 @@ public class GameProfileViewActivity extends AppCompatActivity {
     }
 
     public void populateFields(Game game) {
-        TextView game_view_title = (TextView) findViewById(R.id.game_view_title);
-        TextView game_view_developer = (TextView) findViewById(R.id.game_view_developer);
-        TextView game_view_platform = (TextView) findViewById(R.id.game_view_platform);
-        TextView game_view_genres = (TextView) findViewById(R.id.game_view_genres);
-        TextView game_view_description = (TextView) findViewById(R.id.game_view_description);
-        ImageView game_view_image = (ImageView) findViewById(R.id.game_view_image);
 
-        game_view_title.setText(game.getTitle());
-        game_view_developer.setText(game.getDeveloper());
-        game_view_platform.setText(game.getPlatform());
-        game_view_genres.setText(TextUtils.join(", ", game.getGenres()));
-        game_view_description.setText(game.getDescription());
 
-        if (!game.getPicture().equals("")) {
-            //Decode base64 string to a bitmap.
-            byte[] decodedBytes = Base64.decode(game.getPicture(), 0);
-            Bitmap imageBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-
-            game_view_image.setImageBitmap(imageBitmap);
-        }
-
+        //TODO: Remove this.
         ArrayList<Bid> bids = new ArrayList<Bid>();
         bids.add(new Bid(Constants.CURRENT_USER, 19.99, new LatLng(53.33, 113.33)));
+        bids.add(new Bid(Constants.CURRENT_USER, 20.99, new LatLng(53.33, 113.33)));
+        bids.add(new Bid(Constants.CURRENT_USER, 9.99, new LatLng(53.33, 113.33)));
+        bids.add(new Bid(Constants.CURRENT_USER, 199.99, new LatLng(53.33, 113.33)));
         game.setBids(bids);
-        setupListView(game.getBids());
 
+        ListView listView = (ListView) findViewById(R.id.game_profile_ListView);
+        BidListViewArrayAdapter adapter = new BidListViewArrayAdapter(this, game);
+        listView.setAdapter(adapter);
+
+        registerForContextMenu(listView);
+
+        /*
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(findViewById(R.id.game_edit_button))
+                .setDismissText("GOT IT")
+                .setContentText("Touch here to edit the info about your game and add an image !!")
+                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("Show edit game") // provide a unique ID used to ensure it is only shown once
+                .show();
+        */
     }
 
     @SuppressWarnings({"unused", "UnusedParameters"})
@@ -122,11 +113,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
     }
 
     private void setupListView(ArrayList<Bid> bids) {
-        ListView listView = (ListView) findViewById(R.id.game_profile_ListView);
-        BidListViewArrayAdapter adapter = new BidListViewArrayAdapter(this, bids);
-        listView.setAdapter(adapter);
 
-        registerForContextMenu(listView);
     }
 
 }
