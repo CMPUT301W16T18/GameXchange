@@ -17,7 +17,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -44,7 +55,9 @@ public class GameProfileEditActivity extends AppCompatActivity {
         Button save = (Button) findViewById(R.id.game_edit_save);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { editGame(); }
+            public void onClick(View v) {
+                editGame();
+            }
         });
     }
 
@@ -83,15 +96,13 @@ public class GameProfileEditActivity extends AppCompatActivity {
         return game;
     }
 
-    private void editGame() {
+    protected void editGame() {
         //implements US 01.04.01
 
         // Get connection status
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
-        if (!isConnected) { cacheGame(); }
 
         EditText game_edit_title = (EditText) findViewById(R.id.game_edit_title);
         EditText game_edit_developer = (EditText) findViewById(R.id.game_edit_developer);
@@ -105,17 +116,28 @@ public class GameProfileEditActivity extends AppCompatActivity {
         game.setGenres(new ArrayList<String>(Arrays.asList(game_edit_genres.getText().toString().split("\\s*,\\s*"))));
         game.setDescription(game_edit_description.getText().toString());
 
-        ElasticSearcher.sendGame(game);
-        CharSequence text = "Saved!";
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(this, text, duration);
-        toast.show();
+        if (!isConnected) {
+            cacheGame(game);
+            CharSequence text = "Cached Till Network Available";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(this, text, duration);
+            toast.show();
+        }
+        else{
+            ElasticSearcher.sendGame(game);
+            CharSequence text = "Saved!";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(this, text, duration);
+            toast.show();
+        }
+
+
     }
 
-    private void cacheGame() {
+    private void cacheGame(Game game) {
         //implements US 08.01.01
         // TODO: Actually cache the changed game info, along with timestamp
-        finish();
+        saveInFile(game);
     }
 
     @SuppressWarnings({"unused", "UnusedParameters"})
@@ -146,4 +168,21 @@ public class GameProfileEditActivity extends AppCompatActivity {
             //ElasticSearcher.updateGamePicture(game.getId(), encoded, this);
         }
     }
+
+
+    /**
+     * This method used for Caching
+     */
+    public void saveInFile(Game game) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir(),"")+ File.separator+Constants.FILENAME));
+            oos.writeObject(game);
+            oos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

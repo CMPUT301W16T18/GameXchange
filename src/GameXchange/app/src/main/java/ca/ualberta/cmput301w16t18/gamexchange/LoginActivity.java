@@ -25,7 +25,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -283,6 +291,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onLoginSuccess() {
         showProgress(false);
 
+        loadFromFile();
+
         intent = new Intent(this, SearchListActivity.class);
         intent.putExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION, Constants.MY_GAMES);
         startActivity(intent);
@@ -308,5 +318,39 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         intent.putExtra("USER_PASS", mPasswordView.getText().toString());
         startActivity(intent);
     }
+
+
+    /**
+     * This method used for Caching
+     */
+    private void loadFromFile() {
+        try {
+            ObjectInputStream oin =
+                    new ObjectInputStream(new FileInputStream((new File(getFilesDir(),"")+ File.separator+Constants.FILENAME)));
+
+            Game game = (Game) oin.readObject();
+
+            oin.close();
+            deleteFile(Constants.FILENAME);
+
+            if(game != null){
+                ElasticSearcher.sendGame(game);
+                CharSequence text = "Your Cached Game Has Now Been Saved!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this, text, duration);
+                toast.show();
+            }
+            else{
+                return;
+            }
+        } catch (FileNotFoundException e) {
+            return;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
