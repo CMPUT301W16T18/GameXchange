@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -35,6 +37,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
         this.context = context;
         this.game = game;
         this.bids = game.getBids();
+        this.add(new Bid("",0,new LatLng(0,0)));
     }
 
     @Override
