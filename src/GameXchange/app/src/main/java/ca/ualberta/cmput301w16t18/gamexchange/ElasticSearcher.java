@@ -181,7 +181,7 @@ class ElasticSearcher {
         };
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                Constants.getPrefix() + "users/" + Constants.CURRENT_USER, responseListener, errorListener);
+                Constants.getPrefix() + "users/" + Constants.CURRENT_USER.getId(), responseListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
@@ -295,7 +295,7 @@ class ElasticSearcher {
 
                         if (email.equals( source.get("email").toString() )) {
                             if (passhash.equals( source.get("passhash").toString() )) {
-                                Constants.CURRENT_USER = hit.getString("_id");
+                                Constants.CURRENT_USER.setId(hit.getString("_id"));
                                 loginActivity.onLoginSuccess();
                             }
                             else {
