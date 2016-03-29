@@ -34,7 +34,7 @@ public class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.searchlist_listview_item, parent, false);
+            convertView = inflater.inflate(R.layout.review_listview_item, parent, false);
         }
 
         //Populate data in the view

@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -105,6 +107,9 @@ public class GameProfileViewActivity extends AppCompatActivity {
             game_view_image.setImageBitmap(imageBitmap);
         }
 
+        ArrayList<Bid> bids = new ArrayList<Bid>();
+        bids.add(new Bid(Constants.CURRENT_USER, 19.99, new LatLng(53.33, 113.33)));
+        game.setBids(bids);
         setupListView(game.getBids());
 
     }
