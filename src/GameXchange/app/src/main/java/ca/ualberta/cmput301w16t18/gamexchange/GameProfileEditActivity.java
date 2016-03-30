@@ -137,7 +137,10 @@ public class GameProfileEditActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, text, duration);
             toast.show();
         }
-        else{
+        else {
+            if (game.getId().equals("")) {
+                game.setStatus("Available");
+            }
             ElasticSearcher.sendGame(game);
             CharSequence text = "Saved!";
             int duration = Toast.LENGTH_SHORT;
@@ -189,7 +192,8 @@ public class GameProfileEditActivity extends AppCompatActivity {
      */
     public void saveInFile(Game game) {
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir(),"")+ File.separator+Constants.FILENAME));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(getFilesDir(),"")+ File.separator+Constants.FILENAME+Constants.iterator));
+            Constants.iterator = Constants.iterator +1;
             oos.writeObject(game);
             oos.close();
         } catch (FileNotFoundException e) {
@@ -198,7 +202,6 @@ public class GameProfileEditActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
     }
-
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -234,5 +237,4 @@ public class GameProfileEditActivity extends AppCompatActivity {
             mView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
 }

@@ -39,7 +39,6 @@ public class SearchListActivity extends AppCompatActivity {
     private ListView listView;
     private SearchListActivity searchListActivity;
     FloatingActionButton fab;
-    private String type;
 
     private View mProgressView;
     private View mListViewView;
@@ -69,12 +68,12 @@ public class SearchListActivity extends AppCompatActivity {
             }
         });
 
-        if(type == null) {
+        if(Constants.SEARCHLIST_CONTEXT.equals("")) {
             Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
-        } else if(type.equals(Constants.BORROWED_GAMES)) {
+        } else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.BORROWED_GAMES)) {
             setTitle("Borrowed Games");
             fab.setVisibility(View.GONE);
-        } else if(type.equals(Constants.WATCH_LIST)) {
+        } else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.WATCH_LIST)) {
             setTitle("Watch List");
             fab.setVisibility(View.GONE);
         } else {
@@ -82,9 +81,8 @@ public class SearchListActivity extends AppCompatActivity {
             setTitle("My Games");
             fab.setVisibility(View.VISIBLE);
         }
-
         showProgress(true);
-        ElasticSearcher.receiveGames(type, this);
+        ElasticSearcher.receiveGames(this);
 
         //Create Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -187,8 +185,6 @@ public class SearchListActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        type = intent.getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
-
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             ElasticSearcher.receiveGamesBySearchTerm(query, searchListActivity);
@@ -285,24 +281,27 @@ public class SearchListActivity extends AppCompatActivity {
             Intent intent;
             switch (position){
                 case 0:
+                    Constants.SEARCHLIST_CONTEXT = Constants.MY_GAMES;
                     setTitle("My Games");
                     fab.setVisibility(View.VISIBLE);
                     showProgress(true);
-                    ElasticSearcher.receiveGames(Constants.MY_GAMES, searchListActivity);
+                    ElasticSearcher.receiveGames(searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1:
+                    Constants.SEARCHLIST_CONTEXT = Constants.BORROWED_GAMES;
                     setTitle("Borrowed Games");
                     fab.setVisibility(View.GONE);
                     showProgress(true);
-                    ElasticSearcher.receiveGames(Constants.ALL_GAMES, searchListActivity);
+                    ElasticSearcher.receiveGames(searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2:
+                    Constants.SEARCHLIST_CONTEXT = Constants.WATCH_LIST;
                     setTitle("Watch List");
                     fab.setVisibility(View.GONE);
                     showProgress(true);
-                    ElasticSearcher.receiveGames(Constants.WATCH_LIST, searchListActivity);
+                    ElasticSearcher.receiveGames(searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:

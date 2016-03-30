@@ -34,6 +34,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.OptionalDataException;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission was granted.
                     populateAutoComplete();
                 } else {
@@ -141,10 +143,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     //Copied from http://stackandroid.com/tutorial/android-autocomplete-email-ids-using-loadermanager-on-marshmallow/
     private void populateAutoComplete() {
-        if(!mayRequestContacts()) {
+        if (!mayRequestContacts()) {
             return;
         }
-        getLoaderManager().initLoader(0,null,this);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     /**
@@ -293,8 +295,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         loadFromFile();
 
+        Constants.SEARCHLIST_CONTEXT = Constants.MY_GAMES;
         intent = new Intent(this, SearchListActivity.class);
-        intent.putExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION, Constants.MY_GAMES);
         startActivity(intent);
     }
 
@@ -324,33 +326,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * This method used for Caching
      */
     private void loadFromFile() {
-        try {
-            ObjectInputStream oin =
-                    new ObjectInputStream(new FileInputStream((new File(getFilesDir(),"")+ File.separator+Constants.FILENAME)));
-
-            Game game = (Game) oin.readObject();
-
-            oin.close();
-            deleteFile(Constants.FILENAME);
-
-            if(game != null){
-                ElasticSearcher.sendGame(game);
-                CharSequence text = "Your Cached Game Has Now Been Saved!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(this, text, duration);
-                toast.show();
-            }
-            else{
-                return;
-            }
-        } catch (FileNotFoundException e) {
+        File fileLister[] = getFilesDir().listFiles();
+        if (fileLister.length ==  0){
             return;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
+        for (int i = 0; i < fileLister.length; ++i) {
+            try {
+                ObjectInputStream oin =
+                        new ObjectInputStream(new FileInputStream((new File(getFilesDir(), "")
+                                + File.separator + Constants.FILENAME + i)));
+                Game game = (Game) oin.readObject();
+                ElasticSearcher.sendGame(game);
+                oin.close();
+                deleteFile(Constants.FILENAME + i);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
+            }
+        }
+        CharSequence text = "Your Cached Game Has Now Been Saved!";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, text, duration);
+        toast.show();
+
     }
 
+
 }
+
 

@@ -27,6 +27,7 @@ class Constants {
 
     public static final String SEARCH_LIST_ACTIVITY_ACTION = "SEARCH_LIST_ACTIVITY_ACTION";
     public static final String FILENAME = "cache.sav";
+    public static int iterator = 0;
 
     public static boolean isEmailValid(String email) {
         return email.contains("@");
