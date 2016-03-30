@@ -51,7 +51,6 @@ public class GameProfileEditActivity extends AppCompatActivity {
 
         mProgressView = findViewById(R.id.game_edit_view_progress);
         mView = findViewById(R.id.game_profile_edit_all_view);
-        showProgress(true);
 
         Intent parent_intent = getIntent(); //fixed as per lint.
         id = parent_intent.getStringExtra(Constants.GAME_ID);
@@ -74,7 +73,8 @@ public class GameProfileEditActivity extends AppCompatActivity {
     }
 
     public void loadGame(String id) {
-        ElasticSearcher.receiveGame(id, this);
+            showProgress(true);                
+            ElasticSearcher.receiveGame(id, this);
     }
 
     public void populateFields(Game game) {
