@@ -137,14 +137,6 @@ public class User {
         this.watchlist = watchlist;
     }
 
-    public ArrayList<String> getOwned_games() {
-        return owned_games;
-    }
-
-    public void setOwned_games(ArrayList<String> owned_games) {
-        this.owned_games = owned_games;
-    }
-
     public ArrayList<Review> getReviews() {
         return reviews;
     }
