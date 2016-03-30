@@ -62,7 +62,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
      * call to elastic search to load the user into the view.
      */
     private void loadUser() {
-        ElasticSearcher.receiveUser(Constants.CURRENT_USER, this);
+        ElasticSearcher.receiveUser(Constants.CURRENT_USER.getId(), this);
     }
 
     /**

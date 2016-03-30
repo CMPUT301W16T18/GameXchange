@@ -11,7 +11,7 @@ class Constants {
 
     public static final String GAME_ID = "GAME_ID";
     public static final String USER_ID = "USER_ID";
-    public static String CURRENT_USER = "";
+    public static User CURRENT_USER = new User();
     public static String SEARCHLIST_CONTEXT = "";
     public static final int REQUEST_IMAGE_CAPTURE = 1;
 

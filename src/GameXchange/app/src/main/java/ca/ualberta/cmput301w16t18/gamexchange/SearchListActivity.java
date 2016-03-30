@@ -190,7 +190,7 @@ public class SearchListActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.alert_dialog_logout, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Constants.CURRENT_USER = "";
+                        Constants.CURRENT_USER = new User();
                         finish();
                     }
                 })
@@ -296,11 +296,11 @@ public class SearchListActivity extends AppCompatActivity {
                     break;
                 case 4:
                     intent = new Intent(SearchListActivity.this, UserProfileViewActivity.class);
-                    intent.putExtra(Constants.USER_ID, Constants.CURRENT_USER);
+                    intent.putExtra(Constants.USER_ID, Constants.CURRENT_USER.getId());
                     startActivity(intent);
                     break;
                 case 5:
-                    Constants.CURRENT_USER = "";
+                    Constants.CURRENT_USER = new User();
                     finish();
                     break;
             }
