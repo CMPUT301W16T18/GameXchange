@@ -16,6 +16,7 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,6 +37,9 @@ public class GameProfileViewActivity extends AppCompatActivity {
     private View mProgressView;
     private View mView;
 
+    private ListView listView;
+    private BidListViewArrayAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +51,26 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
         mView = findViewById(R.id.game_profile_ListView);
         mProgressView = findViewById(R.id.game_view_progress);
+
         showProgress(true);
 
+        listView = (ListView) findViewById(R.id.game_profile_ListView);
+        adapter = new BidListViewArrayAdapter(this, new Game("", "", "", "", "",
+                new ArrayList<String>(), "", "", new ArrayList<Bid>()));
+        listView.setAdapter(adapter);
+
+        registerForContextMenu(listView);
+
+        /*
+        //TODO: find anchor for this.
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(findViewById(R.id.game_edit_button))
+                .setDismissText("GOT IT")
+                .setContentText("Touch here to edit the info about your game and add an image !!")
+                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("Show edit game") // provide a unique ID used to ensure it is only shown once
+                .show();
+        */
     }
 
     @Override
@@ -105,24 +127,12 @@ public class GameProfileViewActivity extends AppCompatActivity {
         bids.add(new Bid(Constants.CURRENT_USER.getId(), 199.99, new LatLng(53.55, -113.5)));
         game.setBids(bids);
 
-        ListView listView = (ListView) findViewById(R.id.game_profile_ListView);
-        BidListViewArrayAdapter adapter = new BidListViewArrayAdapter(this, game);
+        adapter = new BidListViewArrayAdapter(this, game);
         listView.setAdapter(adapter);
-
-        registerForContextMenu(listView);
 
         showProgress(false);
 
-        /*
-        //TODO: find anchor for this.
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(findViewById(R.id.game_edit_button))
-                .setDismissText("GOT IT")
-                .setContentText("Touch here to edit the info about your game and add an image !!")
-                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse("Show edit game") // provide a unique ID used to ensure it is only shown once
-                .show();
-        */
+
     }
 
     @SuppressWarnings({"unused", "UnusedParameters"})
@@ -169,7 +179,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
     }
 
     private void acceptBid(Bid bid) {
-        //TODO: This.
+        //TODO: This. need to clear all bids on the object and mark one as accepted.
 
     }
 
@@ -184,10 +194,14 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
     private void viewBidBidder(Bid bid) {
         //TODO: This.
+        Intent intent = new Intent(GameProfileViewActivity.this, UserProfileViewActivity.class);
+        intent.putExtra(Constants.USER_ID,bid.getBidder());
+        startActivity(intent);
     }
 
     private void declineBid(Bid bid) {
-        //TODO: This.
+        //TODO: This. need to remove the bid from the arraylist and resync bids with elastic search.
+
     }
 
 }
