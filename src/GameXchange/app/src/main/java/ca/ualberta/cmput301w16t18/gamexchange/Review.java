@@ -8,9 +8,18 @@ import java.util.Date;
 public class Review {
     private Date date;
     private String reviewBody;
-    private int rating;
+    private float rating;
     private String reviewer;
     private String gameID;
+
+    public Review(Date date, String reviewer, String gameID, int rating, String reviewBody) {
+        this.date = date;
+        this.reviewBody = reviewBody;
+        this.rating = rating;
+        this.reviewer = reviewer;
+        this.gameID = gameID;
+
+    }
 
     public Date getDate() {
         return date;
@@ -28,7 +37,7 @@ public class Review {
         this.reviewBody = reviewBody;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
