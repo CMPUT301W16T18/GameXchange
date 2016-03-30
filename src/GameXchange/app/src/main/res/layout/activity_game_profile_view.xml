@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/game_profile_ListView">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="4dp">
 
-</ListView>
+    <!-- progress bar -->
+    <ProgressBar
+        android:id="@+id/game_view_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+    <ListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/game_profile_ListView">
+
+    </ListView>
+</LinearLayout>

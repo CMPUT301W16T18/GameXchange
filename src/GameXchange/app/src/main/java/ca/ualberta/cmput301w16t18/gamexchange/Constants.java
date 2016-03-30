@@ -18,7 +18,7 @@ class Constants {
     public static final int SWIPE_MIN_DISTANCE = 300;
     public static final int SWIPE_THRESHOLD_VELOCITY = 150;
 
-    public static final Boolean DEBUG = true;
+    public static final Boolean DEBUG = false;
 
     public static final String ALL_GAMES = "ALL_GAMES";
     public static final String MY_GAMES = "MY_GAMES";

@@ -1,8 +1,12 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -26,6 +30,9 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
     private String id;
 
+    private View mProgressView;
+    private View mView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,11 @@ public class GameProfileViewActivity extends AppCompatActivity {
         Intent parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
+
+        mView = findViewById(R.id.game_profile_ListView);
+        mProgressView = findViewById(R.id.game_view_progress);
+        showProgress(true);
+
     }
 
     @Override
@@ -94,7 +106,10 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
         registerForContextMenu(listView);
 
+        showProgress(false);
+
         /*
+        //TODO: find anchor for this.
         new MaterialShowcaseView.Builder(this)
                 .setTarget(findViewById(R.id.game_edit_button))
                 .setDismissText("GOT IT")
@@ -112,8 +127,40 @@ public class GameProfileViewActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void setupListView(ArrayList<Bid> bids) {
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
+            mView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 
 }

@@ -1,10 +1,14 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -37,6 +41,9 @@ public class SearchListActivity extends AppCompatActivity {
     FloatingActionButton fab;
     private String type;
 
+    private View mProgressView;
+    private View mListViewView;
+
     public GameList games;
 
     @Override
@@ -46,6 +53,10 @@ public class SearchListActivity extends AppCompatActivity {
         games = new GameList();
         handleIntent(getIntent());
         setContentView(R.layout.activity_search_list);
+
+
+        mListViewView = findViewById(R.id.searchListAllView);
+        mProgressView = findViewById(R.id.search_progress);
 
         //Initialise FAB
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -71,6 +82,8 @@ public class SearchListActivity extends AppCompatActivity {
             setTitle("My Games");
             fab.setVisibility(View.VISIBLE);
         }
+
+        showProgress(true);
         ElasticSearcher.receiveGames(type, this);
 
         //Create Navigation Drawer
@@ -207,6 +220,7 @@ public class SearchListActivity extends AppCompatActivity {
         games.clear();
         games.addAll(gameList);
         adapter.notifyDataSetChanged();
+        showProgress(false);
     }
 
     @Override
@@ -273,18 +287,21 @@ public class SearchListActivity extends AppCompatActivity {
                 case 0:
                     setTitle("My Games");
                     fab.setVisibility(View.VISIBLE);
+                    showProgress(true);
                     ElasticSearcher.receiveGames(Constants.MY_GAMES, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1:
                     setTitle("Borrowed Games");
                     fab.setVisibility(View.GONE);
+                    showProgress(true);
                     ElasticSearcher.receiveGames(Constants.ALL_GAMES, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2:
                     setTitle("Watch List");
                     fab.setVisibility(View.GONE);
+                    showProgress(true);
                     ElasticSearcher.receiveGames(Constants.WATCH_LIST, searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
@@ -304,6 +321,42 @@ public class SearchListActivity extends AppCompatActivity {
                     finish();
                     break;
             }
+        }
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mListViewView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mListViewView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mListViewView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mListViewView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 }
