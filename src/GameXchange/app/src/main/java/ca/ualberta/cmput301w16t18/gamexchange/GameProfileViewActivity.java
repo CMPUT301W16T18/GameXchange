@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +23,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -60,18 +63,20 @@ public class GameProfileViewActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        ListView listView = (ListView) findViewById(R.id.game_profile_ListView);
+        Bid bid = (Bid) listView.getItemAtPosition(info.position);
         switch(item.getItemId()) {
             case R.id.bid_accept:
-                //  stuff here
+                acceptBid(bid);
                 return true;
             case R.id.bid_view_location:
-                //  stuff here
+                viewBidLocation(bid);
                 return true;
             case R.id.bid_view_bidder:
-                //  stuff here
+                viewBidBidder(bid);
                 return true;
             case R.id.bid_decline:
-                //  stuff here
+                declineBid(bid);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -94,10 +99,10 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
         //TODO: Remove this.
         ArrayList<Bid> bids = new ArrayList<Bid>();
-        bids.add(new Bid(Constants.CURRENT_USER.getId(), 19.99, new LatLng(53.33, 113.33)));
-        bids.add(new Bid(Constants.CURRENT_USER.getId(), 20.99, new LatLng(53.33, 113.33)));
-        bids.add(new Bid(Constants.CURRENT_USER.getId(), 9.99, new LatLng(53.33, 113.33)));
-        bids.add(new Bid(Constants.CURRENT_USER.getId(), 199.99, new LatLng(53.33, 113.33)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 19.99, new LatLng(53.55, -113.5)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 20.99, new LatLng(53.55, -113.5)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 9.99, new LatLng(53.55, -113.5)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 199.99, new LatLng(53.55, -113.5)));
         game.setBids(bids);
 
         ListView listView = (ListView) findViewById(R.id.game_profile_ListView);
@@ -161,6 +166,28 @@ public class GameProfileViewActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    private void acceptBid(Bid bid) {
+        //TODO: This.
+
+    }
+
+    private void viewBidLocation(Bid bid) {
+        //TODO: This.
+        //From https://developers.google.com/maps/documentation/android-api/intents#display_a_map
+        Uri gmmIntentUri = Uri.parse(bid.getMapsString());
+        Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        intent.setPackage("com.google.android.apps.maps");
+        startActivity(intent);
+    }
+
+    private void viewBidBidder(Bid bid) {
+        //TODO: This.
+    }
+
+    private void declineBid(Bid bid) {
+        //TODO: This.
     }
 
 }

@@ -40,4 +40,9 @@ public class Bid {
     public void setPoint(LatLng point) {
         this.location = point;
     }
+
+    public String getMapsString() {
+        // from http://stackoverflow.com/questions/3990110/how-to-show-marker-in-maps-launched-by-geo-uri-intent
+        return "geo:" + location.latitude + "," + location.longitude + "?z=10&q=" + location.latitude + "," + location.longitude + "(Trade location)";
+    }
 }
