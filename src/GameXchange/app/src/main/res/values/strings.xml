@@ -29,7 +29,7 @@
     <string-array name="navigation_drawer_items_section">
         <item>My Games</item>
         <item>Borrowed Games</item>
-        <item>Wish List</item>
+        <item>Watch List</item>
         <item>Notifications</item>
         <item>My Account</item>
         <item>Log Out</item>

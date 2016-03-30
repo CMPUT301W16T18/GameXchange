@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceLarge"
+            android:padding="4dp"
             android:id="@+id/BidListItemItemAmountTextView"
             android:text="Bid"
             android:layout_gravity="center"

@@ -19,6 +19,20 @@ public class User {
     private ArrayList<String> watchlist;
     private ArrayList<Review> reviews;
 
+    public User() {
+        this.id = "";
+        this.email = "";
+        this.name = "";
+        this.passhash = "";
+        this.address1 = "";
+        this.address2 = "";
+        this.city = "";
+        this.phone = "";
+        this.postal = "";
+        this.owned_games = new ArrayList<>();
+        this.watchlist = new ArrayList<>();
+    }
+
     public User(String id, String email, String name, String passhash, String address1,
                 String address2, String city, String phone, String postal,
                 ArrayList<String> owned_games, ArrayList<String> watchlist) {
@@ -121,14 +135,6 @@ public class User {
 
     public void setWatchlist(ArrayList<String> watchlist) {
         this.watchlist = watchlist;
-    }
-
-    public ArrayList<String> getOwned_games() {
-        return owned_games;
-    }
-
-    public void setOwned_games(ArrayList<String> owned_games) {
-        this.owned_games = owned_games;
     }
 
     public ArrayList<Review> getReviews() {

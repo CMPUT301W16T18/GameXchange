@@ -131,14 +131,4 @@ public class Schemas {
 
         return rv;
     }
-
-    public static JSONObject getAddGameToListSchema(String whichList, String gameID) {
-        JSONObject rv = new JSONObject();
-        return rv;
-    }
-
-    public static JSONObject getRemoveGameFromListSchema(String whichList, String gameID) {
-        JSONObject rv = new JSONObject();
-        return rv;
-    }
 }

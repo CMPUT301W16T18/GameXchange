@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -21,14 +25,8 @@ public class UserProfileViewActivity extends AppCompatActivity {
         id = parent_intent.getStringExtra(Constants.USER_ID);
         loadUser(id);
 
-        Button editButton = (Button) findViewById(R.id.viewUserEdit);
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(editButton)
-                .setDismissText("GOT IT")
-                .setContentText("Click here to edit a user!")
-                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse("Show edit") // provide a unique ID used to ensure it is only shown once
-                .show();
+
+
     }
 
     @Override
@@ -45,21 +43,31 @@ public class UserProfileViewActivity extends AppCompatActivity {
 
     // Callback method for elastic search to populate the view.
     public void populateFields(User user) {
-        TextView viewUserName = (TextView) findViewById(R.id.viewUserName);
-        TextView viewUserEmail = (TextView) findViewById(R.id.viewUserEmail);
-        TextView viewUserAddress1 = (TextView) findViewById(R.id.viewUserAddress1);
-        TextView viewUserAddress2 = (TextView) findViewById(R.id.viewUserAddress2);
-        TextView viewUserCity = (TextView) findViewById(R.id.viewUserCity);
-        TextView viewUserPhone = (TextView) findViewById(R.id.viewUserPhone);
-        TextView viewUserPostalCode = (TextView) findViewById(R.id.viewUserPostalCode);
 
-        viewUserName.setText(user.getName());
-        viewUserEmail.setText(user.getEmail());
-        viewUserAddress1.setText(user.getAddress1());
-        viewUserAddress2.setText(user.getAddress2());
-        viewUserCity.setText(user.getCity());
-        viewUserPhone.setText(user.getPhone());
-        viewUserPostalCode.setText(user.getPostal());
+        //TODO: Remove this.
+        ArrayList<Review> reviews = new ArrayList<>();
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis());
+        reviews.add(new Review(date, "", "", 5, "Best Game Ever!"));
+        reviews.add(new Review(date, "", "", 4, "Great Game!"));
+        reviews.add(new Review(date, "", "", 3, "Alright Game."));
+        reviews.add(new Review(date, "", "", 2, "Not so good game."));
+        reviews.add(new Review(date, "", "", 1, "Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n"));
+        reviews.add(new Review(date, "", "", 0, "Would not recommend."));
+        reviews.add(new Review(date, "", "", 1, "Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n"));
+        reviews.add(new Review(date, "", "", 2, "Not so good game."));
+        reviews.add(new Review(date, "", "", 3, "Alright Game."));
+        reviews.add(new Review(date, "", "", 4, "Great Game!"));
+        reviews.add(new Review(date, "", "", 5, "Best Game Ever!"));
+        user.setReviews(reviews);
+
+        ListView listView = (ListView) findViewById(R.id.user_profile_ListView);
+        ReviewListViewArrayAdapter adapter = new ReviewListViewArrayAdapter(this, user);
+        adapter.setActivity(this);
+        listView.setAdapter(adapter);
+
+
+
     }
 
     // onClick method for the edit User button.

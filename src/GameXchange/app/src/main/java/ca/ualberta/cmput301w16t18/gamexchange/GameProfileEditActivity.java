@@ -123,7 +123,10 @@ public class GameProfileEditActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, text, duration);
             toast.show();
         }
-        else{
+        else {
+            if (game.getId().equals("")) {
+                game.setStatus("Available");
+            }
             ElasticSearcher.sendGame(game);
             CharSequence text = "Saved!";
             int duration = Toast.LENGTH_SHORT;

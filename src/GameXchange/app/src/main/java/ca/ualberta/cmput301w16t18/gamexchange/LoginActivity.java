@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (Constants.DEBUG) {
             // Quickstart for testing purposes.
             // Default to log in as Vassili
-            Constants.CURRENT_USER = "AVM1KtaDI8oCfzIHasfN";
+            Constants.CURRENT_USER.setId("AVM1KtaDI8oCfzIHasfN");
             onLoginSuccess();
         }
 
@@ -295,8 +295,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         loadFromFile();
 
+        Constants.SEARCHLIST_CONTEXT = Constants.MY_GAMES;
         intent = new Intent(this, SearchListActivity.class);
-        intent.putExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION, Constants.MY_GAMES);
         startActivity(intent);
     }
 

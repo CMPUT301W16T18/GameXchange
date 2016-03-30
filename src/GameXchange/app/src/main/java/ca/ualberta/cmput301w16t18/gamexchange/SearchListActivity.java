@@ -35,7 +35,6 @@ public class SearchListActivity extends AppCompatActivity {
     private ListView listView;
     private SearchListActivity searchListActivity;
     FloatingActionButton fab;
-    private String type;
 
     public GameList games;
 
@@ -58,12 +57,12 @@ public class SearchListActivity extends AppCompatActivity {
             }
         });
 
-        if(type == null) {
+        if(Constants.SEARCHLIST_CONTEXT.equals("")) {
             Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
-        } else if(type.equals(Constants.BORROWED_GAMES)) {
+        } else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.BORROWED_GAMES)) {
             setTitle("Borrowed Games");
             fab.setVisibility(View.GONE);
-        } else if(type.equals(Constants.WATCH_LIST)) {
+        } else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.WATCH_LIST)) {
             setTitle("Watch List");
             fab.setVisibility(View.GONE);
         } else {
@@ -71,7 +70,7 @@ public class SearchListActivity extends AppCompatActivity {
             setTitle("My Games");
             fab.setVisibility(View.VISIBLE);
         }
-        ElasticSearcher.receiveGames(type, this);
+        ElasticSearcher.receiveGames(this);
 
         //Create Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -174,8 +173,6 @@ public class SearchListActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-        type = intent.getStringExtra(Constants.SEARCH_LIST_ACTIVITY_ACTION);
-
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             ElasticSearcher.receiveGamesBySearchTerm(query, searchListActivity);
@@ -190,7 +187,7 @@ public class SearchListActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.alert_dialog_logout, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Constants.CURRENT_USER = "";
+                        Constants.CURRENT_USER = new User();
                         finish();
                     }
                 })
@@ -271,21 +268,24 @@ public class SearchListActivity extends AppCompatActivity {
             Intent intent;
             switch (position){
                 case 0:
+                    Constants.SEARCHLIST_CONTEXT = Constants.MY_GAMES;
                     setTitle("My Games");
                     fab.setVisibility(View.VISIBLE);
-                    ElasticSearcher.receiveGames(Constants.MY_GAMES, searchListActivity);
+                    ElasticSearcher.receiveGames(searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 1:
+                    Constants.SEARCHLIST_CONTEXT = Constants.BORROWED_GAMES;
                     setTitle("Borrowed Games");
                     fab.setVisibility(View.GONE);
-                    ElasticSearcher.receiveGames(Constants.ALL_GAMES, searchListActivity);
+                    ElasticSearcher.receiveGames(searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 2:
+                    Constants.SEARCHLIST_CONTEXT = Constants.WATCH_LIST;
                     setTitle("Watch List");
                     fab.setVisibility(View.GONE);
-                    ElasticSearcher.receiveGames(Constants.WATCH_LIST, searchListActivity);
+                    ElasticSearcher.receiveGames(searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:
@@ -296,11 +296,11 @@ public class SearchListActivity extends AppCompatActivity {
                     break;
                 case 4:
                     intent = new Intent(SearchListActivity.this, UserProfileViewActivity.class);
-                    intent.putExtra(Constants.USER_ID, Constants.CURRENT_USER);
+                    intent.putExtra(Constants.USER_ID, Constants.CURRENT_USER.getId());
                     startActivity(intent);
                     break;
                 case 5:
-                    Constants.CURRENT_USER = "";
+                    Constants.CURRENT_USER = new User();
                     finish();
                     break;
             }

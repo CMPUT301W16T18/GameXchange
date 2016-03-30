@@ -82,10 +82,10 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
         //TODO: Remove this.
         ArrayList<Bid> bids = new ArrayList<Bid>();
-        bids.add(new Bid(Constants.CURRENT_USER, 19.99, new LatLng(53.33, 113.33)));
-        bids.add(new Bid(Constants.CURRENT_USER, 20.99, new LatLng(53.33, 113.33)));
-        bids.add(new Bid(Constants.CURRENT_USER, 9.99, new LatLng(53.33, 113.33)));
-        bids.add(new Bid(Constants.CURRENT_USER, 199.99, new LatLng(53.33, 113.33)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 19.99, new LatLng(53.33, 113.33)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 20.99, new LatLng(53.33, 113.33)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 9.99, new LatLng(53.33, 113.33)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 199.99, new LatLng(53.33, 113.33)));
         game.setBids(bids);
 
         ListView listView = (ListView) findViewById(R.id.game_profile_ListView);

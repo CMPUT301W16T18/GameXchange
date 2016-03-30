@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletionService;
 
 /**
  * Created by Vassili Minaev on 2/29/2016.
@@ -35,6 +36,17 @@ class ElasticSearcher {
     };
 
     public static void sendGame(final Game game) {
+        Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                if (game.getId().equals("")) {
+                    Parser parser = new Parser(response.toString());
+                    String id = parser.getStringValue("_id");
+                    addGameToList(id);
+                }
+            }
+        };
+
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/" + game.getId(),
                 Schemas.getGameSchema(game), jsonListener, errorListener);
@@ -50,20 +62,34 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void addGameToList(String whichList, String gameID, String userID) {
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(
-                Constants.getPrefix() + "users/" + userID,
-                Schemas.getAddGameToListSchema(whichList, gameID), jsonListener, errorListener);
-
-        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    public static void addGameToList(String gameID) {
+        User user = Constants.CURRENT_USER;
+        if (Constants.SEARCHLIST_CONTEXT.equals(Constants.MY_GAMES)) {
+            ArrayList myGames = user.getGames();
+            myGames.add(gameID);
+            user.setGames(myGames);
+        }
+        else if (Constants.SEARCHLIST_CONTEXT.equals(Constants.WATCH_LIST)) {
+            ArrayList myGames = user.getWatchlist();
+            myGames.add(gameID);
+            user.setWatchlist(myGames);
+        }
+        sendUser(user);
     }
 
-    public static void removeGameFromList(String whichList, String gameID, String userID) {
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(
-                Constants.getPrefix() + "users/" + userID,
-                Schemas.getRemoveGameFromListSchema(whichList, gameID), jsonListener, errorListener);
-
-        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    public static void removeGameFromList(String gameID) {
+        User user = Constants.CURRENT_USER;
+        if (Constants.SEARCHLIST_CONTEXT.equals(Constants.MY_GAMES)) {
+            ArrayList myGames = user.getGames();
+            myGames.remove(gameID);
+            user.setGames(myGames);
+        }
+        else if (Constants.SEARCHLIST_CONTEXT.equals(Constants.WATCH_LIST)) {
+            ArrayList myGames = user.getWatchlist();
+            myGames.remove(gameID);
+            user.setWatchlist(myGames);
+        }
+        sendUser(user);
     }
 
     public static void receiveGame(final String id, final Activity activity) {
@@ -158,9 +184,10 @@ class ElasticSearcher {
 //    }
 // --Commented out by Inspection STOP (3/22/16 6:39 PM)
 
-    public static void receiveGames(final String which, final Activity activity) {
+    public static void receiveGames(final Activity activity) {
+        final String which = Constants.SEARCHLIST_CONTEXT;
 
-        if (which.equals(Constants.ALL_GAMES)) {
+        if (which.equals(Constants.ALL_GAMES) || which.equals(Constants.BORROWED_GAMES)) {
             receiveAllGames(activity);
             return;
         }
@@ -181,7 +208,7 @@ class ElasticSearcher {
         };
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                Constants.getPrefix() + "users/" + Constants.CURRENT_USER, responseListener, errorListener);
+                Constants.getPrefix() + "users/" + Constants.CURRENT_USER.getId(), responseListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
     }
@@ -295,7 +322,19 @@ class ElasticSearcher {
 
                         if (email.equals( source.get("email").toString() )) {
                             if (passhash.equals( source.get("passhash").toString() )) {
-                                Constants.CURRENT_USER = hit.getString("_id");
+                                Parser parser = new Parser(response.toString());
+                                User user = new User(parser.getStringValue("_id"),
+                                        parser.getStringValue("email"),
+                                        parser.getStringValue("name"),
+                                        parser.getStringValue("passhash"),
+                                        parser.getStringValue("address1"),
+                                        parser.getStringValue("address2"),
+                                        parser.getStringValue("city"),
+                                        parser.getStringValue("phone"),
+                                        parser.getStringValue("postal"),
+                                        parser.getArrayValue("owned_games"),
+                                        parser.getArrayValue("watchlist"));
+                                Constants.CURRENT_USER = user;
                                 loginActivity.onLoginSuccess();
                             }
                             else {
