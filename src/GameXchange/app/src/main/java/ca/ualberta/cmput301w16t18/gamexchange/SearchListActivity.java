@@ -28,7 +28,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class SearchListActivity extends AppCompatActivity {
 
@@ -144,15 +146,25 @@ public class SearchListActivity extends AppCompatActivity {
         listView.setOnTouchListener(mDetector);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(findViewById(R.id.tutorialTextView))
-                .setDismissText("GOT IT")
-                .setContentText("Touch a game to get details !!! " +
-                        "Touch the hamburger icon in the top left corner to navigate around " +
-                        "the app!! Also swipe left on a game to delete!!")
-                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse("list view")// provide a unique ID used to ensure it is only shown once
-                .show();
+        // This is for the Tutorial
+        // For reuse statement https://github.com/deano2390/MaterialShowcaseView
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "ListView");
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(findViewById(R.id.tutorialTextView),
+                "This is where you will see all of your Games!", "GOT IT");
+
+        sequence.addSequenceItem(findViewById(R.id.tutorialTextView),
+                "Swipe from the left to open the hamburger menu!", "GOT IT");
+
+        sequence.addSequenceItem(findViewById(R.id.tutorialTextView),
+                "Now you're ready to navigate around the app!", "GOT IT");
+
+        sequence.start();
         TextView view = (TextView) findViewById(R.id.tutorialTextView);
         view.setVisibility(View.GONE);
     }

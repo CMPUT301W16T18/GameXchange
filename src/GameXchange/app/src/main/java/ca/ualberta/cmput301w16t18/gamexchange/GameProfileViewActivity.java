@@ -28,7 +28,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class GameProfileViewActivity extends AppCompatActivity {
 
@@ -61,16 +63,29 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
         registerForContextMenu(listView);
 
-        /*
         //TODO: find anchor for this.
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(findViewById(R.id.game_edit_button))
-                .setDismissText("GOT IT")
-                .setContentText("Touch here to edit the info about your game and add an image !!")
-                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse("Show edit game") // provide a unique ID used to ensure it is only shown once
-                .show();
-        */
+        // For reuse statement https://github.com/deano2390/MaterialShowcaseView
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(200); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "GameView");
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(findViewById(R.id.tutorialTextViewGameView),
+                "This is where you will see the information for a single game!", "GOT IT");
+
+        sequence.addSequenceItem(findViewById(R.id.tutorialTextViewGameView),
+                "It contains game information and bid information!", "GOT IT");
+
+        sequence.addSequenceItem(findViewById(R.id.tutorialTextViewGameView),
+                "To view location of a bid, decline or accept a bid, and to view the location of" +
+                        " a bid long press on a bid!", "GOT IT");
+
+        sequence.start();
+        TextView view = (TextView) findViewById(R.id.tutorialTextViewGameView);
+        view.setVisibility(View.GONE);
+
     }
 
     @Override
