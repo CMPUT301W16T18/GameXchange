@@ -149,7 +149,7 @@ public class SearchListActivity extends AppCompatActivity {
         // This is for the Tutorial
         // For reuse statement https://github.com/deano2390/MaterialShowcaseView
         ShowcaseConfig config = new ShowcaseConfig();
-        config.setDelay(500); // half second between each showcase view
+        config.setDelay(200); // half second between each showcase view
 
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "ListView");
 

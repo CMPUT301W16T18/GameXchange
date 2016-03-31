@@ -15,7 +15,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class UserProfileViewActivity extends AppCompatActivity {
 
@@ -34,6 +36,25 @@ public class UserProfileViewActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.user_view_progress);
         mListViewView = findViewById(R.id.user_profile_ListView);
         showProgress(true);
+
+        // This is for the Tutorial
+        // For reuse statement https://github.com/deano2390/MaterialShowcaseView
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(200); // half second between each showcase view
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "UserView");
+
+        sequence.setConfig(config);
+
+        sequence.addSequenceItem(findViewById(R.id.tutorialTextViewUserView),
+                "This is where you will see information about users!", "GOT IT");
+
+        sequence.addSequenceItem(findViewById(R.id.tutorialTextViewUserView),
+                "Contains basic information and reviews!", "GOT IT");
+
+        sequence.start();
+        TextView view = (TextView) findViewById(R.id.tutorialTextViewUserView);
+        view.setVisibility(View.GONE);
     }
 
     @Override
