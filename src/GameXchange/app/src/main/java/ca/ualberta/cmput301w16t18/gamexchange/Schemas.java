@@ -10,7 +10,8 @@ import java.util.ArrayList;
  * Created by Vassili Minaev on 3/11/2016.
  */
 public class Schemas {
-    public static JSONObject getUserSchema(User user) {
+
+    public static JSONObject userSchema(User user) {
         JSONObject object = new JSONObject();
         try {
             object.put("email", user.getEmail());
@@ -23,6 +24,8 @@ public class Schemas {
             object.put("postal", user.getPostal());
             object.put("owned_games", new JSONArray(user.getGames()));
             object.put("watchlist", new JSONArray(user.getWatchlist()));
+            object.put("borrowing_games", new JSONArray(user.getBorrowing()));
+            object.put("reviews", reviewsSchema(user.getReviews()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -30,7 +33,7 @@ public class Schemas {
         return object;
     }
 
-    public static JSONObject getUserLoginSchema(String userEmail) {
+    public static JSONObject userLoginSchema(String userEmail) {
         JSONObject query = new JSONObject();
         JSONObject term = new JSONObject();
         JSONObject email = new JSONObject();
@@ -45,7 +48,7 @@ public class Schemas {
         return query;
     }
 
-    public static JSONObject getGameSchema(Game game) {
+    public static JSONObject gameSchema(Game game) {
         JSONObject object = new JSONObject();
 
         try {
@@ -53,10 +56,10 @@ public class Schemas {
             object.put("title", game.getTitle());
             object.put("developer",game.getDeveloper());
             object.put("platform",game.getPlatform());
-            object.put("description",game.getDescription());
+            object.put("description", game.getDescription());
             object.put("genres", new JSONArray(game.getGenres()));
             object.put("picture",game.getPicture());
-            object.put("bids",game.getBids());
+            object.put("bids", bidsSchema(game.getBids()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -64,7 +67,7 @@ public class Schemas {
         return object;
     }
 
-    public static JSONObject getLongList() {
+    public static JSONObject longListSchema() {
         JSONObject object = new JSONObject();
 
         try {
@@ -76,21 +79,7 @@ public class Schemas {
         return object;
     }
 
-    public static JSONObject getPictureSchema(String picture) {
-        JSONObject object = new JSONObject();
-        JSONObject doc = new JSONObject();
-
-        try {
-            doc.put("picture",picture);
-            object.put("doc", doc);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return object;
-    }
-
-    public static JSONObject getSpecificList(ArrayList<String> gameIDs) {
+    public static JSONObject specificListSchema(ArrayList<String> gameIDs) {
         JSONObject query = new JSONObject();
         JSONObject object = new JSONObject();
         JSONObject ids = new JSONObject();
@@ -107,7 +96,7 @@ public class Schemas {
         return query;
     }
 
-    public static JSONObject getTextSearch(String search) {
+    public static JSONObject textSearchSchema(String search) {
         JSONObject rv = new JSONObject();
         JSONObject query = new JSONObject();
         JSONObject multi_match = new JSONObject();
@@ -130,5 +119,15 @@ public class Schemas {
         }
 
         return rv;
+    }
+
+    private static JSONArray bidsSchema(ArrayList<Bid> bids) {
+        //TODO: this
+        return new JSONArray();
+    }
+
+    private static JSONArray reviewsSchema(ArrayList<Review> reviews) {
+        //TODO: this
+        return new JSONArray();
     }
 }

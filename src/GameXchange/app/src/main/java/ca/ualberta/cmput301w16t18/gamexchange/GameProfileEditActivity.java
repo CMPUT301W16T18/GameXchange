@@ -55,7 +55,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
         Intent parent_intent = getIntent(); //fixed as per lint.
         id = parent_intent.getStringExtra(Constants.GAME_ID);
         if (id.equals("")) {
-            game = new Game("", "", "", "", "", new ArrayList<String>(), "", "");
+            game = new Game();
 
             setTitle("Let's add a game to your list!");
         }

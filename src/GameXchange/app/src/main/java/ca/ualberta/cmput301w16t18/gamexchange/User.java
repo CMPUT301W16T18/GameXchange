@@ -17,6 +17,7 @@ public class User {
     private String postal;
     private ArrayList<String> owned_games;
     private ArrayList<String> watchlist;
+    private ArrayList<String> borrowing_games;
     private ArrayList<Review> reviews;
 
     public User() {
@@ -31,11 +32,14 @@ public class User {
         this.postal = "";
         this.owned_games = new ArrayList<>();
         this.watchlist = new ArrayList<>();
+        this.borrowing_games = new ArrayList<>();
+        this.reviews = new ArrayList<>();
     }
 
     public User(String id, String email, String name, String passhash, String address1,
                 String address2, String city, String phone, String postal,
-                ArrayList<String> owned_games, ArrayList<String> watchlist) {
+                ArrayList<String> owned_games, ArrayList<String> watchlist,
+                ArrayList<String> borrowing_games, ArrayList<Review> reviews) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -47,6 +51,8 @@ public class User {
         this.postal = postal;
         this.owned_games = owned_games;
         this.watchlist = watchlist;
+        this.borrowing_games = borrowing_games;
+        this.reviews = reviews;
     }
 
     public String getId() {
@@ -135,6 +141,14 @@ public class User {
 
     public void setWatchlist(ArrayList<String> watchlist) {
         this.watchlist = watchlist;
+    }
+
+    public ArrayList<String> getBorrowing() {
+        return borrowing_games;
+    }
+
+    public void setBorrowing(ArrayList<String> borrowing_games) {
+        this.borrowing_games = borrowing_games;
     }
 
     public ArrayList<Review> getReviews() {

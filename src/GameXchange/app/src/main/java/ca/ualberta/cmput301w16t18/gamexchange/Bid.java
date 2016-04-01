@@ -67,7 +67,5 @@ public class Bid {
         this.status = Constants.ACCEPTED;
     }
 
-    public void reject() {
-        this.status = Constants.REJECTED;
-    }
+
 }

@@ -50,7 +50,7 @@ class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/" + game.getId(),
-                Schemas.getGameSchema(game), jsonListener, errorListener);
+                Schemas.gameSchema(game), jsonListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
@@ -58,7 +58,7 @@ class ElasticSearcher {
     public static void sendUser(final User user) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "users/" + user.getId(),
-                Schemas.getUserSchema(user), jsonListener, errorListener);
+                Schemas.userSchema(user), jsonListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
@@ -161,16 +161,6 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-// --Commented out by Inspection START (3/22/16 6:39 PM):
-//    public static void updateGamePicture(String id, String picture) {
-//        JsonObjectRequest jsonRequest = new JsonObjectRequest(
-//                Constants.getPrefix() + "games/" + id + "/_update",
-//                Schemas.getPictureSchema(picture), jsonListener, errorListener);
-//
-//        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
-//    }
-// --Commented out by Inspection STOP (3/22/16 6:39 PM)
-
     public static void receiveGames(final Activity activity) {
         final String which = Constants.SEARCHLIST_CONTEXT;
 
@@ -232,7 +222,7 @@ class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
-                Schemas.getLongList(), responseListener, errorListener);
+                Schemas.longListSchema(), responseListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
@@ -255,7 +245,7 @@ class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
-                Schemas.getSpecificList(gameList), responseListener, errorListener);
+                Schemas.specificListSchema(gameList), responseListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
@@ -278,7 +268,7 @@ class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
-                Schemas.getTextSearch(search), responseListener, errorListener);
+                Schemas.textSearchSchema(search), responseListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
@@ -317,13 +307,15 @@ class ElasticSearcher {
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "users/_search",
-                Schemas.getUserLoginSchema(email), loginListener, errorListener);
+                Schemas.userLoginSchema(email), loginListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
     private static User responseToUser(JSONObject response) {
         User user = new User();
+        JSONArray borrowingGamesList = new JSONArray(); //TODO: remove this when database is reset
+        JSONArray reviewsList = new JSONArray(); //TODO: remove this when database is reset
 
         try {
             String id = response.getString("_id");
@@ -346,8 +338,19 @@ class ElasticSearcher {
             for (int i=0; i<watchedGamesList.length(); i++) {
                 watchlist.add(watchedGamesList.get(i).toString());
             }
+            if (source.has("borrowing_games")) {
+                borrowingGamesList = source.getJSONArray("borrowing_games");
+            }
+            ArrayList<String> borrowing_games = new ArrayList<>();
+            for (int i=0; i<borrowingGamesList.length(); i++) {
+                borrowing_games.add(borrowingGamesList.get(i).toString());
+            }
+            if (source.has("reviews")) {
+                reviewsList = source.getJSONArray("reviews");
+            }
+            ArrayList<Review> reviews = responseToReviewList(reviewsList);
 
-            user = new User(id, email, name, passhash, address1, address2, city, phone, postal, owned_games, watchlist);
+            user = new User(id, email, name, passhash, address1, address2, city, phone, postal, owned_games, watchlist, borrowing_games, reviews);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -358,7 +361,8 @@ class ElasticSearcher {
 
     private static Game responseToGame(JSONObject response) {
         Game game = new Game();
-        String picture = "";
+        String picture = ""; //TODO: remove this when database is reset
+        JSONArray bidsList = new JSONArray(); //TODO: remove this when database is reset
 
         try {
             String id = response.getString("_id");
@@ -376,8 +380,12 @@ class ElasticSearcher {
             for (int i=0; i<genresList.length(); i++) {
                 genres.add(genresList.get(i).toString());
             }
+            if (source.has("bids")) {
+                bidsList = source.getJSONArray("bids");
+            }
+            ArrayList<Bid> bids = responseToBidList(bidsList);
 
-            game = new Game(id, status, title, developer, platform, genres, description, picture);
+            game = new Game(id, status, title, developer, platform, genres, description, picture, bids);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -402,6 +410,26 @@ class ElasticSearcher {
         }
 
         return games;
+    }
+
+    private static ArrayList<Review> responseToReviewList(JSONArray response) {
+        //TODO this
+        return new ArrayList<>();
+    }
+
+    private static Review responseToReview(JSONObject response) {
+        //TODO this
+        return new Review();
+    }
+
+    private static ArrayList<Bid> responseToBidList(JSONArray response) {
+        //TODO this
+        return new ArrayList<>();
+    }
+
+    private static Bid responseToBid(JSONObject response) {
+        //TODO this
+        return new Bid();
     }
 
 }

@@ -16,13 +16,22 @@ public class Game implements Serializable {
     private ArrayList<String> genres;
     private String description;
     private String picture;
-
     private ArrayList<Bid> bids;
 
-    public Game() {}
+    public Game() {
+        this.id = "";
+        this.status = "";
+        this.title = "";
+        this.developer = "";
+        this.platform = "";
+        this.genres = new ArrayList<String>();
+        this.description = "";
+        this.picture = "";
+        this.bids = new ArrayList<Bid>();
+    }
 
     public Game(String id, String status, String title, String developer, String platform,
-                ArrayList<String> genres, String description, String picture) {
+                ArrayList<String> genres, String description, String picture, ArrayList<Bid> bids) {
         this.id = id;
         this.status = status;
         this.title = title;
@@ -31,12 +40,6 @@ public class Game implements Serializable {
         this.genres = genres;
         this.description = description;
         this.picture = picture;
-        this.bids = new ArrayList<Bid>();
-    }
-
-    public Game(String id, String status, String title, String developer, String platform,
-                ArrayList<String> genres, String description, String picture, ArrayList<Bid> bids) {
-        this(id,status,title,developer,platform,genres,description,picture);
         this.bids = bids;
     }
 
