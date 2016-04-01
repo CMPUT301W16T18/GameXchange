@@ -58,7 +58,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
         showProgress(true);
 
         listView = (ListView) findViewById(R.id.game_profile_ListView);
-        adapter = new BidListViewArrayAdapter(this, new Game("", "", "", "", "",
+        adapter = new BidListViewArrayAdapter(this, this, new Game("", "", "", "", "",
                 new ArrayList<String>(), "", "", new ArrayList<Bid>()));
         listView.setAdapter(adapter);
 
@@ -145,7 +145,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
         bids.add(new Bid(Constants.CURRENT_USER.getId(), 199.99, new LatLng(53.55, -113.5)));
         game.setBids(bids);
 
-        adapter = new BidListViewArrayAdapter(this, game);
+        adapter = new BidListViewArrayAdapter(this, this, game);
         listView.setAdapter(adapter);
 
         showProgress(false);

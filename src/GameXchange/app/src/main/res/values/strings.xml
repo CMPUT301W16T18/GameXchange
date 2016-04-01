@@ -10,9 +10,10 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="contacts_permission_rationale">Contacts permissions are needed for providing
+        email auto-completions.</string>
+    <string name="location_permission_rationale">Location permission is needed to specify
+        where the trade will take place.</string>
     <string name="title_activity_search_list">List of games</string>
     <string name="title_activity_game_add_edit">Edit your game</string>
     <string name="title_activity_game_profile">Game info</string>

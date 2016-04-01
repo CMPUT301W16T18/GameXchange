@@ -1,43 +1,51 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.RecyclerView;
+import android.os.Build;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
  * Created by cawthorn on 2/28/16.
  */
-public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
+public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements ActivityCompat.OnRequestPermissionsResultCallback {
     private final Context context;
     private ArrayList<Bid> bids;
     private Game game;
+    private Activity activity;
+
+    private final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
 
     /**
      * Constructor for an android arrayadapter
      * @param context context to create the arrayadapter
      * @param game game to be adaptered.
      */
-    public BidListViewArrayAdapter(Context context, Game game) {
+    public BidListViewArrayAdapter(Activity activity, Context context, Game game) {
         super(context,-1,game.getBids());
         this.context = context;
         this.game = game;
         this.bids = game.getBids();
+        this.activity = activity;
         this.add(new Bid());
     }
 
@@ -114,8 +122,11 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
 
     public View.OnClickListener bidListener = new View.OnClickListener() {
         public void onClick(View v) {
-            // DO something
-
+            if(!mayRequestLocation()) {
+                //Do nothing, user cannot make a bid if the permission is denied.
+            } else {
+                makeBid();
+            }
         }
     };
 
@@ -124,6 +135,63 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
             // DO something
         }
     };
+
+    // Modified from http://stackandroid.com/tutorial/android-autocomplete-email-ids-using-loadermanager-on-marshmallow/
+    private boolean mayRequestLocation() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, ACCESS_FINE_LOCATION)) {
+            Snackbar.make(activity.findViewById(R.id.game_profile_ListView),R.string.location_permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+                        }
+                    }).show();
+        } else {
+            ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
+        return false;
+    }
+
+
+    // called by ActivityCompat.requestPermissions, from android documentation
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //permission was granted.
+                    makeBid();
+                } else {
+                    // permission was denied. do nothing.
+                    Snackbar.make(activity.findViewById(R.id.game_profile_ListView),"Location access is needed to make bids.",
+                            Snackbar.LENGTH_INDEFINITE).setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Snackbar is dismissed on click by design, so do nothing.
+                        }
+                    });
+                }
+
+            }
+        }
+    }
+
+    private void makeBid() {
+        Snackbar.make(activity.findViewById(R.id.game_profile_ListView), "Needs to be implemented.",
+                Snackbar.LENGTH_INDEFINITE).setAction(android.R.string.ok, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Snackbar is dismissed on click by design, so do nothing.
+            }
+        }).show();
+    }
 }
 
 
