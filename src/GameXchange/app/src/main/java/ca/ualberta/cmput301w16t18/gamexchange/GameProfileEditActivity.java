@@ -153,7 +153,6 @@ public class GameProfileEditActivity extends AppCompatActivity {
 
     private void cacheGame(Game game) {
         //implements US 08.01.01
-        // TODO: Actually cache the changed game info, along with timestamp
         saveInFile(game);
     }
 

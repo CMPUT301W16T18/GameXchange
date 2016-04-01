@@ -63,7 +63,6 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
         registerForContextMenu(listView);
 
-        //TODO: find anchor for this.
         // For reuse statement https://github.com/deano2390/MaterialShowcaseView
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(200); // half second between each showcase view
@@ -194,12 +193,11 @@ public class GameProfileViewActivity extends AppCompatActivity {
     }
 
     private void acceptBid(Bid bid) {
-        //TODO: This. need to clear all bids on the object and mark one as accepted.
+        //TODO: This. need to clear all bids on the object and mark one as accepted. 
 
     }
 
     private void viewBidLocation(Bid bid) {
-        //TODO: This.
         //From https://developers.google.com/maps/documentation/android-api/intents#display_a_map
         Uri gmmIntentUri = Uri.parse(bid.getMapsString());
         Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
