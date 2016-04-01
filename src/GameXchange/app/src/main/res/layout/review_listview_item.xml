@@ -26,9 +26,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/ReviewRatingBar"
             android:layout_gravity="end"
-            android:clickable="false"
-            android:focusableInTouchMode="false"
-            android:focusable="false" />
+            style="?android:attr/ratingBarStyleIndicator"/>
 
 
     </LinearLayout>

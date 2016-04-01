@@ -37,7 +37,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
         this.context = context;
         this.game = game;
         this.bids = game.getBids();
-        this.add(new Bid("",0,new LatLng(0,0)));
+        this.add(new Bid());
     }
 
     @Override

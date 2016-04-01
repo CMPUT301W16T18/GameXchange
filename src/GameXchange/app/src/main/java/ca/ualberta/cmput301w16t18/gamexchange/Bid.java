@@ -10,13 +10,20 @@ public class Bid {
     private String bidder;
     private double price;
     private LatLng location;
-    private boolean accepted;
+    private String status;
+
+    public Bid() {
+        this.bidder = "";
+        this.price = 0.0;
+        this.location = new LatLng(0.0, 0.0);
+        this.status = Constants.PENDING;
+    }
 
     public Bid(String bidder, double price, LatLng location) {
         this.bidder = bidder;
         this.price = price;
         this.location = location;
-        this.accepted = false;
+        this.status = Constants.PENDING;
     }
 
     public String getBidder() {
@@ -35,12 +42,12 @@ public class Bid {
         this.price = price;
     }
 
-    public LatLng getPoint() {
+    public LatLng getLocation() {
         return location;
     }
 
-    public void setPoint(LatLng point) {
-        this.location = point;
+    public void setLocation(LatLng location) {
+        this.location = location;
     }
 
     public String getMapsString() {
@@ -48,11 +55,19 @@ public class Bid {
         return "geo:" + location.latitude + "," + location.longitude + "?z=10&q=" + location.latitude + "," + location.longitude + "(Trade location)";
     }
 
-    public boolean getAccepted() {
-        return accepted;
+    public String getStatus() {
+        return status;
     }
 
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void accept() {
+        this.status = Constants.ACCEPTED;
+    }
+
+    public void reject() {
+        this.status = Constants.REJECTED;
     }
 }

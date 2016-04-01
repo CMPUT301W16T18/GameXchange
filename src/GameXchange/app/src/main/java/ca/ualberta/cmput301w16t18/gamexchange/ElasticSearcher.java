@@ -7,14 +7,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletionService;
 
 /**
  * Created by Vassili Minaev on 2/29/2016.
@@ -40,9 +38,12 @@ class ElasticSearcher {
             @Override
             public void onResponse(JSONObject response) {
                 if (game.getId().equals("")) {
-                    Parser parser = new Parser(response.toString());
-                    String id = parser.getStringValue("_id");
-                    addGameToList(id);
+                    try {
+                        String id = response.getString("_id");
+                        addGameToList(id);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
@@ -93,18 +94,11 @@ class ElasticSearcher {
     }
 
     public static void receiveGame(final String id, final Activity activity) {
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+        Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                Parser parser = new Parser(response);
-                Game game = new Game(id,
-                        parser.getStringValue("status"),
-                        parser.getStringValue("title"),
-                        parser.getStringValue("developer"),
-                        parser.getStringValue("platform"),
-                        parser.getArrayValue("genres"),
-                        parser.getStringValue("description"),
-                        parser.getStringValue("picture"));
+            public void onResponse(JSONObject response) {
+
+                Game game = responseToGame(response);
 
                 if (activity.getLocalClassName().equals("GameProfileViewActivity")) {
                     GameProfileViewActivity other = (GameProfileViewActivity) activity;
@@ -118,28 +112,19 @@ class ElasticSearcher {
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                Constants.getPrefix() + "games/" + id, responseListener, errorListener);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                Constants.getPrefix() + "games/" + id,
+                new JSONObject(), jsonListener, errorListener);
 
-        NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
     public static void receiveUser(final String id, final Activity activity) {
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+        Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                Parser parser = new Parser(response);
-                User user = new User(parser.getStringValue("_id"),
-                        parser.getStringValue("email"),
-                        parser.getStringValue("name"),
-                        parser.getStringValue("passhash"),
-                        parser.getStringValue("address1"),
-                        parser.getStringValue("address2"),
-                        parser.getStringValue("city"),
-                        parser.getStringValue("phone"),
-                        parser.getStringValue("postal"),
-                        parser.getArrayValue("owned_games"),
-                        parser.getArrayValue("watchlist"));
+            public void onResponse(JSONObject response) {
+
+                User user = responseToUser(response);
 
                 if (activity.getLocalClassName().equals("UserProfileViewActivity")) {
                     UserProfileViewActivity other = (UserProfileViewActivity) activity;
@@ -153,25 +138,27 @@ class ElasticSearcher {
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                Constants.getPrefix() + "users/" + id, responseListener, errorListener);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                Constants.getPrefix() + "users/" + id,
+                new JSONObject(), jsonListener, errorListener);
 
-        NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
     public static void deleteGame(final String id, final Activity activity) {
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+        Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(JSONObject response) {
                 SearchListActivity searchListActivity = (SearchListActivity) activity;
                 searchListActivity.deleteGame(id);
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.DELETE,
-                Constants.getPrefix() + "games/" + id, responseListener, errorListener);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.DELETE,
+                Constants.getPrefix() + "games/" + id,
+                new JSONObject(), jsonListener, errorListener);
 
-        NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
 // --Commented out by Inspection START (3/22/16 6:39 PM):
@@ -192,25 +179,39 @@ class ElasticSearcher {
             return;
         }
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+        Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                Parser parser = new Parser(response);
+            public void onResponse(JSONObject response) {
+
                 ArrayList<String> gameIDs = new ArrayList<>();
-                if (which.equals(Constants.MY_GAMES)) {
-                    gameIDs = parser.getArrayValue("owned_games");
+                JSONArray gamesList = new JSONArray();
+
+                try {
+                    JSONObject source = response.getJSONObject("_source");
+                    if (which.equals(Constants.MY_GAMES)) {
+                        gamesList = source.getJSONArray("owned_games");
+                    }
+                    else if (which.equals(Constants.WATCH_LIST)) {
+                        gamesList = source.getJSONArray("watchlist");
+                    }
+
+                    for (int i=0; i<gamesList.length(); i++) {
+                        gameIDs.add(gamesList.get(i).toString());
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                else if (which.equals(Constants.WATCH_LIST)) {
-                    gameIDs = parser.getArrayValue("watchlist");
-                }
+
                 receiveListOfGames(gameIDs, activity);
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                Constants.getPrefix() + "users/" + Constants.CURRENT_USER.getId(), responseListener, errorListener);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                Constants.getPrefix() + "users/" + Constants.CURRENT_USER.getId(),
+                new JSONObject(), jsonListener, errorListener);
 
-        NetworkSingleton.getInstance().addToRequestQueue(stringRequest);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
     private static void receiveAllGames(final Activity activity) {
@@ -282,32 +283,6 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    private static GameList responseToGameList(JSONObject response) {
-        GameList games = new GameList();
-        try {
-            JSONObject hits = response.getJSONObject("hits");
-            JSONArray hitsArray = hits.getJSONArray("hits");
-
-            for (int i = 0; i < hitsArray.length(); i++) {
-                JSONObject hit = hitsArray.getJSONObject(i);
-                Parser parser = new Parser(hit.toString());
-                Game game = new Game(parser.getStringValue("_id"),
-                        parser.getStringValue("status"),
-                        parser.getStringValue("title"),
-                        parser.getStringValue("developer"),
-                        parser.getStringValue("platform"),
-                        parser.getArrayValue("genres"),
-                        parser.getStringValue("description"),
-                        parser.getStringValue("picture"));
-                games.add(game);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return games;
-    }
-
     public static void authenticateUser(final String email, final String passhash, final LoginActivity loginActivity) {
         Response.Listener<JSONObject> loginListener = new Response.Listener<JSONObject>() {
             @Override
@@ -318,22 +293,10 @@ class ElasticSearcher {
 
                     for (int i = 0; i < hitsArray.length(); i++) {
                         JSONObject hit = hitsArray.getJSONObject(i);
-                        JSONObject source = hit.getJSONObject("_source");
+                        User user = responseToUser(hit);
 
-                        if (email.equals( source.get("email").toString() )) {
-                            if (passhash.equals( source.get("passhash").toString() )) {
-                                Parser parser = new Parser(response.toString());
-                                User user = new User(parser.getStringValue("_id"),
-                                        parser.getStringValue("email"),
-                                        parser.getStringValue("name"),
-                                        parser.getStringValue("passhash"),
-                                        parser.getStringValue("address1"),
-                                        parser.getStringValue("address2"),
-                                        parser.getStringValue("city"),
-                                        parser.getStringValue("phone"),
-                                        parser.getStringValue("postal"),
-                                        parser.getArrayValue("owned_games"),
-                                        parser.getArrayValue("watchlist"));
+                        if (email.equals( user.getEmail() )) {
+                            if (passhash.equals( user.getPasshash() )) {
                                 Constants.CURRENT_USER = user;
                                 loginActivity.onLoginSuccess();
                             }
@@ -357,6 +320,88 @@ class ElasticSearcher {
                 Schemas.getUserLoginSchema(email), loginListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    private static User responseToUser(JSONObject response) {
+        User user = new User();
+
+        try {
+            String id = response.getString("_id");
+            JSONObject source = response.getJSONObject("_source");
+            String email = source.getString("email");
+            String name = source.getString("name");
+            String passhash = source.getString("passhash");
+            String address1 = source.getString("address1");
+            String address2 = source.getString("address2");
+            String city = source.getString("city");
+            String phone = source.getString("phone");
+            String postal = source.getString("postal");
+            JSONArray ownedGamesList = source.getJSONArray("owned_games");
+            ArrayList<String> owned_games = new ArrayList<>();
+            for (int i=0; i<ownedGamesList.length(); i++) {
+                owned_games.add(ownedGamesList.get(i).toString());
+            }
+            JSONArray watchedGamesList = source.getJSONArray("watchlist");
+            ArrayList<String> watchlist = new ArrayList<>();
+            for (int i=0; i<watchedGamesList.length(); i++) {
+                watchlist.add(watchedGamesList.get(i).toString());
+            }
+
+            user = new User(id, email, name, passhash, address1, address2, city, phone, postal, owned_games, watchlist);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+    private static Game responseToGame(JSONObject response) {
+        Game game = new Game();
+        String picture = "";
+
+        try {
+            String id = response.getString("_id");
+            JSONObject source = response.getJSONObject("_source");
+            String status = source.getString("status");
+            String title = source.getString("title");
+            String developer = source.getString("developer");
+            String platform = source.getString("platform");
+            String description = source.getString("description");
+            if (source.has("picture")) {
+                picture = source.getString("picture");
+            }
+            JSONArray genresList = source.getJSONArray("genres");
+            ArrayList<String> genres = new ArrayList<>();
+            for (int i=0; i<genresList.length(); i++) {
+                genres.add(genresList.get(i).toString());
+            }
+
+            game = new Game(id, status, title, developer, platform, genres, description, picture);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return game;
+    }
+
+    private static GameList responseToGameList(JSONObject response) {
+        GameList games = new GameList();
+        try {
+            JSONObject hits = response.getJSONObject("hits");
+            JSONArray hitsArray = hits.getJSONArray("hits");
+
+            for (int i = 0; i < hitsArray.length(); i++) {
+                JSONObject hit = hitsArray.getJSONObject(i);
+                Game game = responseToGame(hit);
+                games.add(game);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return games;
     }
 
 }

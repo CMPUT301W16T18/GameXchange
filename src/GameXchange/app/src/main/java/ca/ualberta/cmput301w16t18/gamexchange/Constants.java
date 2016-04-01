@@ -25,6 +25,10 @@ class Constants {
     public static final String BORROWED_GAMES = "BORROWED_GAMES";
     public static final String WATCH_LIST = "WATCH_LIST";
 
+    public static final String ACCEPTED = "ACCEPTED";
+    public static final String REJECTED = "REJECTED";
+    public static final String PENDING = "PENDING";
+
     public static final String SEARCH_LIST_ACTIVITY_ACTION = "SEARCH_LIST_ACTIVITY_ACTION";
     public static final String FILENAME = "cache.sav";
     public static int iterator = 0;
