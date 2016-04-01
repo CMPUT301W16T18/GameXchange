@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -63,7 +64,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
 
         registerForContextMenu(listView);
 
-        //TODO: find anchor for this.
+
         // For reuse statement https://github.com/deano2390/MaterialShowcaseView
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(200); // half second between each showcase view
@@ -85,6 +86,8 @@ public class GameProfileViewActivity extends AppCompatActivity {
         sequence.start();
         TextView view = (TextView) findViewById(R.id.tutorialTextViewGameView);
         view.setVisibility(View.GONE);
+
+
 
     }
 

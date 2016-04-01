@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -69,6 +70,20 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
             game_view_genres.setText(TextUtils.join(", ", game.getGenres()));
             game_view_description.setText(game.getDescription());
 
+            if (Constants.CURRENT_USER.getGames().contains(game.getId())){
+                View view = convertView.findViewById(R.id.game_edit_button);
+                view.setVisibility(view.VISIBLE);
+            }
+            else{
+                View view = convertView.findViewById(R.id.game_edit_bid);
+                View view1 = convertView.findViewById(R.id.game_edit_watchlist);
+                view.setVisibility(view.VISIBLE);
+                view1.setVisibility(view1.VISIBLE);
+                view.setOnClickListener(bidListener);
+                view1.setOnClickListener(watchListener);
+            }
+
+
             if (!game.getPicture().equals("")) {
                 //Decode base64 string to a bitmap.
                 byte[] decodedBytes = Base64.decode(game.getPicture(), 0);
@@ -92,6 +107,25 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
                 textview.setText("Text was null");
             }
         }
+
+
         return convertView;
     }
+
+    public View.OnClickListener bidListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            // DO something
+
+        }
+    };
+
+    public View.OnClickListener watchListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            // DO something
+        }
+    };
 }
+
+
+
+
