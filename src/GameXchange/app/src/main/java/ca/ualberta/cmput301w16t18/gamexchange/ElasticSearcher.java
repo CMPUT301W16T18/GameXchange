@@ -164,7 +164,7 @@ class ElasticSearcher {
     public static void receiveGames(final Activity activity) {
         final String which = Constants.SEARCHLIST_CONTEXT;
 
-        if (which.equals(Constants.ALL_GAMES) || which.equals(Constants.BORROWED_GAMES)) {
+        if (which.equals(Constants.ALL_GAMES)) {
             receiveAllGames(activity);
             return;
         }
@@ -183,6 +183,9 @@ class ElasticSearcher {
                     }
                     else if (which.equals(Constants.WATCH_LIST)) {
                         gamesList = source.getJSONArray("watchlist");
+                    }
+                    else if (which.equals(Constants.BORROWED_GAMES)) {
+                        gamesList = source.getJSONArray(Constants.BORROWED_GAMES);
                     }
 
                     for (int i=0; i<gamesList.length(); i++) {

@@ -197,12 +197,11 @@ public class GameProfileViewActivity extends AppCompatActivity {
     }
 
     private void acceptBid(Bid bid) {
-        //TODO: This. need to clear all bids on the object and mark one as accepted.
+        //TODO: This. need to clear all bids on the object and mark one as accepted. 
 
     }
 
     private void viewBidLocation(Bid bid) {
-        //TODO: This.
         //From https://developers.google.com/maps/documentation/android-api/intents#display_a_map
         Uri gmmIntentUri = Uri.parse(bid.getMapsString());
         Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
