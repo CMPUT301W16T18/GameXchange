@@ -80,7 +80,11 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
 
             if (Constants.CURRENT_USER.getGames().contains(game.getId())){
                 View view = convertView.findViewById(R.id.game_edit_button);
+                View view1 = convertView.findViewById(R.id.game_edit_return);
                 view.setVisibility(view.VISIBLE);
+                view1.setVisibility(view1.VISIBLE);
+
+
             }
             else{
                 View view = convertView.findViewById(R.id.game_edit_bid);
