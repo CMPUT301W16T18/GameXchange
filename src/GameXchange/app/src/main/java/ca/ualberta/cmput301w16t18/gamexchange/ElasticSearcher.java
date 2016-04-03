@@ -319,6 +319,10 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    public static void getNotifications(final SearchListActivity activity) {
+
+    }
+
     private static User responseToUser(JSONObject response) {
         User user = new User();
         JSONArray borrowingGamesList = new JSONArray(); //TODO: remove this when database is reset
