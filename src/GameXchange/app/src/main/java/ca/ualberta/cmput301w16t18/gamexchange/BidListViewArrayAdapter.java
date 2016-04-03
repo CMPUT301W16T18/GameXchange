@@ -85,7 +85,13 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
 
             if (Constants.CURRENT_USER.getGames().contains(game.getId())){
                 View view = convertView.findViewById(R.id.game_edit_button);
+                View view1 = convertView.findViewById(R.id.game_edit_return);
                 view.setVisibility(view.VISIBLE);
+                if (game.getStatus().equals(Constants.BORROWED)) {
+                    view1.setVisibility(view1.VISIBLE);
+                }
+
+
             }
             else{
                 View view = convertView.findViewById(R.id.game_edit_bid);
@@ -164,7 +170,6 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
         return false;
     }
 
-
     // called by ActivityCompat.requestPermissions, from android documentation
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -221,7 +226,3 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
 
     }
 }
-
-
-
-

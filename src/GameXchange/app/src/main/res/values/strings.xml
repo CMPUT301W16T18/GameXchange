@@ -57,6 +57,7 @@
     <string name="bid_decline">Decline Bid</string>
     <string name="game_bid">Bid</string>
     <string name="game_watchlist">Add to watchlist</string>
+    <string name="game_return">Set Game to Returned</string>
 
     <string name="reviews_string">Reviews:</string>
     <string name="bids_string">Bids:</string>

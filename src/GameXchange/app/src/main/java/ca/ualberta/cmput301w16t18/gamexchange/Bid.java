@@ -9,21 +9,32 @@ public class Bid {
 
     private String bidder;
     private double price;
-    private LatLng location;
+    private double latitude;
+    private double longitude;
     private String status;
 
     public Bid() {
         this.bidder = "";
         this.price = 0.0;
-        this.location = new LatLng(0.0, 0.0);
+        this.latitude = 0.0;
+        this.longitude = 0.0;
         this.status = Constants.PENDING;
     }
 
-    public Bid(String bidder, double price, LatLng location) {
+    public Bid(String bidder, double price, double latitude, double longitude) {
         this.bidder = bidder;
         this.price = price;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.status = Constants.PENDING;
+    }
+
+    public Bid(String bidder, double price, double latitude, double longitude, String status) {
+        this.bidder = bidder;
+        this.price = price;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.status = status;
     }
 
     public String getBidder() {
@@ -42,17 +53,34 @@ public class Bid {
         this.price = price;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public LatLng getLocation() {
-        return location;
+        return new LatLng(this.latitude, this.longitude);
     }
 
     public void setLocation(LatLng location) {
-        this.location = location;
+        this.latitude = location.latitude;
+        this.longitude = location.longitude;
     }
 
     public String getMapsString() {
         // from http://stackoverflow.com/questions/3990110/how-to-show-marker-in-maps-launched-by-geo-uri-intent
-        return "geo:" + location.latitude + "," + location.longitude + "?z=10&q=" + location.latitude + "," + location.longitude + "(Trade location)";
+        return "geo:" + latitude + "," + longitude + "?z=10&q=" + latitude + "," + longitude + "(Trade location)";
     }
 
     public String getStatus() {

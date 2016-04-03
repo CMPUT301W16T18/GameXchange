@@ -64,6 +64,13 @@
         android:text="@string/edit_button"
         android:visibility="gone"/>
     <Button
+        android:id="@+id/game_edit_return"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:text="@string/game_return"
+        android:visibility="gone"/>
+    <Button
         android:id="@+id/game_edit_watchlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

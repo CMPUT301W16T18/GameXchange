@@ -36,13 +36,10 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 public class GameProfileViewActivity extends AppCompatActivity {
 
     private String id;
-
     private View mProgressView;
     private View mView;
-
     private ListView listView;
     private BidListViewArrayAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +59,9 @@ public class GameProfileViewActivity extends AppCompatActivity {
                 new ArrayList<String>(), "", "", new ArrayList<Bid>()));
         listView.setAdapter(adapter);
 
-        registerForContextMenu(listView);
+        if (Constants.CURRENT_USER.getGames().contains(id)){
+            registerForContextMenu(listView);
+        }
 
 
         // For reuse statement https://github.com/deano2390/MaterialShowcaseView
@@ -86,9 +85,6 @@ public class GameProfileViewActivity extends AppCompatActivity {
         sequence.start();
         TextView view = (TextView) findViewById(R.id.tutorialTextViewGameView);
         view.setVisibility(View.GONE);
-
-
-
     }
 
     @Override
@@ -135,22 +131,18 @@ public class GameProfileViewActivity extends AppCompatActivity {
     }
 
     public void populateFields(Game game) {
-
-
         //TODO: Remove this.
         ArrayList<Bid> bids = new ArrayList<Bid>();
-        bids.add(new Bid(Constants.CURRENT_USER.getId(), 19.99, new LatLng(53.55, -113.5)));
-        bids.add(new Bid(Constants.CURRENT_USER.getId(), 20.99, new LatLng(53.55, -113.5)));
-        bids.add(new Bid(Constants.CURRENT_USER.getId(), 9.99, new LatLng(53.55, -113.5)));
-        bids.add(new Bid(Constants.CURRENT_USER.getId(), 199.99, new LatLng(53.55, -113.5)));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 19.99, 53.55, -113.5));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 20.99, 53.55, -113.5));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 9.99, 53.55, -113.5));
+        bids.add(new Bid(Constants.CURRENT_USER.getId(), 199.99, 53.55, -113.5));
         game.setBids(bids);
 
         adapter = new BidListViewArrayAdapter(this, this, game);
         listView.setAdapter(adapter);
 
         showProgress(false);
-
-
     }
 
     @SuppressWarnings({"unused", "UnusedParameters"})
@@ -212,7 +204,7 @@ public class GameProfileViewActivity extends AppCompatActivity {
     private void viewBidBidder(Bid bid) {
         //TODO: This.
         Intent intent = new Intent(GameProfileViewActivity.this, UserProfileViewActivity.class);
-        intent.putExtra(Constants.USER_ID,bid.getBidder());
+        intent.putExtra(Constants.USER_ID, bid.getBidder());
         startActivity(intent);
     }
 
