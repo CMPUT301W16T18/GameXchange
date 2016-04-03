@@ -159,7 +159,6 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
         return false;
     }
 
-
     // called by ActivityCompat.requestPermissions, from android documentation
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -193,7 +192,3 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
         }).show();
     }
 }
-
-
-
-
