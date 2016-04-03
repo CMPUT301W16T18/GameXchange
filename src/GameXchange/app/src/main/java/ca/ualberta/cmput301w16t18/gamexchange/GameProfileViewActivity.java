@@ -59,7 +59,10 @@ public class GameProfileViewActivity extends AppCompatActivity {
                 new ArrayList<String>(), "", "", new ArrayList<Bid>()));
         listView.setAdapter(adapter);
 
-        registerForContextMenu(listView);
+        if (Constants.CURRENT_USER.getGames().contains(id)){
+            registerForContextMenu(listView);
+        }
+
 
         // For reuse statement https://github.com/deano2390/MaterialShowcaseView
         ShowcaseConfig config = new ShowcaseConfig();
