@@ -148,7 +148,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
         }
     };
 
-    // Vassili needs to remove games from other lists
+    // TODO : Vassili needs to remove games from other lists
     public View.OnClickListener returnListener = new View.OnClickListener() {
         public void onClick(View v) {
             game.setStatus(Constants.AVAILABLE);
