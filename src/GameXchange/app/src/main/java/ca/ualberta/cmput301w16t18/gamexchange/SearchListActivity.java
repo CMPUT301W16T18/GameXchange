@@ -72,6 +72,9 @@ public class SearchListActivity extends AppCompatActivity {
 
         if(Constants.SEARCHLIST_CONTEXT.equals("")) {
             Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
+        } else if (Constants.SEARCHLIST_CONTEXT.equals(Constants.NOTIFICATIONS)) {
+            setTitle("Notifications");
+            fab.setVisibility(View.GONE);
         } else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.BORROWED_GAMES)) {
             setTitle("Borrowed Games");
             fab.setVisibility(View.GONE);

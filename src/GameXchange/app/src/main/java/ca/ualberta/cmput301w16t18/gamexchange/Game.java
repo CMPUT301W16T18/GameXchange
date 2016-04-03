@@ -18,6 +18,8 @@ public class Game implements Serializable {
     private String picture;
     private ArrayList<Bid> bids;
 
+    public String notification;
+
     public Game() {
         this.id = "";
         this.status = "";
@@ -28,6 +30,7 @@ public class Game implements Serializable {
         this.description = "";
         this.picture = "";
         this.bids = new ArrayList<Bid>();
+        this.notification = "";
     }
 
     public Game(String id, String status, String title, String developer, String platform,
@@ -41,6 +44,7 @@ public class Game implements Serializable {
         this.description = description;
         this.picture = picture;
         this.bids = bids;
+        this.notification = "";
     }
 
     public String getId() {
