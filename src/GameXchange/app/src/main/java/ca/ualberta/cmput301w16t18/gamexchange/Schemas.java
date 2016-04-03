@@ -122,12 +122,46 @@ public class Schemas {
     }
 
     private static JSONArray bidsSchema(ArrayList<Bid> bids) {
-        //TODO: this
-        return new JSONArray();
+        JSONArray bidsJSON = new JSONArray();
+        for (Bid bid : bids) {
+            bidsJSON.put(bidSchema(bid));
+        }
+        return bidsJSON;
+    }
+
+    private static JSONObject bidSchema(Bid bid) {
+        JSONObject bidJSON = new JSONObject();
+        try {
+            bidJSON.put("bidder", bid.getBidder());
+            bidJSON.put("price", bid.getPrice());
+            bidJSON.put("latitude", bid.getLatitude());
+            bidJSON.put("longitude", bid.getLongitude());
+            bidJSON.put("status", bid.getStatus());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return bidJSON;
     }
 
     private static JSONArray reviewsSchema(ArrayList<Review> reviews) {
-        //TODO: this
-        return new JSONArray();
+        JSONArray reviewsJSON = new JSONArray();
+        for (Review review : reviews) {
+            reviewsJSON.put(reviewSchema(review));
+        }
+        return reviewsJSON;
+    }
+
+    private static JSONObject reviewSchema(Review review) {
+        JSONObject reviewJSON = new JSONObject();
+        try {
+            reviewJSON.put("timestamp", review.getTimestamp());
+            reviewJSON.put("reviewBody", review.getReviewBody());
+            reviewJSON.put("rating", review.getRating());
+            reviewJSON.put("reviewer", review.getReviewer());
+            reviewJSON.put("gameID", review.getGameID());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return reviewJSON;
     }
 }

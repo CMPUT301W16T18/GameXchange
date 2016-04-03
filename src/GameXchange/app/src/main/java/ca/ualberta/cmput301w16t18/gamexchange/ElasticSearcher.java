@@ -12,7 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Vassili Minaev on 2/29/2016.
@@ -174,10 +176,10 @@ class ElasticSearcher {
             public void onResponse(JSONObject response) {
 
                 ArrayList<String> gameIDs = new ArrayList<>();
-                JSONArray gamesList = new JSONArray();
 
                 try {
                     JSONObject source = response.getJSONObject("_source");
+                    JSONArray gamesList = new JSONArray();
                     if (which.equals(Constants.MY_GAMES)) {
                         gamesList = source.getJSONArray("owned_games");
                     }
@@ -185,7 +187,9 @@ class ElasticSearcher {
                         gamesList = source.getJSONArray("watchlist");
                     }
                     else if (which.equals(Constants.BORROWED_GAMES)) {
-                        gamesList = source.getJSONArray(Constants.BORROWED_GAMES);
+                        //TODO: remove line when database cleared
+                        if (source.has("borrowing_games"))
+                            gamesList = source.getJSONArray("borrowing_games");
                     }
 
                     for (int i=0; i<gamesList.length(); i++) {
@@ -416,23 +420,69 @@ class ElasticSearcher {
     }
 
     private static ArrayList<Review> responseToReviewList(JSONArray response) {
-        //TODO this
-        return new ArrayList<>();
+        ArrayList<Review> reviews = new ArrayList<>();
+        try {
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject reviewJSON = response.getJSONObject(i);
+                Review review = responseToReview(reviewJSON);
+                reviews.add(review);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return reviews;
     }
 
     private static Review responseToReview(JSONObject response) {
-        //TODO this
-        return new Review();
+        Review review = new Review();
+        try {
+            long timestamp = response.getLong("timestamp");
+            String reviewBody = response.getString("reviewBody");
+            float rating = (float) response.getDouble("rating");
+            String reviewer = response.getString("reviewer");
+            String gameID = response.getString("gameID");
+
+            review = new Review(timestamp, reviewBody, rating, reviewer, gameID);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return review;
     }
 
     private static ArrayList<Bid> responseToBidList(JSONArray response) {
-        //TODO this
-        return new ArrayList<>();
+        ArrayList<Bid> bids = new ArrayList<>();
+        try {
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject bidJSON = response.getJSONObject(i);
+                Bid bid = responseToBid(bidJSON);
+                bids.add(bid);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return bids;
     }
 
     private static Bid responseToBid(JSONObject response) {
-        //TODO this
-        return new Bid();
+        Bid bid = new Bid();
+        try {
+            String bidder = response.getString("bidder");
+            double price = (float) response.getDouble("price");
+            double latitude = response.getDouble("latitude");
+            double longitude = response.getDouble("longitude");
+            String status = response.getString("status");
+
+            bid = new Bid(bidder, price, latitude, longitude, status);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return bid;
     }
 
 }

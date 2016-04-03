@@ -74,19 +74,18 @@ public class UserProfileViewActivity extends AppCompatActivity {
 
         //TODO: Remove this.
         ArrayList<Review> reviews = new ArrayList<>();
-        Date date = new Date();
-        date.setTime(System.currentTimeMillis());
-        reviews.add(new Review(date, "", "", 5, "Best Game Ever!"));
-        reviews.add(new Review(date, "", "", 4, "Great Game!"));
-        reviews.add(new Review(date, "", "", 3, "Alright Game."));
-        reviews.add(new Review(date, "", "", 2, "Not so good game."));
-        reviews.add(new Review(date, "", "", 1, "Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n"));
-        reviews.add(new Review(date, "", "", 0, "Would not recommend."));
-        reviews.add(new Review(date, "", "", 1, "Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n Worst Game Ever! :( \n"));
-        reviews.add(new Review(date, "", "", 2, "Not so good game."));
-        reviews.add(new Review(date, "", "", 3, "Alright Game."));
-        reviews.add(new Review(date, "", "", 4, "Great Game!"));
-        reviews.add(new Review(date, "", "", 5, "Best Game Ever!"));
+        long timestamp = System.currentTimeMillis();
+        reviews.add(new Review(timestamp, "Best Game Ever!", 5, "", ""));
+        reviews.add(new Review(timestamp, "Great Game!", 4, "", ""));
+        reviews.add(new Review(timestamp, "Alright Game.", 3, "", ""));
+        reviews.add(new Review(timestamp, "Not so good game.", 2, "", ""));
+        reviews.add(new Review(timestamp, "Worst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \n", 1, "", ""));
+        reviews.add(new Review(timestamp, "Would not recommend.", 0, "", ""));
+        reviews.add(new Review(timestamp, "Worst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \n", 1, "", ""));
+        reviews.add(new Review(timestamp, "Not so good game.", 2, "", ""));
+        reviews.add(new Review(timestamp, "Alright Game.", 3, "", ""));
+        reviews.add(new Review(timestamp, "Great Game!", 4, "", ""));
+        reviews.add(new Review(timestamp, "Best Game Ever!", 5, "", ""));
         user.setReviews(reviews);
 
         ListView listView = (ListView) findViewById(R.id.user_profile_ListView);

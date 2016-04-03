@@ -34,7 +34,7 @@ public class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
         this.context = context;
         this.user = user;
         this.reviews = user.getReviews();
-        this.add(new Review(new java.util.Date(), "", "", 0, ""));
+        this.add(new Review());
     }
 
     @Override
@@ -51,8 +51,7 @@ public class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if(getItemViewType(position) == 0)
-        {
+        if(getItemViewType(position) == 0) {
             convertView = inflater.inflate(R.layout.user_profile_listview_item, parent, false);
 
             TextView viewUserName = (TextView) convertView.findViewById(R.id.viewUserName);
@@ -79,16 +78,13 @@ public class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
                 .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
                 .singleUse("Show edit") // provide a unique ID used to ensure it is only shown once
                 .show();
-
-
         } else {
-
             convertView = inflater.inflate(R.layout.review_listview_item, parent, false);
 
             //Populate data in the view
             Review review = reviews.get(position - 1);
             TextView textview = (TextView) convertView.findViewById(R.id.ReviewDateTextView);
-            textview.setText(review.getDate().toString());
+            textview.setText(review.getDateString());
 
             textview = (TextView) convertView.findViewById(R.id.ReviewBodyTextView);
             textview.setText(review.getReviewBody());
@@ -96,8 +92,6 @@ public class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
             RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.ReviewRatingBar);
             ratingBar.setNumStars(5);
             ratingBar.setRating(review.getRating());
-            ratingBar.setClickable(false);
-            ratingBar.setIsIndicator(true);
         }
         return convertView;
     }
