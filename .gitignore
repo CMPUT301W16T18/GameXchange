@@ -33,3 +33,6 @@ captures/
 
 src/GameXchange/.idea/
 .idea/
+
+#keystore
+keystore/

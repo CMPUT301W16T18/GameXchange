@@ -50,6 +50,9 @@
         <activity
             android:name=".UserProfileEditActivity"
             android:label="@string/title_activity_user_profile_edit"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBb2UE5Df72rWfGsYxgpQ4wiuAhUf82bbM" />
     </application>
 
 </manifest>

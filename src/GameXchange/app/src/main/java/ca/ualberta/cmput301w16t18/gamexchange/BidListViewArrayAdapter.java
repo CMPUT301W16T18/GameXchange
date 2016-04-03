@@ -20,6 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.ui.PlacePicker;
+
 import java.util.ArrayList;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -34,6 +38,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
     private Activity activity;
 
     private final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
+    final int PLACE_PICKER_REQUEST = 2;
 
     /**
      * Constructor for an android arrayadapter
@@ -191,6 +196,29 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
                 //Snackbar is dismissed on click by design, so do nothing.
             }
         }).show();
+
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            activity.startActivityForResult(builder.build(activity), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesNotAvailableException ex) {
+            Snackbar.make(activity.findViewById(R.id.game_profile_ListView),"Google Play Services is required for this application.",Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Do nothing, want the snackbar to be dismissed.
+                        }
+                    }).show();
+        } catch (GooglePlayServicesRepairableException ex) {
+            Snackbar.make(activity.findViewById(R.id.game_profile_ListView),"Google Play Services needs to be up to date and enabled for this application.",Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Do nothing, want the snackbar to be dismissed.
+                        }
+                    }).show();
+        }
+
+
     }
 }
 
