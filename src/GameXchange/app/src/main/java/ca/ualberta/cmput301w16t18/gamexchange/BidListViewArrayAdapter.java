@@ -89,6 +89,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
                 view.setVisibility(view.VISIBLE);
                 if (game.getStatus().equals(Constants.BORROWED)) {
                     view1.setVisibility(view1.VISIBLE);
+                    view1.setOnClickListener(returnListener);
                 }
 
 
@@ -144,6 +145,14 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
     public View.OnClickListener watchListener = new View.OnClickListener() {
         public void onClick(View v) {
             // DO something
+        }
+    };
+
+    // Vassili needs to remove games from other lists
+    public View.OnClickListener returnListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            game.setStatus(Constants.AVAILABLE);
+            ElasticSearcher.sendGame(game);
         }
     };
 
