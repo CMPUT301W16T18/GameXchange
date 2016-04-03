@@ -82,7 +82,9 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
                 View view = convertView.findViewById(R.id.game_edit_button);
                 View view1 = convertView.findViewById(R.id.game_edit_return);
                 view.setVisibility(view.VISIBLE);
-                view1.setVisibility(view1.VISIBLE);
+                if (game.getStatus() == Constants.BORROWED) {
+                    view1.setVisibility(view1.VISIBLE);
+                }
 
 
             }

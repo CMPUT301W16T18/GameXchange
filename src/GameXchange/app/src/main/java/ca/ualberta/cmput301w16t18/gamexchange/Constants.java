@@ -35,8 +35,8 @@ class Constants {
     public static final String REJECTED = "REJECTED";
     public static final String PENDING = "PENDING";
 
-    public static final String AVAILABLE = "AVAILABLE";
-    public static final String BORROWED = "BORROWED";
+    public static final String AVAILABLE = "Available";
+    public static final String BORROWED = "Borrowed";
 
     public static final String SEARCH_LIST_ACTIVITY_ACTION = "SEARCH_LIST_ACTIVITY_ACTION";
     public static final String FILENAME = "cache.sav";
