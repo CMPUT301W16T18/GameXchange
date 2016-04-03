@@ -13,10 +13,13 @@ MIT License used
 
 # Not working as Intended  
   - Everything should be working as intended  
+  
 # UI Differences per API  
   - Material Desgin with API 23  
   - API 18 has some missing asthetic UI elements  
+  
 # Lowest API needed  
   - Need at least API 18  
+  
 # Link for Youtube Video  
   - to do  
