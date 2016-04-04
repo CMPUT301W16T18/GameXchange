@@ -41,6 +41,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
     private final Context context;
     private ArrayList<Bid> bids;
 
+
     /**
      * Constructor for an android arrayadapter
      * @param context context to create the arrayadapter
@@ -66,6 +67,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
 
         TextView textview = (TextView) convertView.findViewById(R.id.BidListItemItemAmountTextView);
         String text = String.valueOf(bid.getPrice());
+
         try {
             textview.setText("$" + text + " / day");
         } catch (NullPointerException ex) {
