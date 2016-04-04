@@ -6,15 +6,18 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -24,6 +27,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -56,6 +61,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     private BidListViewArrayAdapter adapter;
     private Game game;
     private Review reviewToPostOnElasticSearchCallback;
+    private boolean showNewWindowDialog = true;
 
     private Place place;
 
@@ -307,7 +313,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
                                 editText.getText().toString(), rating.getRating(),
                                 Constants.CURRENT_USER.getId() , game.getId());
                         game.setStatus(Constants.AVAILABLE);
-                        //ElasticSearcher.sendGame(game); TODO: Uncomment.
+                        ElasticSearcher.sendGame(game);
                         //TODO: attach this to a user, as well as removing the game from there list of borrowed games.
                         reviewToPostOnElasticSearchCallback = review;
                         ElasticSearcher.getBorrowingUser(GameProfileViewActivity.this, game.getId());
@@ -455,22 +461,42 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     }
 
     private void makeBid() {
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        showNewWindowDialog = sharedPreferences.getBoolean("never_show_dialog", true);
+        if(showNewWindowDialog) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("A new window will open to select the location the trade will take place.")
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Do nothing, want the dialog to close.
-                    }
-                })
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startPlacePicker();
-                    }
-                });
-        builder.show();
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.new_window_dialog, null);
+
+            final CheckBox checkBox = (CheckBox) view.findViewById(R.id.new_window_checkbox);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    SharedPreferences.Editor prefEditor = sharedPreferences.edit();
+                    prefEditor.putBoolean("never_show_dialog", !isChecked);
+                    prefEditor.apply();
+                }
+            });
+
+            builder.setMessage("A new window will open to select the location the trade will take place.")
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Do nothing, want the dialog to close.
+                        }
+                    })
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startPlacePicker();
+                        }
+                    })
+                    .setView(view);
+            builder.show();
+        } else {
+            startPlacePicker();
+        }
     }
 
     private void startPlacePicker() {
@@ -515,6 +541,10 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         reviews.add(reviewToPostOnElasticSearchCallback);
         user.setReviews(reviews);
 
-        //ElasticSearcher.sendUser(user); TODO: Uncomment.
+        ElasticSearcher.sendUser(user);
+    }
+
+    private void setShowNewWindowDialog(boolean bool) {
+        showNewWindowDialog = bool;
     }
 }

@@ -41,10 +41,10 @@ class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
         Bid bid = bids.get(position);
 
         TextView textview = (TextView) convertView.findViewById(R.id.BidListItemItemAmountTextView);
-        String text = String.valueOf(bid.getPrice());
 
         try {
-            textview.setText("$" + text + " / day");
+            String text = String.format("$%.2f / day", bid.getPrice());
+            textview.setText(text);
         } catch (NullPointerException ex) {
             System.out.println("text was null.");
             textview.setText("Text was null");

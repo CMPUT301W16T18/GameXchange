@@ -341,12 +341,10 @@ class ElasticSearcher {
             public void onResponse(JSONObject response) {
 
                 ArrayList<User> user = responseToUserList(response);
-                System.out.println(user.size());
                 activity.saveReviewAndRemoveBorrowedGame(user.get(0));
             }
         };
-
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
                 Constants.getPrefix() + "users/_search",
                 Schemas.borrowerSchema(gameID), jsonListener, errorListener);
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
