@@ -2,7 +2,10 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
@@ -31,222 +36,44 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 /**
  * Created by cawthorn on 2/28/16.
  */
-public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
+
     private final Context context;
     private ArrayList<Bid> bids;
-    private Game game;
-    private Activity activity;
-    User user = Constants.CURRENT_USER;
 
-    private final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
-    final int PLACE_PICKER_REQUEST = 2;
 
     /**
      * Constructor for an android arrayadapter
      * @param context context to create the arrayadapter
-     * @param game game to be adaptered.
+     * @param bids bids to be adaptered.
      */
-    public BidListViewArrayAdapter(Activity activity, Context context, Game game) {
-        super(context,-1,game.getBids());
+    public BidListViewArrayAdapter(Context context, ArrayList<Bid> bids) {
+        super(context,-1,bids);
         this.context = context;
-        this.game = game;
-        this.bids = game.getBids();
-        this.activity = activity;
-        this.add(new Bid());
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return 2;
-    }
-
-    public int getItemViewType(int position) {
-        if(position == 0) return 0;
-        return 1;
+        this.bids = bids;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if(getItemViewType(position) == 0) {
-            convertView = inflater.inflate(R.layout.game_profile_listview_item, parent, false);
-            TextView game_view_title = (TextView) convertView.findViewById(R.id.game_view_title);
-            TextView game_view_developer = (TextView) convertView.findViewById(R.id.game_view_developer);
-            TextView game_view_platform = (TextView) convertView.findViewById(R.id.game_view_platform);
-            TextView game_view_genres = (TextView) convertView.findViewById(R.id.game_view_genres);
-            TextView game_view_description = (TextView) convertView.findViewById(R.id.game_view_description);
-            ImageView game_view_image = (ImageView) convertView.findViewById(R.id.game_view_image);
-
-            game_view_title.setText(game.getTitle());
-            game_view_developer.setText(game.getDeveloper());
-            game_view_platform.setText(game.getPlatform());
-            game_view_genres.setText(TextUtils.join(", ", game.getGenres()));
-            game_view_description.setText(game.getDescription());
-
-            if (Constants.CURRENT_USER.getGames().contains(game.getId())){
-                View view = convertView.findViewById(R.id.game_edit_button);
-                View view1 = convertView.findViewById(R.id.game_edit_return);
-                view.setVisibility(view.VISIBLE);
-                if (game.getStatus().equals(Constants.BORROWED)) {
-                    view1.setVisibility(view1.VISIBLE);
-                    view1.setOnClickListener(returnListener);
-                }
-
-
-            }
-            else{
-                View view = convertView.findViewById(R.id.game_edit_bid);
-                View view1 = convertView.findViewById(R.id.game_edit_watchlist);
-                view.setVisibility(view.VISIBLE);
-                view1.setVisibility(view1.VISIBLE);
-                view.setOnClickListener(bidListener);
-                view1.setOnClickListener(watchListener);
-            }
-
-
-            if (!game.getPicture().equals("")) {
-                //Decode base64 string to a bitmap.
-                byte[] decodedBytes = Base64.decode(game.getPicture(), 0);
-                Bitmap imageBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-
-                game_view_image.setImageBitmap(imageBitmap);
-            }
-        } else {
+        if(convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             convertView = inflater.inflate(R.layout.bid_listview_item, parent, false);
-
-            //Populate data in the view
-            Bid bid = bids.get(position - 1);
-
-            TextView textview = (TextView) convertView.findViewById(R.id.BidListItemItemAmountTextView);
-            String text = String.valueOf(bid.getPrice());
-            try {
-                textview.setText("$" + text + " / day");
-            } catch (NullPointerException ex) {
-                System.out.println("text was null.");
-                textview.setText("Text was null");
-            }
         }
 
+        //Populate data in the view
+        Bid bid = bids.get(position);
 
-        return convertView;
-    }
+        TextView textview = (TextView) convertView.findViewById(R.id.BidListItemItemAmountTextView);
+        String text = String.valueOf(bid.getPrice());
 
-    public View.OnClickListener bidListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            if(!mayRequestLocation()) {
-                //Do nothing, user cannot make a bid if the permission is denied.
-            } else {
-                makeBid();
-            }
-        }
-    };
-
-    public View.OnClickListener watchListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            if (user.getWatchlist().contains(game.getId())){
-                CharSequence text = "You already have this game Watchlisted";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            }else {
-                user.getWatchlist().add(game.getId());
-                ElasticSearcher.sendUser(user);
-                CharSequence text = "Your game has been Watchlisted";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-            }
-        }
-    };
-
-    // TODO : Vassili needs to remove games from other lists
-    public View.OnClickListener returnListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            game.setStatus(Constants.AVAILABLE);
-            ElasticSearcher.sendGame(game);
-        }
-    };
-
-    // Modified from http://stackandroid.com/tutorial/android-autocomplete-email-ids-using-loadermanager-on-marshmallow/
-    private boolean mayRequestLocation() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, ACCESS_FINE_LOCATION)) {
-            Snackbar.make(activity.findViewById(R.id.game_profile_ListView),R.string.location_permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-                        }
-                    }).show();
-        } else {
-            ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
-        return false;
-    }
-
-    // called by ActivityCompat.requestPermissions, from android documentation
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //permission was granted.
-                    makeBid();
-                } else {
-                    // permission was denied. do nothing.
-                    Snackbar.make(activity.findViewById(R.id.game_profile_ListView),"Location access is needed to make bids.",
-                            Snackbar.LENGTH_INDEFINITE).setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //Snackbar is dismissed on click by design, so do nothing.
-                        }
-                    });
-                }
-
-            }
-        }
-    }
-
-    private void makeBid() {
-        Snackbar.make(activity.findViewById(R.id.game_profile_ListView), "Needs to be implemented.",
-                Snackbar.LENGTH_INDEFINITE).setAction(android.R.string.ok, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Snackbar is dismissed on click by design, so do nothing.
-            }
-        }).show();
-
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
-            activity.startActivityForResult(builder.build(activity), PLACE_PICKER_REQUEST);
-        } catch (GooglePlayServicesNotAvailableException ex) {
-            Snackbar.make(activity.findViewById(R.id.game_profile_ListView),"Google Play Services is required for this application.",Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //Do nothing, want the snackbar to be dismissed.
-                        }
-                    }).show();
-        } catch (GooglePlayServicesRepairableException ex) {
-            Snackbar.make(activity.findViewById(R.id.game_profile_ListView),"Google Play Services needs to be up to date and enabled for this application.",Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //Do nothing, want the snackbar to be dismissed.
-                        }
-                    }).show();
+            textview.setText("$" + text + " / day");
+        } catch (NullPointerException ex) {
+            System.out.println("text was null.");
+            textview.setText("Text was null");
         }
-
-
+        return convertView;
     }
 }

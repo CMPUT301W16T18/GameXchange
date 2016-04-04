@@ -3,6 +3,8 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by Vassili Minaev on 2/12/2016.

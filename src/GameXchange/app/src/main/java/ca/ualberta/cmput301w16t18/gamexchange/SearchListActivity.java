@@ -55,7 +55,6 @@ public class SearchListActivity extends AppCompatActivity {
         handleIntent(getIntent());
         setContentView(R.layout.activity_search_list);
 
-
         mListViewView = findViewById(R.id.searchListAllView);
         mProgressView = findViewById(R.id.search_progress);
 
@@ -204,6 +203,7 @@ public class SearchListActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             ElasticSearcher.receiveGamesBySearchTerm(query, searchListActivity);
             setTitle("Results for \"" + query + "\"");
+            showProgress(false);
         }
     }
 
@@ -282,7 +282,19 @@ public class SearchListActivity extends AppCompatActivity {
         //implements US 01.05.01
         //deletes a game from a user's list
         Game mygame = games.getGames().get(position);
-        ElasticSearcher.deleteGame(mygame.getId(), this);
+        if (Constants.SEARCHLIST_CONTEXT == Constants.WATCH_LIST){
+            ElasticSearcher.removeGameFromList(mygame.getId());
+            deleteGame(mygame.getId());
+            return;
+        }else if(Constants.SEARCHLIST_CONTEXT == Constants.MY_GAMES){
+            ElasticSearcher.deleteGame(mygame.getId(), this);
+        }else if(Constants.SEARCHLIST_CONTEXT == Constants.BORROWED_GAMES){
+            CharSequence text = "Cannot delete";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(searchListActivity, text, duration);
+            toast.show();
+        }
+        
     }
 
     /**
