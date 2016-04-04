@@ -279,7 +279,19 @@ public class SearchListActivity extends AppCompatActivity {
         //implements US 01.05.01
         //deletes a game from a user's list
         Game mygame = games.getGames().get(position);
-        ElasticSearcher.deleteGame(mygame.getId(), this);
+        if (Constants.SEARCHLIST_CONTEXT == Constants.WATCH_LIST){
+            ElasticSearcher.removeGameFromList(mygame.getId());
+            deleteGame(mygame.getId());
+            return;
+        }else if(Constants.SEARCHLIST_CONTEXT == Constants.MY_GAMES){
+            ElasticSearcher.deleteGame(mygame.getId(), this);
+        }else if(Constants.SEARCHLIST_CONTEXT == Constants.BORROWED_GAMES){
+            CharSequence text = "Cannot delete";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(searchListActivity, text, duration);
+            toast.show();
+        }
+        
     }
 
     /**
