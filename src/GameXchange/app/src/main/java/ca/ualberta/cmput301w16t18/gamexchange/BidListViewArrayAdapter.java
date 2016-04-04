@@ -36,6 +36,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
     private ArrayList<Bid> bids;
     private Game game;
     private Activity activity;
+    User user = Constants.CURRENT_USER;
 
     private final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
     final int PLACE_PICKER_REQUEST = 2;
@@ -89,6 +90,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
                 view.setVisibility(view.VISIBLE);
                 if (game.getStatus().equals(Constants.BORROWED)) {
                     view1.setVisibility(view1.VISIBLE);
+                    view1.setOnClickListener(returnListener);
                 }
 
 
@@ -143,7 +145,29 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> implements Activi
 
     public View.OnClickListener watchListener = new View.OnClickListener() {
         public void onClick(View v) {
-            // DO something
+            if (user.getWatchlist().contains(game.getId())){
+                CharSequence text = "You already have this game Watchlisted";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }else {
+                user.getWatchlist().add(game.getId());
+                ElasticSearcher.sendUser(user);
+                CharSequence text = "Your game has been Watchlisted";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        }
+    };
+
+    // TODO : Vassili needs to remove games from other lists
+    public View.OnClickListener returnListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            game.setStatus(Constants.AVAILABLE);
+            ElasticSearcher.sendGame(game);
         }
     };
 

@@ -18,6 +18,7 @@ public class GameProfileEditActivityTest extends TestCase {
     }
     */
 
+
     public void testPopulateFields() throws Exception {
         ArrayList<String> genres = new ArrayList<String>();
         genres.add("genres");
