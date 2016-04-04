@@ -148,14 +148,7 @@ public class UserProfileViewActivity extends AppCompatActivity {
         viewUserPhone.setText(user.getPhone());
         viewUserPostalCode.setText(user.getPostal());
 
-        Button editButton = (Button) headerView.findViewById(R.id.viewUserEdit);
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(editButton)
-                .setDismissText("GOT IT")
-                .setContentText("Click here to edit a user!")
-                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
-                .singleUse("Show edit") // provide a unique ID used to ensure it is only shown once
-                .show();
+        
     }
 
 }
