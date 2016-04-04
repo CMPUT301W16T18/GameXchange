@@ -320,17 +320,70 @@ class ElasticSearcher {
             @Override
             public void onResponse(JSONObject response) {
                 GameList games = responseToGameList(response);
+                ArrayList<Game> gameslist = games.getGames();
+
+                for (Game i : gameslist) {
+                    i.notification = "Your bid was accepted.";
+                }
+
+                getWatchlistChanges(activity, games);
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/_search",
+                Schemas.myAcceptedBidsSchema(), responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void getWatchlistChanges(final Activity activity, final GameList all_games) {
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                GameList games = responseToGameList(response);
+                ArrayList<Game> gameslist = games.getGames();
+
+                for (Game i : gameslist) {
+                    i.notification = "A game on your watchlist became available.";
+                }
+
+                all_games.addAll(games);
+
+                getNewBids(activity, all_games);
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/_search",
+                Schemas.myWatchlistChangesSchema(), responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void getNewBids(final Activity activity, final GameList all_games) {
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                GameList games = responseToGameList(response);
+                ArrayList<Game> gameslist = games.getGames();
+
+                for (Game i : gameslist) {
+                    i.notification = "Someone placed a bid on your game.";
+                }
+
+                all_games.addAll(games);
 
                 if (activity.getLocalClassName().equals("SearchListActivity")) {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
-                    searchListActivity.setDisplayedList(games);
+                    searchListActivity.setDisplayedList(all_games);
                 }
             }
         };
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
-                Schemas.longListSchema(), responseListener, errorListener);
+                Schemas.myNewBidsSchema(), responseListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
