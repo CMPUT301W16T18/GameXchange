@@ -321,7 +321,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (fileLister.length ==  0){
             return;
         }
-        for (int i = 0; i < fileLister.length; ++i) {
+        for (int i = 0; i <= fileLister.length; ++i) {
             try {
                 ObjectInputStream oin =
                         new ObjectInputStream(new FileInputStream((new File(getFilesDir(), "")
