@@ -97,8 +97,8 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
                 "It contains game information and bid information!", "GOT IT");
 
         sequence.addSequenceItem(findViewById(R.id.tutorialTextViewGameView),
-                "To view location of a bid, decline or accept a bid, and to view the location of" +
-                        " a bid long press on a bid!", "GOT IT");
+                "If you own the game then long press on a bid to Accept/Decline a bid, view the user" +
+                        " who made the bid or view the location of the bid!!", "GOT IT");
 
         sequence.start();
         TextView view = (TextView) findViewById(R.id.tutorialTextViewGameView);
