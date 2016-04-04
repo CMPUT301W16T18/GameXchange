@@ -108,6 +108,7 @@ class Schemas {
         searchFields.add("genres");
         searchFields.add("platform");
         searchFields.add("description");
+        searchFields.add("status");
 
         try {
             multi_match.put("query", search);
@@ -153,6 +154,7 @@ class Schemas {
             must.put("match", match2);
             bool.put("must", must);
             query.put("bool", bool);
+            object.put("query", query);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -190,19 +192,23 @@ class Schemas {
     public static JSONObject myNewBidsSchema() {
         JSONObject object = new JSONObject();
         JSONObject query1 = new JSONObject();
-        JSONObject filtered = new JSONObject();
         JSONObject query2 = new JSONObject();
-        JSONObject exists = new JSONObject();
+        JSONObject filtered = new JSONObject();
+        JSONObject bool = new JSONObject();
+        JSONObject must_not = new JSONObject();
+        JSONObject missing = new JSONObject();
         JSONObject filter = new JSONObject();
         JSONObject ids = new JSONObject();
         ArrayList<String> values = Constants.CURRENT_USER.getGames();
 
         try {
-            exists.put("field", "bids");
-            query2.put("exists", exists);
+            missing.put("field", "bids");
+            must_not.put("missing", missing);
+            bool.put("must_not", must_not);
+            filter.put("bool", bool);
             ids.put("type", "games");
             ids.put("values", new JSONArray(values));
-            filter.put("ids", ids);
+            query2.put("ids", ids);
             filtered.put("query", query2);
             filtered.put("filter", filter);
             query1.put("filtered", filtered);
