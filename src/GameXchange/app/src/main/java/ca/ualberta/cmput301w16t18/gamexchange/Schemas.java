@@ -139,6 +139,21 @@ class Schemas {
         return borrowerJSON;
     }
 
+    public static JSONObject ownerSchema(String gameID) {
+        JSONObject ownerJSON = new JSONObject();
+        JSONObject fieldJSON = new JSONObject();
+        JSONObject matchJSON = new JSONObject();
+        try {
+            fieldJSON.put("owned_games", gameID);
+            matchJSON.put("match", fieldJSON);
+            ownerJSON.put("query", matchJSON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return ownerJSON;
+    }
+
     public static JSONObject myAcceptedBidsSchema() {
         JSONObject object = new JSONObject();
         JSONObject query = new JSONObject();
@@ -213,6 +228,29 @@ class Schemas {
             filtered.put("filter", filter);
             query1.put("filtered", filtered);
             object.put("query", query1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+    }
+
+    public static JSONObject myBidsSchema() {
+        JSONObject object = new JSONObject();
+        JSONObject query = new JSONObject();
+        JSONObject bool = new JSONObject();
+        JSONObject must = new JSONObject();
+        JSONObject match1 = new JSONObject();
+        JSONObject match2 = new JSONObject();
+
+        try {
+            match1.put("bids.bidder", Constants.CURRENT_USER.getId());
+            match2.put("bids.status", Constants.PENDING);
+            must.put("match", match1);
+            must.put("match", match2);
+            bool.put("must", must);
+            query.put("bool", bool);
+            object.put("query", query);
         } catch (JSONException e) {
             e.printStackTrace();
         }

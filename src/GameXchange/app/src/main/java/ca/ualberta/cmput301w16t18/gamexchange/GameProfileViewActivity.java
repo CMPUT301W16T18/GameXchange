@@ -27,6 +27,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -62,6 +63,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     private Game game;
     private Review reviewToPostOnElasticSearchCallback;
     private boolean showNewWindowDialog = true;
+    private GameProfileViewActivity gameProfileViewActivity;
 
     private Place place;
 
@@ -69,6 +71,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_profile_view);
+        gameProfileViewActivity = this;
         Intent parent_intent = getIntent();
         id = parent_intent.getStringExtra(Constants.GAME_ID);
         loadGame(id);
@@ -87,6 +90,15 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
             registerForContextMenu(listView);
         }
 
+        Button viewOwner = (Button) findViewById(R.id.game_view_owner);
+        viewOwner.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        ElasticSearcher.showOwner(gameProfileViewActivity, game.getId());
+                    }
+                }
+        );
+        viewOwner.setVisibility(View.VISIBLE);
 
         // For reuse statement https://github.com/deano2390/MaterialShowcaseView
         ShowcaseConfig config = new ShowcaseConfig();
@@ -547,5 +559,11 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         user.setReviews(reviews);
 
         ElasticSearcher.sendUser(user);
+    }
+
+    public void openUserProfile(String userID) {
+        Intent intent = new Intent(gameProfileViewActivity, UserProfileViewActivity.class);
+        intent.putExtra(Constants.USER_ID, userID);
+        startActivity(intent);
     }
 }

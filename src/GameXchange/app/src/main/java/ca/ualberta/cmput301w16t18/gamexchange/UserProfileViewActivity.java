@@ -58,6 +58,8 @@ public class UserProfileViewActivity extends AppCompatActivity {
         sequence.start();
         TextView view = (TextView) findViewById(R.id.tutorialTextViewUserView);
         view.setVisibility(View.GONE);
+
+        //Button editButton
     }
 
     @Override
@@ -82,7 +84,6 @@ public class UserProfileViewActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         showProgress(false);
-
     }
 
     // onClick method for the edit User button.

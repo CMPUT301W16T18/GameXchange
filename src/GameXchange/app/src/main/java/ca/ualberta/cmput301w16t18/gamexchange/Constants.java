@@ -29,6 +29,7 @@ class Constants {
     public static final String MY_GAMES = "MY_GAMES";
     public static final String BORROWED_GAMES = "BORROWED_GAMES";
     public static final String WATCH_LIST = "WATCH_LIST";
+    public static final String MY_BIDS = "MY_BIDS";
     public static final String NOTIFICATIONS = "NOTIFICATIONS";
 
     public static final String ACCEPTED = "ACCEPTED";

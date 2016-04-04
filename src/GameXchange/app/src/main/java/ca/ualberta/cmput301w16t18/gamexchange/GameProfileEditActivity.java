@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -161,7 +162,8 @@ public class GameProfileEditActivity extends AppCompatActivity {
     @SuppressWarnings({"unused", "UnusedParameters"})
     public void deletePhoto(View view) {
         ImageView image = (ImageView) findViewById(R.id.game_edit_image);
-        image.setImageBitmap(null);
+        Bitmap bImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.nopicture);
+        image.setImageBitmap(bImage);
         game.setPicture("");
     }
 
