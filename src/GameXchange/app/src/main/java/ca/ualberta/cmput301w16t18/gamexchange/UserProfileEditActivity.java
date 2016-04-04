@@ -34,7 +34,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
 
         if (action != null && action.equals("NEW")) {
             user = new User();
-
+            showProgress(false);
             setTitle("Let's create a new account!");
             String email = parent_intent.getStringExtra("USER_EMAIL");
             String password = parent_intent.getStringExtra("USER_PASS");

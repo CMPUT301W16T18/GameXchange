@@ -37,6 +37,7 @@ public class SearchListActivity extends AppCompatActivity {
     private SearchListListViewArrayAdapter adapter;
     private SearchListActivity searchListActivity;
     private FloatingActionButton fab;
+    private Menu searchMenu;
 
     private View mProgressView;
     private View mListViewView;
@@ -64,31 +65,6 @@ public class SearchListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        switch (Constants.SEARCHLIST_CONTEXT) {
-            case "":
-                Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
-                break;
-            case Constants.NOTIFICATIONS:
-                setTitle("Notifications");
-                fab.setVisibility(View.GONE);
-                break;
-            case Constants.BORROWED_GAMES:
-                setTitle("Borrowed Games");
-                fab.setVisibility(View.GONE);
-                break;
-            case Constants.WATCH_LIST:
-                setTitle("Watch List");
-                fab.setVisibility(View.GONE);
-                break;
-            default:
-                //Default to my Games
-                setTitle("My Games");
-                fab.setVisibility(View.VISIBLE);
-                break;
-        }
-        showProgress(true);
-        ElasticSearcher.receiveGames(this);
 
         //Create Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -173,6 +149,35 @@ public class SearchListActivity extends AppCompatActivity {
         view.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        switch (Constants.SEARCHLIST_CONTEXT) {
+            case "":
+                Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
+                break;
+            case Constants.NOTIFICATIONS:
+                setTitle("Notifications");
+                fab.setVisibility(View.GONE);
+                break;
+            case Constants.BORROWED_GAMES:
+                setTitle("Borrowed Games");
+                fab.setVisibility(View.GONE);
+                break;
+            case Constants.WATCH_LIST:
+                setTitle("Watch List");
+                fab.setVisibility(View.GONE);
+                break;
+            default:
+                //Default to my Games
+                setTitle("My Games");
+                fab.setVisibility(View.VISIBLE);
+                break;
+        }
+        showProgress(true);
+        ElasticSearcher.receiveGames(this);
+    }
+
     /**
      * Used to create the search bar and use it
      * @param menu
@@ -181,6 +186,7 @@ public class SearchListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+        searchMenu = menu;
         inflater.inflate(R.menu.global, menu);
         // Associate searchable configuration with the SearchView
         SearchManager searchManager =
@@ -205,6 +211,14 @@ public class SearchListActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             ElasticSearcher.receiveGamesBySearchTerm(query, searchListActivity);
             setTitle("Results for \"" + query + "\"");
+
+            SearchManager searchManager =
+                    (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            SearchView searchView =
+                    (SearchView) searchMenu.findItem(R.id.search).getActionView();
+            searchView.setSearchableInfo(
+                    searchManager.getSearchableInfo(getComponentName()));
+            searchView.setIconified(true);
             showProgress(false);
         }
     }

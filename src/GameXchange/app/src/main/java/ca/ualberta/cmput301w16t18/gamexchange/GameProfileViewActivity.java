@@ -235,10 +235,12 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         ElasticSearcher.receiveUser(borrowingUser,this);
     }
 
-    //TODO: This should be done but needs to be tested when bids sync to elastic search.
+    //TODO: This should be done but needs to be tested.
     public void elasticSearcherCallback(User user) {
         ArrayList<String> borrowing = user.getBorrowing();
         borrowing.add(game.getId());
+        user.setBorrowing(borrowing);
+        ElasticSearcher.sendUser(user);
     }
 
     private void viewBidLocation(Bid bid) {
@@ -257,7 +259,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     }
 
     private void declineBid(Bid bid) {
-        //TODO: This. Removing a bid does not sync with elastic search.
+        //TODO: This should be done, needs to be tested.
         ArrayList<Bid> bids = game.getBids();
         bids.remove(bid);
         game.setBids(bids);
@@ -312,8 +314,8 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
                                 editText.getText().toString(), rating.getRating(),
                                 Constants.CURRENT_USER.getId() , game.getId());
                         game.setStatus(Constants.AVAILABLE);
+                        game.setBids(new ArrayList<Bid>());
                         ElasticSearcher.sendGame(game);
-                        //TODO: attach this to a user, as well as removing the game from there list of borrowed games.
                         reviewToPostOnElasticSearchCallback = review;
                         ElasticSearcher.getBorrowingUser(GameProfileViewActivity.this, game.getId());
                     }
@@ -323,6 +325,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
                     public void onClick(DialogInterface dialog, int which) {
                         // Set game available, but don't save review.
                         game.setStatus(Constants.AVAILABLE);
+                        game.setBids(new ArrayList<Bid>());
                         ElasticSearcher.sendGame(game);
                     }
                 })
@@ -385,7 +388,6 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         }
     }
 
-    // TODO : Vassili needs to remove games from other lists
     public View.OnClickListener returnListener = new View.OnClickListener() {
         public void onClick(View v) {
             showReviewDialog();
@@ -545,9 +547,5 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         user.setReviews(reviews);
 
         ElasticSearcher.sendUser(user);
-    }
-
-    private void setShowNewWindowDialog(boolean bool) {
-        showNewWindowDialog = bool;
     }
 }

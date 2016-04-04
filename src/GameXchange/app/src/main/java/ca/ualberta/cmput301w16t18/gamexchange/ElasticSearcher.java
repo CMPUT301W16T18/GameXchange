@@ -569,7 +569,6 @@ class ElasticSearcher {
         return bid;
     }
 
-    //TODO: Fix this, it returns all users at the moment. the schema should be right though.
     private static ArrayList<User> responseToUserList(JSONObject response) {
         ArrayList<User> users = new ArrayList<>();
         try {
