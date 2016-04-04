@@ -158,6 +158,13 @@ public class GameProfileEditActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings({"unused", "UnusedParameters"})
+    public void deletePhoto(View view) {
+        ImageView image = (ImageView) findViewById(R.id.game_edit_image);
+        image.setImageBitmap(null);
+        game.setPicture("");
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ImageView image = (ImageView) findViewById(R.id.game_edit_image);

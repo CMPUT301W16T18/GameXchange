@@ -45,6 +45,7 @@
 
     <string name="edit_button">Edit</string>
     <string name="take_photo_button">Take Photo</string>
+    <string name="delete_photo_button">Delete Photo</string>
 
     <string name="alert_dialog_message">Are you sure you want to log out?</string>
     <string name="alert_dialog_logout">Log Out</string>

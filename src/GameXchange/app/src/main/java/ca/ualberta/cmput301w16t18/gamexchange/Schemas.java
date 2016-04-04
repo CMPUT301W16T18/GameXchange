@@ -108,6 +108,7 @@ class Schemas {
         searchFields.add("genres");
         searchFields.add("platform");
         searchFields.add("description");
+        searchFields.add("status");
 
         try {
             multi_match.put("query", search);
@@ -136,6 +137,87 @@ class Schemas {
         }
 
         return borrowerJSON;
+    }
+
+    public static JSONObject myAcceptedBidsSchema() {
+        JSONObject object = new JSONObject();
+        JSONObject query = new JSONObject();
+        JSONObject bool = new JSONObject();
+        JSONObject must = new JSONObject();
+        JSONObject match1 = new JSONObject();
+        JSONObject match2 = new JSONObject();
+
+        try {
+            match1.put("bids.bidder", Constants.CURRENT_USER.getId());
+            match2.put("bids.status", Constants.ACCEPTED);
+            must.put("match", match1);
+            must.put("match", match2);
+            bool.put("must", must);
+            query.put("bool", bool);
+            object.put("query", query);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+    }
+
+    public static JSONObject myWatchlistChangesSchema() {
+        JSONObject object = new JSONObject();
+        JSONObject query1 = new JSONObject();
+        JSONObject filtered = new JSONObject();
+        JSONObject query2 = new JSONObject();
+        JSONObject match = new JSONObject();
+        JSONObject filter = new JSONObject();
+        JSONObject ids = new JSONObject();
+        ArrayList<String> values = Constants.CURRENT_USER.getWatchlist();
+
+        try {
+            match.put("status", Constants.AVAILABLE);
+            query2.put("match", match);
+            ids.put("type", "games");
+            ids.put("values", new JSONArray(values));
+            filter.put("ids", ids);
+            filtered.put("query", query2);
+            filtered.put("filter", filter);
+            query1.put("filtered", filtered);
+            object.put("query", query1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+    }
+
+    public static JSONObject myNewBidsSchema() {
+        JSONObject object = new JSONObject();
+        JSONObject query1 = new JSONObject();
+        JSONObject query2 = new JSONObject();
+        JSONObject filtered = new JSONObject();
+        JSONObject bool = new JSONObject();
+        JSONObject must_not = new JSONObject();
+        JSONObject missing = new JSONObject();
+        JSONObject filter = new JSONObject();
+        JSONObject ids = new JSONObject();
+        ArrayList<String> values = Constants.CURRENT_USER.getGames();
+
+        try {
+            missing.put("field", "bids");
+            must_not.put("missing", missing);
+            bool.put("must_not", must_not);
+            filter.put("bool", bool);
+            ids.put("type", "games");
+            ids.put("values", new JSONArray(values));
+            query2.put("ids", ids);
+            filtered.put("query", query2);
+            filtered.put("filter", filter);
+            query1.put("filtered", filtered);
+            object.put("query", query1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
     }
 
     private static JSONArray bidsSchema(ArrayList<Bid> bids) {

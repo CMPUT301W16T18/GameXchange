@@ -89,14 +89,30 @@
                     android:adjustViewBounds="false"
                     android:contentDescription="item Photo" />
 
-                <Button
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/take_photo_button"
-                    android:id="@+id/game_edit_set_picture"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:onClick="takePhoto"
-                    android:layout_gravity="center_vertical|end" />
+                    android:gravity="center_vertical">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/take_photo_button"
+                        android:id="@+id/game_edit_set_picture"
+                        android:onClick="takePhoto"
+                        android:layout_gravity="center_vertical|end" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delete_photo_button"
+                        android:id="@+id/game_edit_delete_picture"
+                        android:onClick="deletePhoto"
+                        android:layout_gravity="center_vertical|end" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout

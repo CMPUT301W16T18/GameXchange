@@ -346,10 +346,12 @@ public class SearchListActivity extends AppCompatActivity {
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:
+                    Constants.SEARCHLIST_CONTEXT = Constants.NOTIFICATIONS;
                     setTitle("Notifications");
                     fab.setVisibility(View.GONE);
+                    showProgress(true);
+                    ElasticSearcher.getNotifications(searchListActivity);
                     mDrawerLayout.closeDrawers();
-                    Toast.makeText(SearchListActivity.this,"No notifications for you",Toast.LENGTH_SHORT).show();
                     break;
                 case 4:
                     intent = new Intent(SearchListActivity.this, UserProfileViewActivity.class);

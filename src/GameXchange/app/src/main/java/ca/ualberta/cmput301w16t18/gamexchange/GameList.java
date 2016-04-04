@@ -20,12 +20,6 @@ public class GameList {
         games.addAll(other.getGames());
     }
 
-// --Commented out by Inspection START (3/22/16 6:39 PM):
-//    public void removeGame(Game game) {
-//        games.remove(games.indexOf(game));
-//    }
-// --Commented out by Inspection STOP (3/22/16 6:39 PM)
-
     public void removeGame(String id) {
         for (Game game : games) {
             if (game.getId().equals(id)) {
@@ -42,6 +36,8 @@ public class GameList {
     public void clear() {
         games.clear();
     }
+
+    public int size() { return games.size(); }
 
 // Implement cache and pull new data
 
