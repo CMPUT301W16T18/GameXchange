@@ -2,6 +2,7 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 
 /**
  * Created by Vassili Minaev on 2/29/2016.
+ * This is a class that holds constants
  */
 class Constants {
     public static boolean testing = false;

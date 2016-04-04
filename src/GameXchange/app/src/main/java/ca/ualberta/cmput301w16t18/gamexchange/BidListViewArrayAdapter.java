@@ -19,8 +19,8 @@ class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
 
     /**
      * Constructor for an android arrayadapter
-     * @param context context to create the arrayadapter
-     * @param bids bids to be adaptered.
+     * @param context to create the arrayadapter
+     * @param bids to be adaptered.
      */
     public BidListViewArrayAdapter(Context context, ArrayList<Bid> bids) {
         super(context,-1,bids);
@@ -28,6 +28,14 @@ class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
         this.bids = bids;
     }
 
+    /**
+     *  This function is used to inflate the bidlist view if the
+     *  view does not already exist if it does exist then recycle the view
+     * @param position used to find position in bidlist
+     * @param convertView is the view to be returned
+     * @param parent the root view
+     * @return it returns the converted view
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
