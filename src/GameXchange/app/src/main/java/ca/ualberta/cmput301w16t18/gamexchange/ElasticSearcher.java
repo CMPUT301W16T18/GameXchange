@@ -319,8 +319,27 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void getNotifications(final SearchListActivity activity) {
+    public static void getNotifications(final Activity activity) {
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                GameList games = responseToGameList(response);
 
+                if (activity.getLocalClassName().equals("SearchListActivity")) {
+                    SearchListActivity searchListActivity = (SearchListActivity) activity;
+                    searchListActivity.setDisplayedList(games);
+                }
+                else {
+                    //TODO: Are we going to call this method from anywhere else? Probably not.
+                }
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/_search",
+                Schemas.specificListSchema(gameList), responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
     private static User responseToUser(JSONObject response) {
