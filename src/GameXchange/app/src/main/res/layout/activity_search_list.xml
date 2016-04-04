@@ -42,7 +42,9 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/searchListActivityListView">
+                android:id="@+id/searchListActivityListView"
+                android:divider="@color/material_dark"
+                android:dividerHeight="2dp">
 
             </ListView>
 

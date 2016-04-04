@@ -160,7 +160,7 @@ public class SearchListActivity extends AppCompatActivity {
         sequence.setConfig(config);
 
         sequence.addSequenceItem(findViewById(R.id.tutorialTextView),
-                "This is where you will see all of your Games!", "GOT IT");
+                "This is where you will see all of your Notifications but you dont have any yet!", "GOT IT");
 
         sequence.addSequenceItem(findViewById(R.id.tutorialTextView),
                 "Swipe from the left to open the hamburger menu!", "GOT IT");
