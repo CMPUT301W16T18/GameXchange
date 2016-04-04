@@ -160,7 +160,6 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
                 // The Intent's data holds the place.
                 Place place = PlacePicker.getPlace(this, data);
                 this.place = place;
-                Toast.makeText(this, "Place: " + place.getName(), Toast.LENGTH_SHORT).show();
                 // Do something with the contact here (bigger example below)
                 showBidDialog();
             }
@@ -366,7 +365,11 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
 
             View view = headerView.findViewById(R.id.game_edit_bid);
             View view1 = headerView.findViewById(R.id.game_edit_watchlist);
-            view.setVisibility(view.VISIBLE);
+            if(game.getStatus().equals(Constants.BORROWED)) {
+                view.setVisibility(view.GONE);
+            } else {
+                view.setVisibility(view.VISIBLE);
+            }
             view1.setVisibility(view1.VISIBLE);
             view.setOnClickListener(bidListener);
             view1.setOnClickListener(watchListener);
