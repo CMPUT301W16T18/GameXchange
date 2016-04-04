@@ -26,7 +26,8 @@ public class UserProfileViewActivityTest extends TestCase {
     public void testPopulateFields() {
         UserProfileViewActivity activity = new UserProfileViewActivity();
         User user = new User("TEST_ID","Email","Name","Passhash","Address1","Address2","City",
-                "Phone","postal",new ArrayList<String>(),new ArrayList<String>());
+                "Phone","postal",new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),
+                new ArrayList<Review>());
         activity.populateFields(user);
         assertEquals("Name was not equal", user.getName(),
                 ((TextView) activity.findViewById(R.id.viewUserName)).getText().toString());

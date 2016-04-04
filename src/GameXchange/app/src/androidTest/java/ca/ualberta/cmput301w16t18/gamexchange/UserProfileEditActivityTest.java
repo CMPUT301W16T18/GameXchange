@@ -14,7 +14,8 @@ public class UserProfileEditActivityTest extends TestCase {
     public void testSetUser() {
         UserProfileEditActivity activity = new UserProfileEditActivity();
         User user = new User("TEST_ID","Email","Name","Passhash","Address1","Address2","City",
-                "Phone","postal",new ArrayList<String>(),new ArrayList<String>());
+                "Phone","postal",new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),
+                new ArrayList<Review>());
         activity.setUser(user);
         assertEquals("User is not equal",user,activity.getUser());
     }
@@ -22,7 +23,8 @@ public class UserProfileEditActivityTest extends TestCase {
     public void testPopulateFields() {
         UserProfileEditActivity activity = new UserProfileEditActivity();
         User user = new User("TEST_ID","Email","Name","Passhash","Address1","Address2","City",
-                "Phone","postal",new ArrayList<String>(),new ArrayList<String>());
+                "Phone","postal",new ArrayList<String>(),new ArrayList<String>(),new ArrayList<String>(),
+                new ArrayList<Review>());
         activity.populateFields(user);
         assertEquals("Name was not equal", user.getName(),
                 ((EditText) activity.findViewById(R.id.editUserName)).getText().toString());
@@ -39,23 +41,4 @@ public class UserProfileEditActivityTest extends TestCase {
         assertEquals("Postal Code was not equal",user.getPostal(),
                 ((EditText) activity.findViewById(R.id.editUserPostalCode)).getText().toString());
     }
-
-    /* Not sure how to test without network connectivity.
-    public void testEditUser() throws Exception {
-        UserProfileEditActivity activity = new UserProfileEditActivity();
-        User user = new User("TEST_ID","Email","Name","Passhash","Address1","Address2","City",
-                "Phone","postal",new ArrayList<String>(),new ArrayList<String>());
-
-        activity.editUser(user);
-
-        assertEquals(user.getName(), "Bill");
-    }
-    */
-
-    /* Not sure how to test without network connectivity
-    public void testLoadUser() {
-
-    }
-    */
-
 }
