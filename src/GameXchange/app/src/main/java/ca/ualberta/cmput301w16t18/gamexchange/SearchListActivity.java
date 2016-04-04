@@ -42,7 +42,7 @@ public class SearchListActivity extends AppCompatActivity {
     private View mProgressView;
     private View mListViewView;
 
-    private GameList games;
+    public GameList games;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

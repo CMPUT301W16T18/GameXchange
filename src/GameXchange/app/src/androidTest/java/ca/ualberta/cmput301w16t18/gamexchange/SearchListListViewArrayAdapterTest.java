@@ -18,8 +18,9 @@ public class SearchListListViewArrayAdapterTest extends AndroidTestCase {
     public void testGetView() throws Exception {
         ArrayList<Game> gamelist = new ArrayList<Game>();
         ArrayList<String> genres = new ArrayList<String>();
+        ArrayList<Bid> bids = new ArrayList<>();
         genres.add("genres");
-        Game game = new Game("Game-ID","Available","Title","developer","platform",genres,"description","Picture");
+        Game game = new Game("Game-ID","Available","Title","developer","platform",genres,"description","Picture",bids);
         gamelist.add(game);
         SearchListListViewArrayAdapter adapter = new SearchListListViewArrayAdapter(getContext(), gamelist);
 
@@ -32,8 +33,9 @@ public class SearchListListViewArrayAdapterTest extends AndroidTestCase {
     public void testGetID() throws Exception {
         ArrayList<Game> gamelist = new ArrayList<Game>();
         ArrayList<String> genres = new ArrayList<String>();
+        ArrayList<Bid> bids = new ArrayList<>();
         genres.add("genres");
-        Game game = new Game("Game-ID","Available","Title","developer","platform",genres,"description","Picture");
+        Game game = new Game("Game-ID","Available","Title","developer","platform",genres,"description","Picture",bids);
         gamelist.add(game);
         SearchListListViewArrayAdapter adapter = new SearchListListViewArrayAdapter(getContext(), gamelist);
 
