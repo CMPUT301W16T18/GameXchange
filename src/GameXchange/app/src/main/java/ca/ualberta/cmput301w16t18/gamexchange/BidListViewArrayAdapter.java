@@ -57,6 +57,7 @@ public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
 
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
             convertView = inflater.inflate(R.layout.bid_listview_item, parent, false);
         }
 

@@ -308,6 +308,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
 
             if (game.getStatus().equals(Constants.BORROWED)) {
                 view1.setVisibility(view1.VISIBLE);
+                view1.setOnClickListener(returnListener);
             }
         }
         else{
@@ -330,6 +331,14 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         }
     }
 
+    // TODO : Vassili needs to remove games from other lists
+    public View.OnClickListener returnListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            game.setStatus(Constants.AVAILABLE);
+            ElasticSearcher.sendGame(game);
+        }
+    };
+
     public View.OnClickListener bidListener = new View.OnClickListener() {
         public void onClick(View v) {
             if(!mayRequestLocation()) {
@@ -343,6 +352,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     public View.OnClickListener watchListener = new View.OnClickListener() {
         public void onClick(View v) {
             // DO something
+            //TODO: This.
         }
     };
 
