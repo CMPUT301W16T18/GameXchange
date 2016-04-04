@@ -1,10 +1,7 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Created by Vassili Minaev on 2/12/2016.
@@ -28,10 +25,10 @@ public class Game implements Serializable {
         this.title = "";
         this.developer = "";
         this.platform = "";
-        this.genres = new ArrayList<String>();
+        this.genres = new ArrayList<>();
         this.description = "";
         this.picture = "";
-        this.bids = new ArrayList<Bid>();
+        this.bids = new ArrayList<>();
         this.notification = "";
     }
 

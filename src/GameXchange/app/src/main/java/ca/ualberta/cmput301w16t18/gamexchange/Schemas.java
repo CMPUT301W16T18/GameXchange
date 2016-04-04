@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Vassili Minaev on 3/11/2016.
  */
-public class Schemas {
+class Schemas {
 
     public static JSONObject userSchema(User user) {
         JSONObject object = new JSONObject();
@@ -60,7 +60,7 @@ public class Schemas {
             object.put("platform",game.getPlatform());
             object.put("description", game.getDescription());
             object.put("genres", new JSONArray(game.getGenres()));
-            object.put("picture",game.getPicture());
+            object.put("picture", game.getPicture());
             object.put("bids", bidsSchema(game.getBids()));
         } catch (JSONException e) {
             e.printStackTrace();

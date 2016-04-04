@@ -2,14 +2,12 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created by Adam on 2016-03-25.
  */
-public class Review {
+class Review {
     private long timestamp; //milliseconds since UNIX epoch
     private String reviewBody;
     private float rating;

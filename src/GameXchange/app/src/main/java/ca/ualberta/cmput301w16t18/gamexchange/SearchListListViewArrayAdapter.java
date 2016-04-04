@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by cawthorn on 2/28/16.
  */
-public class SearchListListViewArrayAdapter extends ArrayAdapter<Game> {
+class SearchListListViewArrayAdapter extends ArrayAdapter<Game> {
     private final Context context;
     private final ArrayList<Game> gamelist;
 

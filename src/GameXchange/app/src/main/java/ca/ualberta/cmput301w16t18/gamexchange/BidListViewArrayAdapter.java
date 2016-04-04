@@ -1,46 +1,21 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
  * Created by cawthorn on 2/28/16.
  */
-public class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
+class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
 
     private final Context context;
     private ArrayList<Bid> bids;
-
 
     /**
      * Constructor for an android arrayadapter

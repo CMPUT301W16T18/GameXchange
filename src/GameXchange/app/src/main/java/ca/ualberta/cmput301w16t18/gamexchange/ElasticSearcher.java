@@ -12,10 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Vassili Minaev on 2/29/2016.
@@ -186,16 +183,18 @@ class ElasticSearcher {
                 try {
                     JSONObject source = response.getJSONObject("_source");
                     JSONArray gamesList = new JSONArray();
-                    if (which.equals(Constants.MY_GAMES)) {
-                        gamesList = source.getJSONArray("owned_games");
-                    }
-                    else if (which.equals(Constants.WATCH_LIST)) {
-                        gamesList = source.getJSONArray("watchlist");
-                    }
-                    else if (which.equals(Constants.BORROWED_GAMES)) {
-                        //TODO: remove line when database cleared
-                        if (source.has("borrowing_games"))
-                            gamesList = source.getJSONArray("borrowing_games");
+                    switch (which) {
+                        case Constants.MY_GAMES:
+                            gamesList = source.getJSONArray("owned_games");
+                            break;
+                        case Constants.WATCH_LIST:
+                            gamesList = source.getJSONArray("watchlist");
+                            break;
+                        case Constants.BORROWED_GAMES:
+                            //TODO: remove line when database cleared
+                            if (source.has("borrowing_games"))
+                                gamesList = source.getJSONArray("borrowing_games");
+                            break;
                     }
 
                     for (int i=0; i<gamesList.length(); i++) {
@@ -227,9 +226,6 @@ class ElasticSearcher {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
                 }
-                else {
-                    //TODO: Are we going to call this method from anywhere else? Probably not.
-                }
             }
         };
 
@@ -250,9 +246,6 @@ class ElasticSearcher {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
                 }
-                else {
-                    //TODO: Are we going to call this method from anywhere else? Probably not.
-                }
             }
         };
 
@@ -272,9 +265,6 @@ class ElasticSearcher {
                 if (activity.getLocalClassName().equals("SearchListActivity")) {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
-                }
-                else {
-                    //TODO: Are we going to call this method from anywhere else? Probably not.
                 }
             }
         };
@@ -335,15 +325,12 @@ class ElasticSearcher {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
                 }
-                else {
-                    //TODO: Are we going to call this method from anywhere else? Probably not.
-                }
             }
         };
 
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
-                Schemas.specificListSchema(gameList), responseListener, errorListener);
+                Schemas.longListSchema(), responseListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }

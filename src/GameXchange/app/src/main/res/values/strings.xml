@@ -21,8 +21,8 @@
     <string name="title_activity_view_profile">User profile</string>
     <string name="title_activity_user_profile_edit">Edit your profile</string>
 
-    <string name="navigation_drawer_open"></string>
-    <string name="navigation_drawer_close"></string>
+    <string name="navigation_drawer_open"/>
+    <string name="navigation_drawer_close"/>
 
     <string name="action_settings">Settings</string>
 

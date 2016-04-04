@@ -45,7 +45,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class GameProfileViewActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    public final int PLACE_PICKER_REQUEST = 2;
+    private final int PLACE_PICKER_REQUEST = 2;
     private final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
 
     private String id;
@@ -361,7 +361,12 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
             View view = headerView.findViewById(R.id.game_edit_bid);
             View view1 = headerView.findViewById(R.id.game_edit_watchlist);
             view.setVisibility(view.VISIBLE);
-            view1.setVisibility(view1.VISIBLE);
+            if (Constants.CURRENT_USER.getWatchlist().contains(game.getId())) {
+                view1.setVisibility(view1.GONE);
+            }
+            else {
+                view1.setVisibility(view1.VISIBLE);
+            }
             view.setOnClickListener(bidListener);
             view1.setOnClickListener(watchListener);
         }
@@ -396,14 +401,10 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     public View.OnClickListener watchListener = new View.OnClickListener() {
         public void onClick(View v) {
             ArrayList<String> watch = Constants.CURRENT_USER.getWatchlist();
-            if(watch.contains(game.getId())) {
-                Toast.makeText(GameProfileViewActivity.this, game.getTitle() + " is already in your watchlist.", Toast.LENGTH_LONG).show();
-            } else {
-                watch.add(game.getId());
-                Constants.CURRENT_USER.setWatchlist(watch);
-                ElasticSearcher.sendUser(Constants.CURRENT_USER);
-                Toast.makeText(GameProfileViewActivity.this, game.getTitle() + " was added to your watchlist.", Toast.LENGTH_LONG).show();
-            }
+            watch.add(game.getId());
+            Constants.CURRENT_USER.setWatchlist(watch);
+            ElasticSearcher.sendUser(Constants.CURRENT_USER);
+            Toast.makeText(GameProfileViewActivity.this, game.getTitle() + " was added to your watchlist.", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -502,9 +503,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         adapter = new BidListViewArrayAdapter(this, game.getBids());
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
-        //TODO: Fix this, dosen't send games.
         ElasticSearcher.sendGame(game);
-
     }
 
     public void saveReviewAndRemoveBorrowedGame(User user) {

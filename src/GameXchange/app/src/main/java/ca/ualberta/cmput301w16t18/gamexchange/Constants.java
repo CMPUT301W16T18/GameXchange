@@ -7,9 +7,9 @@ class Constants {
     public static boolean testing = false;
     public static final boolean DEBUG = false;
 
-    public static final String serverURL = "http://elastic.vassi.li:9200/"; // TODO: Change this later
-    public static final String index = "gamexchange";
-    public static final String testingIndex = "gamexchangetest";
+    private static final String serverURL = "http://elastic.vassi.li:9200/"; // TODO: Change this later
+    private static final String index = "gamexchange";
+    private static final String testingIndex = "gamexchangetest";
 
     public static String getPrefix() {
         if (testing) { return serverURL + testingIndex + "/"; }

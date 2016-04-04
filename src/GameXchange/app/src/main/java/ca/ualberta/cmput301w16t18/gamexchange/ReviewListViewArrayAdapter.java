@@ -1,24 +1,19 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.sql.Date;
 import java.util.ArrayList;
-
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Created by cawthorn on 2/28/16.
  */
-public class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
+class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
     private final Context context;
     private final ArrayList<Review> reviews;
 
