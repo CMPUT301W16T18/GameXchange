@@ -201,6 +201,7 @@ public class SearchListActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             ElasticSearcher.receiveGamesBySearchTerm(query, searchListActivity);
             setTitle("Results for \"" + query + "\"");
+            showProgress(false);
         }
     }
 

@@ -25,6 +25,7 @@ class ElasticSearcher {
         @Override
         public void onErrorResponse(VolleyError error) {
             Log.e("ERROR", "Whoops. I couldn't do the thing.");
+            error.printStackTrace();
         }
     };
 

@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +65,7 @@ public class Schemas {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.d("Troubleshooting", "Game Object: " + object.toString());
         return object;
     }
 

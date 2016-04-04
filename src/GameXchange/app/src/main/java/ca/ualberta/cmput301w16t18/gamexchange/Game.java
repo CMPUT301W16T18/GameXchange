@@ -3,6 +3,8 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by Vassili Minaev on 2/12/2016.
@@ -109,5 +111,13 @@ public class Game implements Serializable {
 
     public void setBids(ArrayList<Bid> bids) {
         this.bids = bids;
+    }
+
+    public void addBid(Bid bid) {
+        bids.add(bid);
+    }
+
+    public void removeBid(Bid bid) {
+        bids.remove(bid);
     }
 }
