@@ -239,6 +239,8 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     public void elasticSearcherCallback(User user) {
         ArrayList<String> borrowing = user.getBorrowing();
         borrowing.add(game.getId());
+        user.setBorrowing(borrowing);
+        ElasticSearcher.sendUser(user);
     }
 
     private void viewBidLocation(Bid bid) {

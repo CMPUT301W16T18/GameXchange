@@ -65,31 +65,6 @@ public class SearchListActivity extends AppCompatActivity {
             }
         });
 
-        switch (Constants.SEARCHLIST_CONTEXT) {
-            case "":
-                Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
-                break;
-            case Constants.NOTIFICATIONS:
-                setTitle("Notifications");
-                fab.setVisibility(View.GONE);
-                break;
-            case Constants.BORROWED_GAMES:
-                setTitle("Borrowed Games");
-                fab.setVisibility(View.GONE);
-                break;
-            case Constants.WATCH_LIST:
-                setTitle("Watch List");
-                fab.setVisibility(View.GONE);
-                break;
-            default:
-                //Default to my Games
-                setTitle("My Games");
-                fab.setVisibility(View.VISIBLE);
-                break;
-        }
-        showProgress(true);
-        ElasticSearcher.receiveGames(this);
-
         //Create Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ListView drawerListView = (ListView) findViewById(R.id.left_drawer);
@@ -171,6 +146,35 @@ public class SearchListActivity extends AppCompatActivity {
         sequence.start();
         TextView view = (TextView) findViewById(R.id.tutorialTextView);
         view.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        switch (Constants.SEARCHLIST_CONTEXT) {
+            case "":
+                Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
+                break;
+            case Constants.NOTIFICATIONS:
+                setTitle("Notifications");
+                fab.setVisibility(View.GONE);
+                break;
+            case Constants.BORROWED_GAMES:
+                setTitle("Borrowed Games");
+                fab.setVisibility(View.GONE);
+                break;
+            case Constants.WATCH_LIST:
+                setTitle("Watch List");
+                fab.setVisibility(View.GONE);
+                break;
+            default:
+                //Default to my Games
+                setTitle("My Games");
+                fab.setVisibility(View.VISIBLE);
+                break;
+        }
+        showProgress(true);
+        ElasticSearcher.receiveGames(this);
     }
 
     /**
