@@ -7,7 +7,7 @@ class Constants {
     public static boolean testing = false;
     public static final boolean DEBUG = false;
 
-    private static final String serverURL = "http://elastic.vassi.li:9200/"; // TODO: Change this later
+    private static final String serverURL = "http://cmput301.softwareprocess.es:8080/"; // TODO: Change this later
     private static final String index = "gamexchange";
     private static final String testingIndex = "gamexchangetest";
 
