@@ -3,7 +3,10 @@ package ca.ualberta.cmput301w16t18.gamexchange;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Created by Adam on 2016-03-21.
+ * This class is the model for a bid and creates a new bid when called
+ * A bid consists of bidder, price, latitude, longitude, and status
+ * Bids are used within the gameView activity
+ * This class also consists of many getters and setters
  */
 class Bid {
 
@@ -12,6 +15,7 @@ class Bid {
     private double latitude;
     private double longitude;
     private String status;
+
 
     public Bid() {
         this.bidder = "";

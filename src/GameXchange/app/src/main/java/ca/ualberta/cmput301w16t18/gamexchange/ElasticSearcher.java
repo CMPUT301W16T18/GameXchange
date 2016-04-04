@@ -1,6 +1,8 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -384,6 +386,44 @@ class ElasticSearcher {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "games/_search",
                 Schemas.myNewBidsSchema(), responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void receiveMyBids(final Activity activity) {
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                GameList games = responseToGameList(response);
+
+                if (activity.getLocalClassName().equals("SearchListActivity")) {
+                    SearchListActivity searchListActivity = (SearchListActivity) activity;
+                    searchListActivity.setDisplayedList(games);
+                }
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/_search",
+                Schemas.myBidsSchema(), responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void showOwner(final Activity activity, final String gameID) {
+        Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                ArrayList<User> user = responseToUserList(response);
+                if (activity.getLocalClassName().equals("GameProfileViewActivity")) {
+                    GameProfileViewActivity gameProfileViewActivity = (GameProfileViewActivity) activity;
+                    gameProfileViewActivity.openUserProfile(user.get(0).getId());
+                }
+            }
+        };
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.POST,
+                Constants.getPrefix() + "users/_search",
+                Schemas.ownerSchema(gameID), jsonListener, errorListener);
 
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }

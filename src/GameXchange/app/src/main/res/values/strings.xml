@@ -32,6 +32,7 @@
         <item>My Games</item>
         <item>Borrowed Games</item>
         <item>Watch List</item>
+        <item>My Bids</item>
         <item>Notifications</item>
         <item>My Account</item>
         <item>Log Out</item>
@@ -58,8 +59,9 @@
     <string name="bid_view_user">View Bidder</string>
     <string name="bid_decline">Decline Bid</string>
     <string name="game_bid">Bid</string>
-    <string name="game_watchlist">Add to watchlist</string>
+    <string name="game_watchlist">Add to Watchlist</string>
     <string name="game_return">Set Game to Returned</string>
+    <string name="game_owner">View Owner</string>
 
     <string name="reviews_string">Reviews:</string>
     <string name="bids_string">Bids:</string>

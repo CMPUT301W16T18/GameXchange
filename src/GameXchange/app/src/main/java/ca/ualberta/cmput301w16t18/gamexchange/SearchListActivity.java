@@ -42,7 +42,7 @@ public class SearchListActivity extends AppCompatActivity {
     private View mProgressView;
     private View mListViewView;
 
-    private GameList games;
+    public GameList games;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +166,10 @@ public class SearchListActivity extends AppCompatActivity {
                 break;
             case Constants.WATCH_LIST:
                 setTitle("Watch List");
+                fab.setVisibility(View.GONE);
+                break;
+            case Constants.MY_BIDS:
+                setTitle("My Bids");
                 fab.setVisibility(View.GONE);
                 break;
             default:
@@ -346,6 +350,14 @@ public class SearchListActivity extends AppCompatActivity {
                     mDrawerLayout.closeDrawers();
                     break;
                 case 3:
+                    Constants.SEARCHLIST_CONTEXT = Constants.MY_BIDS;
+                    setTitle("My Bids");
+                    fab.setVisibility(View.GONE);
+                    showProgress(true);
+                    ElasticSearcher.receiveMyBids(searchListActivity);
+                    mDrawerLayout.closeDrawers();
+                    break;
+                case 4:
                     Constants.SEARCHLIST_CONTEXT = Constants.NOTIFICATIONS;
                     setTitle("Notifications");
                     fab.setVisibility(View.GONE);
@@ -353,12 +365,12 @@ public class SearchListActivity extends AppCompatActivity {
                     ElasticSearcher.getNotifications(searchListActivity);
                     mDrawerLayout.closeDrawers();
                     break;
-                case 4:
+                case 5:
                     intent = new Intent(SearchListActivity.this, UserProfileViewActivity.class);
                     intent.putExtra(Constants.USER_ID, Constants.CURRENT_USER.getId());
                     startActivity(intent);
                     break;
-                case 5:
+                case 6:
                     Constants.CURRENT_USER = new User();
                     finish();
                     break;
