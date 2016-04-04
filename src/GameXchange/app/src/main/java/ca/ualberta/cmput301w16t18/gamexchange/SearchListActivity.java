@@ -291,7 +291,7 @@ public class SearchListActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(searchListActivity, text, duration);
             toast.show();
         }
-        
+
     }
 
     /**
