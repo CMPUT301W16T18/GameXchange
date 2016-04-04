@@ -123,6 +123,21 @@ public class Schemas {
         return rv;
     }
 
+    public static JSONObject borrowerSchema(String gameID) {
+        JSONObject borrowerJSON = new JSONObject();
+        JSONObject fieldJSON = new JSONObject();
+        JSONObject matchJSON = new JSONObject();
+        try {
+            fieldJSON.put("borrowing_games", gameID);
+            matchJSON.put("match", fieldJSON);
+            borrowerJSON.put("query", matchJSON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return borrowerJSON;
+    }
+
     private static JSONArray bidsSchema(ArrayList<Bid> bids) {
         JSONArray bidsJSON = new JSONArray();
         for (Bid bid : bids) {
@@ -166,4 +181,6 @@ public class Schemas {
         }
         return reviewJSON;
     }
+
+
 }

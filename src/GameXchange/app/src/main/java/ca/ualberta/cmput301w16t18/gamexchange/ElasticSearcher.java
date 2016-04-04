@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -137,6 +138,10 @@ class ElasticSearcher {
                     UserProfileEditActivity other = (UserProfileEditActivity) activity;
                     other.setUser(user);
                     other.populateFields(user);
+                }
+                else if (activity.getLocalClassName().equals("GameProfileViewActivity")) {
+                    GameProfileViewActivity other = (GameProfileViewActivity) activity;
+                    other.elasticSearcherCallback(user);
                 }
             }
         };
@@ -324,6 +329,23 @@ class ElasticSearcher {
 
     }
 
+    public static void getBorrowingUser(final GameProfileViewActivity activity, String gameID) {
+        Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                ArrayList<User> user = responseToUserList(response);
+                System.out.println(user.size());
+                activity.saveReviewAndRemoveBorrowedGame(user.get(0));
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                Constants.getPrefix() + "users/_search",
+                Schemas.borrowerSchema(gameID), jsonListener, errorListener);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
     private static User responseToUser(JSONObject response) {
         User user = new User();
         JSONArray borrowingGamesList = new JSONArray(); //TODO: remove this when database is reset
@@ -490,4 +512,22 @@ class ElasticSearcher {
         return bid;
     }
 
+    //TODO: Fix this, it returns all users at the moment. the schema should be right though.
+    private static ArrayList<User> responseToUserList(JSONObject response) {
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            JSONObject hits = response.getJSONObject("hits");
+            JSONArray hitsArray = hits.getJSONArray("hits");
+
+            for (int i = 0; i < hitsArray.length(); i++) {
+                JSONObject hit = hitsArray.getJSONObject(i);
+                User user = responseToUser(hit);
+                users.add(user);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
 }

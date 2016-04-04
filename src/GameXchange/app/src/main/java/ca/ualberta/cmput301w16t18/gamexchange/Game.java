@@ -112,12 +112,4 @@ public class Game implements Serializable {
     public void setBids(ArrayList<Bid> bids) {
         this.bids = bids;
     }
-
-    public void addBid(Bid bid) {
-        bids.add(bid);
-    }
-
-    public void removeBid(Bid bid) {
-        bids.remove(bid);
-    }
 }

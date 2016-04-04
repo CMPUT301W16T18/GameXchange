@@ -55,7 +55,6 @@ public class SearchListActivity extends AppCompatActivity {
         handleIntent(getIntent());
         setContentView(R.layout.activity_search_list);
 
-
         mListViewView = findViewById(R.id.searchListAllView);
         mProgressView = findViewById(R.id.search_progress);
 

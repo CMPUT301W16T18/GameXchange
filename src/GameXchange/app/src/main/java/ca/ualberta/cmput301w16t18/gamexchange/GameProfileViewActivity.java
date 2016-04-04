@@ -4,9 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,18 +18,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,18 +35,10 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -68,6 +55,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     private View headerView;
     private BidListViewArrayAdapter adapter;
     private Game game;
+    private Review reviewToPostOnElasticSearchCallback;
 
     private Place place;
 
@@ -168,7 +156,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
                 this.place = place;
                 Toast.makeText(this, "Place: " + place.getName(), Toast.LENGTH_SHORT).show();
                 // Do something with the contact here (bigger example below)
-                showDialog();
+                showBidDialog();
             }
         }
     }
@@ -231,8 +219,21 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     }
 
     private void acceptBid(Bid bid) {
-        //TODO: This. need to clear all bids on the object and mark one as accepted. 
+        //TODO: This. should be done, needs to be tested.
+        bid.setStatus(Constants.ACCEPTED);
+        ArrayList<Bid> bids = new ArrayList<>();
+        bids.add(bid);
+        game.setBids(bids);
+        game.setStatus(Constants.BORROWED);
+        ElasticSearcher.sendGame(game);
+        String borrowingUser = bid.getBidder();
+        ElasticSearcher.receiveUser(borrowingUser,this);
+    }
 
+    //TODO: This should be done but needs to be tested when bids sync to elastic search.
+    public void elasticSearcherCallback(User user) {
+        ArrayList<String> borrowing = user.getBorrowing();
+        borrowing.add(game.getId());
     }
 
     private void viewBidLocation(Bid bid) {
@@ -244,22 +245,24 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     }
 
     private void viewBidBidder(Bid bid) {
-        //TODO: This.
+        //TODO: This. Should be done, needs to be tested.
         Intent intent = new Intent(GameProfileViewActivity.this, UserProfileViewActivity.class);
         intent.putExtra(Constants.USER_ID, bid.getBidder());
         startActivity(intent);
     }
 
     private void declineBid(Bid bid) {
-        //TODO: This. need to remove the bid from the arraylist and resync bids with elastic search.
-        game.removeBid(bid);
+        //TODO: This. Removing a bid does not sync with elastic search.
+        ArrayList<Bid> bids = game.getBids();
+        bids.remove(bid);
+        game.setBids(bids);
         adapter.remove(bid);
         adapter.notifyDataSetChanged();
         ElasticSearcher.sendGame(game);
     }
 
     //adapted from https://bhavyanshu.me/tutorials/create-custom-alert-dialog-in-android/08/20/2015
-    public void showDialog() {
+    public void showBidDialog() {
 
         // Build the dialog and set up the button click handlers
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -277,6 +280,48 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // do nothing, user canceled.
+
+                    }
+                });
+        builder.create().show();
+    }
+
+    //adapted from https://bhavyanshu.me/tutorials/create-custom-alert-dialog-in-android/08/20/2015
+    public void showReviewDialog() {
+
+        // Build the dialog and set up the button click handlers
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View reviewView = inflater.inflate(R.layout.review_dialog_layout, null);
+        final EditText editText = (EditText) reviewView.findViewById(R.id.ReviewDialogEditText);
+        final RatingBar rating = (RatingBar) reviewView.findViewById(R.id.ReviewDialogRatingBar);
+
+        builder.setTitle("Review Borrower")
+                .setView(reviewView)
+                .setPositiveButton("Save Review", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Send the positive button event back to the host activity
+                        Review review = new Review(System.currentTimeMillis(),
+                                editText.getText().toString(), rating.getRating(),
+                                Constants.CURRENT_USER.getId() , game.getId());
+                        game.setStatus(Constants.AVAILABLE);
+                        //ElasticSearcher.sendGame(game); TODO: Uncomment.
+                        //TODO: attach this to a user, as well as removing the game from there list of borrowed games.
+                        reviewToPostOnElasticSearchCallback = review;
+                        ElasticSearcher.getBorrowingUser(GameProfileViewActivity.this, game.getId());
+                    }
+                })
+                .setNeutralButton("Don't Review", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Set game available, but don't save review.
+                        game.setStatus(Constants.AVAILABLE);
+                        ElasticSearcher.sendGame(game);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // do nothing, user canceled.
 
@@ -334,8 +379,7 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     // TODO : Vassili needs to remove games from other lists
     public View.OnClickListener returnListener = new View.OnClickListener() {
         public void onClick(View v) {
-            game.setStatus(Constants.AVAILABLE);
-            ElasticSearcher.sendGame(game);
+            showReviewDialog();
         }
     };
 
@@ -351,8 +395,15 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
 
     public View.OnClickListener watchListener = new View.OnClickListener() {
         public void onClick(View v) {
-            // DO something
-            //TODO: This.
+            ArrayList<String> watch = Constants.CURRENT_USER.getWatchlist();
+            if(watch.contains(game.getId())) {
+                Toast.makeText(GameProfileViewActivity.this, game.getTitle() + " is already in your watchlist.", Toast.LENGTH_LONG).show();
+            } else {
+                watch.add(game.getId());
+                Constants.CURRENT_USER.setWatchlist(watch);
+                ElasticSearcher.sendUser(Constants.CURRENT_USER);
+                Toast.makeText(GameProfileViewActivity.this, game.getTitle() + " was added to your watchlist.", Toast.LENGTH_LONG).show();
+            }
         }
     };
 
@@ -445,12 +496,26 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     }
 
     private void updateBidList(Bid bid) {
-        game.addBid(bid);
+        ArrayList<Bid> bids = game.getBids();
+        bids.add(bid);
+        game.setBids(bids);
         adapter = new BidListViewArrayAdapter(this, game.getBids());
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
+        //TODO: Fix this, dosen't send games.
         ElasticSearcher.sendGame(game);
 
     }
 
+    public void saveReviewAndRemoveBorrowedGame(User user) {
+        ArrayList<String> borrowing = user.getBorrowing();
+        borrowing.remove(game.getId());
+        user.setBorrowing(borrowing);
+
+        ArrayList<Review> reviews = user.getReviews();
+        reviews.add(reviewToPostOnElasticSearchCallback);
+        user.setReviews(reviews);
+
+        //ElasticSearcher.sendUser(user); TODO: Uncomment.
+    }
 }
