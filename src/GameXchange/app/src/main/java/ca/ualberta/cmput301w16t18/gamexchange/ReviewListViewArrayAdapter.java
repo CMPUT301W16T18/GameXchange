@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by cawthorn on 2/28/16.
+ * The array adapter for our review list
  */
 class ReviewListViewArrayAdapter extends ArrayAdapter<Review> {
     private final Context context;

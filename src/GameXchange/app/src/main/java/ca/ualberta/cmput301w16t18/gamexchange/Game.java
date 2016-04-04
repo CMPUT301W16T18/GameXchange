@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Vassili Minaev on 2/12/2016.
+ * Model for Game Object
  */
 public class Game implements Serializable {
     private String id;

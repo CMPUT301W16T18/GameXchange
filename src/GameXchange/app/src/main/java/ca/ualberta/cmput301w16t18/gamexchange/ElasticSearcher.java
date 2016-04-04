@@ -17,7 +17,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by Vassili Minaev on 2/29/2016.
+ * This class enables network connectivity to the elastic search backend
+ * Allows us to transmit and receive data describing users and games
+ * and also handles pictures
  */
 class ElasticSearcher {
 
@@ -36,6 +38,10 @@ class ElasticSearcher {
         }
     };
 
+    /**
+     * Sends a game to elastic search
+     * @param game the game to be sent
+     */
     public static void sendGame(final Game game) {
         Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
@@ -58,6 +64,10 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * sends a user to elastic search
+     * @param user the user to be sent
+     */
     public static void sendUser(final User user) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Constants.getPrefix() + "users/" + user.getId(),
@@ -66,6 +76,10 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * adds a game to a users list depending on context
+     * @param gameID the game to be added to the list
+     */
     public static void addGameToList(String gameID) {
         User user = Constants.CURRENT_USER;
         if (Constants.SEARCHLIST_CONTEXT.equals(Constants.MY_GAMES)) {
@@ -81,6 +95,10 @@ class ElasticSearcher {
         sendUser(user);
     }
 
+    /**
+     * removes game from a users list depending on context
+     * @param gameID the game to be removed
+     */
     public static void removeGameFromList(String gameID) {
         User user = Constants.CURRENT_USER;
         if (Constants.SEARCHLIST_CONTEXT.equals(Constants.MY_GAMES)) {
@@ -96,6 +114,11 @@ class ElasticSearcher {
         sendUser(user);
     }
 
+    /**
+     * recieves a game from elastic search and sends it to the calling activity
+     * @param id the game id
+     * @param activity calling activity
+     */
     public static void receiveGame(final String id, final Activity activity) {
         Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
@@ -122,6 +145,11 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * recieves a user from elastic search and sends to calling activity
+     * @param id users id
+     * @param activity calling activity
+     */
     public static void receiveUser(final String id, final Activity activity) {
         Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
@@ -152,6 +180,11 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * Deletes a game from elastic search
+     * @param id the game id
+     * @param activity calling activity
+     */
     public static void deleteGame(final String id, final Activity activity) {
         Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
@@ -168,6 +201,10 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * recieves a list of games from elastic search depending on context
+     * @param activity calling activity
+     */
     public static void receiveGames(final Activity activity) {
         final String which = Constants.SEARCHLIST_CONTEXT;
 
@@ -258,6 +295,11 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * recieves games from elastic search by a search term
+     * @param search the term to search for
+     * @param activity calling activity
+     */
     public static void receiveGamesBySearchTerm(final String search, final Activity activity) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
@@ -278,6 +320,12 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * Authenticates user on login by comparing the email and password hash to database contents
+     * @param email the users email
+     * @param passhash the hash of the users password
+     * @param loginActivity calling activity
+     */
     public static void authenticateUser(final String email, final String passhash, final LoginActivity loginActivity) {
         Response.Listener<JSONObject> loginListener = new Response.Listener<JSONObject>() {
             @Override
@@ -317,6 +365,10 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * Generates a list of all notifications that the user should see
+     * @param activity calling activity
+     */
     public static void getNotifications(final Activity activity) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
@@ -339,7 +391,7 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void getWatchlistChanges(final Activity activity, final GameList all_games) {
+    private static void getWatchlistChanges(final Activity activity, final GameList all_games) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -363,7 +415,7 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void getNewBids(final Activity activity, final GameList all_games) {
+    private static void getNewBids(final Activity activity, final GameList all_games) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -390,6 +442,10 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * recieves a list of games that the current user has bid on but were still pending
+     * @param activity calling activity
+     */
     public static void receiveMyBids(final Activity activity) {
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
             @Override
@@ -410,6 +466,11 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * retrieves the user who owns a specific game
+     * @param activity calling activity
+     * @param gameID the game id
+     */
     public static void showOwner(final Activity activity, final String gameID) {
         Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override
@@ -428,6 +489,11 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
+    /**
+     * receives user who is borrowing a specific game
+     * @param activity calling activity
+     * @param gameID the game id
+     */
     public static void getBorrowingUser(final GameProfileViewActivity activity, String gameID) {
         Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
             @Override

@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by Vassili Minaev on 3/2/2016.
+ * Returns the MD5 sum of an arbitrary string for bad password encryption
  */
 class Hasher {
     public static String getHash(String input) {

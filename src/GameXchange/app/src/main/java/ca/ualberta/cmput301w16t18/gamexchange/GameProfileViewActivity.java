@@ -49,6 +49,10 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
+/**
+ * This Activity allows a user to view information about a game and lets a user bid on a game,
+ * add to watchlist, open the edit activity, and open the profile of the games owner
+ */
 public class GameProfileViewActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final int PLACE_PICKER_REQUEST = 2;
@@ -178,11 +182,19 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         }
     }
 
+    /**
+     * loads a game from elastic search by id
+     * @param id the game id to be loaded
+     */
     private void loadGame(String id) {
         //implements US 01.03.01 and US 03.03.01
         ElasticSearcher.receiveGame(id, this);
     }
 
+    /**
+     * populates the view with the proper game information from elastic search
+     * @param game the game to be shown
+     */
     public void populateFields(Game game) {
 
         this.game = game;
@@ -192,6 +204,10 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         showProgress(false);
     }
 
+    /**
+     * Launches the edit game activity
+     * @param view unused
+     */
     @SuppressWarnings({"unused", "UnusedParameters"})
     public void editGameProfile(View view) {
         Intent intent = new Intent(this, GameProfileEditActivity.class);
@@ -236,7 +252,6 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
     }
 
     private void acceptBid(Bid bid) {
-        //TODO: This. should be done, needs to be tested.
         bid.setStatus(Constants.ACCEPTED);
         ArrayList<Bid> bids = new ArrayList<>();
         bids.add(bid);
@@ -247,7 +262,10 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         ElasticSearcher.receiveUser(borrowingUser,this);
     }
 
-    //TODO: This should be done but needs to be tested.
+    /**
+     * Adds a borrowed game to the appropriate users list
+     * @param user the user to be edited
+     */
     public void elasticSearcherCallback(User user) {
         ArrayList<String> borrowing = user.getBorrowing();
         borrowing.add(game.getId());
@@ -280,6 +298,9 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         ElasticSearcher.sendGame(game);
     }
 
+    /**
+     * Shows the dialog for making a bid with money
+     */
     //adapted from https://bhavyanshu.me/tutorials/create-custom-alert-dialog-in-android/08/20/2015
     public void showBidDialog() {
 
@@ -307,6 +328,9 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         builder.create().show();
     }
 
+    /**
+     * After game set to returned review dialog shown to review user
+     */
     //adapted from https://bhavyanshu.me/tutorials/create-custom-alert-dialog-in-android/08/20/2015
     public void showReviewDialog() {
 
@@ -549,6 +573,10 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         ElasticSearcher.sendGame(game);
     }
 
+    /**
+     * Saves the review and removes borrowed game
+     * @param user the user who returned the game
+     */
     public void saveReviewAndRemoveBorrowedGame(User user) {
         ArrayList<String> borrowing = user.getBorrowing();
         borrowing.remove(game.getId());
@@ -561,6 +589,10 @@ public class GameProfileViewActivity extends AppCompatActivity implements Activi
         ElasticSearcher.sendUser(user);
     }
 
+    /**
+     * opens the profile of the owner of the game
+     * @param userID the owner of the game
+     */
     public void openUserProfile(String userID) {
         Intent intent = new Intent(gameProfileViewActivity, UserProfileViewActivity.class);
         intent.putExtra(Constants.USER_ID, userID);

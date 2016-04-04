@@ -10,8 +10,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Created by Vassili Minaev on 3/18/2016.
  * Copy-pasted from https://developer.android.com/training/volley/requestqueue.html
+ * This class is a singleton that stores a request queue such that all network activity
+ * is performed on the same queue
  */
 public class NetworkSingleton {
     private static NetworkSingleton mInstance;

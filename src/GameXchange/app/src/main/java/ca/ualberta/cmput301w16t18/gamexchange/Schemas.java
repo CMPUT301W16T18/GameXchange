@@ -9,10 +9,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by Vassili Minaev on 3/11/2016.
+ * This class contains query builders to be sent to elastic search
  */
 class Schemas {
 
+    /**
+     * Creates a query that seralizes a user object
+     * @param user the user to be serialized
+     * @return the query to be sent
+     */
     public static JSONObject userSchema(User user) {
         JSONObject object = new JSONObject();
         try {
@@ -35,6 +40,11 @@ class Schemas {
         return object;
     }
 
+    /**
+     * Creates a query that authenticates a user
+     * @param userEmail the email of the user
+     * @return the query to be sent
+     */
     public static JSONObject userLoginSchema(String userEmail) {
         JSONObject query = new JSONObject();
         JSONObject term = new JSONObject();
@@ -50,6 +60,11 @@ class Schemas {
         return query;
     }
 
+    /**
+     * Creates a query that serializes a game object
+     * @param game the game to be serialized
+     * @return the query to be sent
+     */
     public static JSONObject gameSchema(Game game) {
         JSONObject object = new JSONObject();
 
@@ -69,6 +84,10 @@ class Schemas {
         return object;
     }
 
+    /**
+     * Creates a query that returns many objects
+     * @return the query to be sent
+     */
     public static JSONObject longListSchema() {
         JSONObject object = new JSONObject();
 
@@ -81,6 +100,11 @@ class Schemas {
         return object;
     }
 
+    /**
+     * Creates a query that contains a list of game ids to be retrieved
+     * @param gameIDs the list of game ids
+     * @return the query to be sent
+     */
     public static JSONObject specificListSchema(ArrayList<String> gameIDs) {
         JSONObject query = new JSONObject();
         JSONObject object = new JSONObject();
@@ -98,6 +122,11 @@ class Schemas {
         return query;
     }
 
+    /**
+     * Creates a query that searches for a string
+     * @param search the text string to be searched
+     * @return the query to be sent
+     */
     public static JSONObject textSearchSchema(String search) {
         JSONObject rv = new JSONObject();
         JSONObject query = new JSONObject();
@@ -124,6 +153,11 @@ class Schemas {
         return rv;
     }
 
+    /**
+     * Creates a query that finds a user who is borrowing a game
+     * @param gameID the game that we are searching for
+     * @return the query to be sent
+     */
     public static JSONObject borrowerSchema(String gameID) {
         JSONObject borrowerJSON = new JSONObject();
         JSONObject fieldJSON = new JSONObject();
@@ -139,6 +173,11 @@ class Schemas {
         return borrowerJSON;
     }
 
+    /**
+     * Creates a query that finds a user who owns a game
+     * @param gameID the game we are searching for
+     * @return the query to be sent
+     */
     public static JSONObject ownerSchema(String gameID) {
         JSONObject ownerJSON = new JSONObject();
         JSONObject fieldJSON = new JSONObject();
@@ -154,6 +193,10 @@ class Schemas {
         return ownerJSON;
     }
 
+    /**
+     * Creates a query that returns all of my bids that were accepted
+     * @return the query to be sent
+     */
     public static JSONObject myAcceptedBidsSchema() {
         JSONObject object = new JSONObject();
         JSONObject query = new JSONObject();
@@ -177,6 +220,10 @@ class Schemas {
         return object;
     }
 
+    /**
+     * Creates a query that returns all games in your watchlist that are available now
+     * @return the query to be sent
+     */
     public static JSONObject myWatchlistChangesSchema() {
         JSONObject object = new JSONObject();
         JSONObject query1 = new JSONObject();
@@ -204,6 +251,10 @@ class Schemas {
         return object;
     }
 
+    /**
+     * Creates a query that returns all of the users games that have outstanding bids
+     * @return the query to be sent
+     */
     public static JSONObject myNewBidsSchema() {
         JSONObject object = new JSONObject();
         JSONObject query1 = new JSONObject();
@@ -235,6 +286,10 @@ class Schemas {
         return object;
     }
 
+    /**
+     * Creates a query that returns all games that the user has bid on
+     * @return the query to be sent
+     */
     public static JSONObject myBidsSchema() {
         JSONObject object = new JSONObject();
         JSONObject query = new JSONObject();

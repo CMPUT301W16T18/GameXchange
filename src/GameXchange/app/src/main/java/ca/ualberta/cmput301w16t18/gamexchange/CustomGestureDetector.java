@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 /**
  * This class is the gesture detector for the delete swipe
- * Therefore it senses that there was a swipe and reveals the delete
+ * Therefore it senses that there was a swipe and reveals the delete button
  */
 class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener
         implements ListView.OnTouchListener {

@@ -17,6 +17,9 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
+/**
+ * This activity allows a user to view a user profile including the reviews for that user
+ */
 public class UserProfileViewActivity extends AppCompatActivity {
 
     private String id;
@@ -75,13 +78,19 @@ public class UserProfileViewActivity extends AppCompatActivity {
         loadUser(id);
     }
 
-    //Async loader for user information from elastic search
+    /**
+     * Async loader for user information from elastic search
+     * @param userId the user to be loaded
+     */
     private void loadUser(String userId) {
         //implements US 03.01.01
         ElasticSearcher.receiveUser(userId, this);
     }
 
-    // Callback method for elastic search to populate the view.
+    /**
+     * Callback method for elastic search to populate the view.
+     * @param user the user to be shown
+     */
     public void populateFields(User user) {
 
         this.user = user;
@@ -93,7 +102,10 @@ public class UserProfileViewActivity extends AppCompatActivity {
         showProgress(false);
     }
 
-    // onClick method for the edit User button.
+    /**
+     * onClick method for the edit User button.
+     * @param view unused
+     */
     @SuppressWarnings({"unused", "UnusedParameters"})
     public void editUserProfile(View view) {
         Intent intent = new Intent(this, UserProfileEditActivity.class);

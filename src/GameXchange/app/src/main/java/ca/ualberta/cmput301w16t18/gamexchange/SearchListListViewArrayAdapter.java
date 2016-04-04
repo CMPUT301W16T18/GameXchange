@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by cawthorn on 2/28/16.
+ * Its an array adapter used to populate the main list view in searchList Activity
  */
 class SearchListListViewArrayAdapter extends ArrayAdapter<Game> {
     private final Context context;

@@ -30,6 +30,9 @@ import android.widget.Toast;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
+/**
+ * This activity displays a list of games depending on context
+ */
 public class SearchListActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
@@ -205,6 +208,10 @@ public class SearchListActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * retrieves appropriate data passed through the intent
+     * @param intent parent intent
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntent(intent);

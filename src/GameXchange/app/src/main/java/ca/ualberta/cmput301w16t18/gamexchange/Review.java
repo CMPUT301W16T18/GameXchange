@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Adam on 2016-03-25.
+ * Model Class for review object
  */
 class Review {
     private long timestamp; //milliseconds since UNIX epoch

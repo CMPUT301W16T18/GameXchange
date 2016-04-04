@@ -31,6 +31,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * This activity lets a user edit game information
+ */
 public class GameProfileEditActivity extends AppCompatActivity {
 
     private Game game;
@@ -66,11 +69,19 @@ public class GameProfileEditActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * fetches a game from elastic search by id
+     * @param id the games id
+     */
     public void loadGame(String id) {
             showProgress(true);                
             ElasticSearcher.receiveGame(id, this);
     }
 
+    /**
+     * Fills in the required game information to text fields
+     * @param game the game object
+     */
     public void populateFields(Game game) {
         EditText game_edit_title = (EditText) findViewById(R.id.game_edit_title);
         EditText game_edit_developer = (EditText) findViewById(R.id.game_edit_developer);
@@ -104,6 +115,10 @@ public class GameProfileEditActivity extends AppCompatActivity {
         return game;
     }
 
+    /**
+     * This method sends the users changes to elastic search unless no network connectivity was
+     * detected then the game is internally cached
+     */
     protected void editGame() {
         //implements US 01.04.01
 
@@ -145,11 +160,19 @@ public class GameProfileEditActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * caches a game
+     * @param game the game to be cached
+     */
     private void cacheGame(Game game) {
         //implements US 08.01.01
         saveInFile(game);
     }
 
+    /**
+     * launches the camera activity
+     * @param view unused
+     */
     @SuppressWarnings({"unused", "UnusedParameters"})
     public void takePhoto(View view) {
 
@@ -159,6 +182,10 @@ public class GameProfileEditActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * deletes a photo from a game
+     * @param view unused
+     */
     @SuppressWarnings({"unused", "UnusedParameters"})
     public void deletePhoto(View view) {
         ImageView image = (ImageView) findViewById(R.id.game_edit_image);
@@ -190,6 +217,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
 
     /**
      * This method used for Caching
+     * @param game the game to be saved
      */
     public void saveInFile(Game game) {
         try {

@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * This Activity allows a user to edit their own profile
+ */
 public class UserProfileEditActivity extends AppCompatActivity {
 
     private User user;
