@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by cawthorn on 2/28/16.
+ * This class is the adapter for bids in the listview
  */
 class BidListViewArrayAdapter extends ArrayAdapter<Bid> {
 
