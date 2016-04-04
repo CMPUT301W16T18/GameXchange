@@ -21,25 +21,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameProfileEditActivity extends AppCompatActivity {
 
     private Game game;
-    private String id;
 
     private View mProgressView;
     private View mView;
@@ -53,7 +46,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
         mView = findViewById(R.id.game_profile_edit_all_view);
 
         Intent parent_intent = getIntent(); //fixed as per lint.
-        id = parent_intent.getStringExtra(Constants.GAME_ID);
+        String id = parent_intent.getStringExtra(Constants.GAME_ID);
         if (id.equals("")) {
             game = new Game();
 
@@ -127,7 +120,7 @@ public class GameProfileEditActivity extends AppCompatActivity {
         game.setTitle(game_edit_title.getText().toString());
         game.setDeveloper(game_edit_developer.getText().toString());
         game.setPlatform(game_edit_platform.getText().toString());
-        game.setGenres(new ArrayList<String>(Arrays.asList(game_edit_genres.getText().toString().split("\\s*,\\s*"))));
+        game.setGenres(new ArrayList<>(Arrays.asList(game_edit_genres.getText().toString().split("\\s*,\\s*"))));
         game.setDescription(game_edit_description.getText().toString());
 
         if (!isConnected) {
@@ -195,8 +188,6 @@ public class GameProfileEditActivity extends AppCompatActivity {
             Constants.iterator = Constants.iterator +1;
             oos.writeObject(game);
             oos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

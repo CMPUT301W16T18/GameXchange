@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:text="Edit"
         android:id="@+id/viewUserEdit"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         android:onClick="editUserProfile" />
 
     <View

@@ -7,13 +7,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -23,7 +21,9 @@ public class UserProfileViewActivity extends AppCompatActivity {
 
     private String id;
     private View mProgressView;
-    private View mListViewView;
+    private ListView mListViewView;
+    private View headerView;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,10 @@ public class UserProfileViewActivity extends AppCompatActivity {
         loadUser(id);
 
         mProgressView = findViewById(R.id.user_view_progress);
-        mListViewView = findViewById(R.id.user_profile_ListView);
+        mListViewView = (ListView) findViewById(R.id.user_profile_ListView);
+        LayoutInflater inflater = this.getLayoutInflater();
+        headerView = inflater.inflate(R.layout.user_profile_listview_item, mListViewView, false);
+        mListViewView.addHeaderView(headerView);
         showProgress(true);
 
         // This is for the Tutorial
@@ -72,25 +75,10 @@ public class UserProfileViewActivity extends AppCompatActivity {
     // Callback method for elastic search to populate the view.
     public void populateFields(User user) {
 
-        //TODO: Remove this.
-        ArrayList<Review> reviews = new ArrayList<>();
-        long timestamp = System.currentTimeMillis();
-        reviews.add(new Review(timestamp, "Best Game Ever!", 5, "", ""));
-        reviews.add(new Review(timestamp, "Great Game!", 4, "", ""));
-        reviews.add(new Review(timestamp, "Alright Game.", 3, "", ""));
-        reviews.add(new Review(timestamp, "Not so good game.", 2, "", ""));
-        reviews.add(new Review(timestamp, "Worst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \n", 1, "", ""));
-        reviews.add(new Review(timestamp, "Would not recommend.", 0, "", ""));
-        reviews.add(new Review(timestamp, "Worst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \nWorst Game Ever! :( \n", 1, "", ""));
-        reviews.add(new Review(timestamp, "Not so good game.", 2, "", ""));
-        reviews.add(new Review(timestamp, "Alright Game.", 3, "", ""));
-        reviews.add(new Review(timestamp, "Great Game!", 4, "", ""));
-        reviews.add(new Review(timestamp, "Best Game Ever!", 5, "", ""));
-        user.setReviews(reviews);
-
+        this.user = user;
+        updateHeader();
         ListView listView = (ListView) findViewById(R.id.user_profile_ListView);
-        ReviewListViewArrayAdapter adapter = new ReviewListViewArrayAdapter(this, user);
-        adapter.setActivity(this);
+        ReviewListViewArrayAdapter adapter = new ReviewListViewArrayAdapter(this, user.getReviews());
         listView.setAdapter(adapter);
 
         showProgress(false);
@@ -139,6 +127,35 @@ public class UserProfileViewActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mListViewView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+    
+    private void updateHeader() {
+
+
+        TextView viewUserName = (TextView) headerView.findViewById(R.id.viewUserName);
+        TextView viewUserEmail = (TextView) headerView.findViewById(R.id.viewUserEmail);
+        TextView viewUserAddress1 = (TextView) headerView.findViewById(R.id.viewUserAddress1);
+        TextView viewUserAddress2 = (TextView) headerView.findViewById(R.id.viewUserAddress2);
+        TextView viewUserCity = (TextView) headerView.findViewById(R.id.viewUserCity);
+        TextView viewUserPhone = (TextView) headerView.findViewById(R.id.viewUserPhone);
+        TextView viewUserPostalCode = (TextView) headerView.findViewById(R.id.viewUserPostalCode);
+
+        viewUserName.setText(user.getName());
+        viewUserEmail.setText(user.getEmail());
+        viewUserAddress1.setText(user.getAddress1());
+        viewUserAddress2.setText(user.getAddress2());
+        viewUserCity.setText(user.getCity());
+        viewUserPhone.setText(user.getPhone());
+        viewUserPostalCode.setText(user.getPostal());
+
+        Button editButton = (Button) headerView.findViewById(R.id.viewUserEdit);
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(editButton)
+                .setDismissText("GOT IT")
+                .setContentText("Click here to edit a user!")
+                .setDelay(1) // optional but starting animations immediately in onCreate can make them choppy
+                .singleUse("Show edit") // provide a unique ID used to ensure it is only shown once
+                .show();
     }
 
 }

@@ -27,15 +27,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
-import java.io.OptionalDataException;
-import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,15 +45,13 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
-    protected final LoginActivity loginActivity = this;
+    private final LoginActivity loginActivity = this;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
-    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,9 +126,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission was granted.
                     populateAutoComplete();
-                } else {
-                    // permission was denied. do nothing.
-                }
+                } // otherwise, permission was denied. do nothing.
 
             }
         }
@@ -253,7 +244,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
+        List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
@@ -271,7 +262,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(LoginActivity.this,
+                new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -290,20 +281,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Callback method for Elastic search for login validation.
      */
-    protected void onLoginSuccess() {
+    void onLoginSuccess() {
         showProgress(false);
 
         loadFromFile();
 
         Constants.SEARCHLIST_CONTEXT = Constants.MY_GAMES;
-        intent = new Intent(this, SearchListActivity.class);
+        Intent intent = new Intent(this, SearchListActivity.class);
         startActivity(intent);
     }
 
     /**
      * Callback method for elastic search to indicate wrong password.
      */
-    protected void onWrongPassword() {
+    void onWrongPassword() {
         showProgress(false);
         mPasswordView.setError(getString(R.string.error_incorrect_password));
         mPasswordView.requestFocus();
@@ -312,7 +303,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Callback for elastic search to create a new account.
      */
-    protected void onNewAccount() {
+    void onNewAccount() {
         showProgress(false);
         Intent intent = new Intent(this, UserProfileEditActivity.class);
         intent.putExtra("ACTION", "NEW");
@@ -339,10 +330,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 ElasticSearcher.sendGame(game);
                 oin.close();
                 deleteFile(Constants.FILENAME + i);
-            } catch (IOException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
-            } catch (ClassNotFoundException e1) {
-                e1.printStackTrace();
             }
         }
         CharSequence text = "Your Cached Game Has Now Been Saved!";

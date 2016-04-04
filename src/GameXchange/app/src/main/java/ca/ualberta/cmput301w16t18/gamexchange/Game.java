@@ -1,7 +1,6 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -18,16 +17,19 @@ public class Game implements Serializable {
     private String picture;
     private ArrayList<Bid> bids;
 
+    public String notification;
+
     public Game() {
         this.id = "";
         this.status = "";
         this.title = "";
         this.developer = "";
         this.platform = "";
-        this.genres = new ArrayList<String>();
+        this.genres = new ArrayList<>();
         this.description = "";
         this.picture = "";
-        this.bids = new ArrayList<Bid>();
+        this.bids = new ArrayList<>();
+        this.notification = "";
     }
 
     public Game(String id, String status, String title, String developer, String platform,
@@ -41,6 +43,7 @@ public class Game implements Serializable {
         this.description = description;
         this.picture = picture;
         this.bids = bids;
+        this.notification = "";
     }
 
     public String getId() {

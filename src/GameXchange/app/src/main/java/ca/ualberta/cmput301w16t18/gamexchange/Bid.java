@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by Adam on 2016-03-21.
  */
-public class Bid {
+class Bid {
 
     private String bidder;
     private double price;

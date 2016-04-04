@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -29,23 +28,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class SearchListActivity extends AppCompatActivity {
 
-    private ListView drawerListView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private SearchListListViewArrayAdapter adapter;
-    private ListView listView;
     private SearchListActivity searchListActivity;
-    FloatingActionButton fab;
+    private FloatingActionButton fab;
 
     private View mProgressView;
     private View mListViewView;
 
-    public GameList games;
+    private GameList games;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +50,6 @@ public class SearchListActivity extends AppCompatActivity {
         games = new GameList();
         handleIntent(getIntent());
         setContentView(R.layout.activity_search_list);
-
 
         mListViewView = findViewById(R.id.searchListAllView);
         mProgressView = findViewById(R.id.search_progress);
@@ -70,27 +65,36 @@ public class SearchListActivity extends AppCompatActivity {
             }
         });
 
-        if(Constants.SEARCHLIST_CONTEXT.equals("")) {
-            Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
-        } else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.BORROWED_GAMES)) {
-            setTitle("Borrowed Games");
-            fab.setVisibility(View.GONE);
-        } else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.WATCH_LIST)) {
-            setTitle("Watch List");
-            fab.setVisibility(View.GONE);
-        } else {
-            //Default to my Games
-            setTitle("My Games");
-            fab.setVisibility(View.VISIBLE);
+        switch (Constants.SEARCHLIST_CONTEXT) {
+            case "":
+                Log.d("Null Pointer", "Intent for SearchListActivity was started without the SEARCH_LIST_ACTIVITY_ACTION added");
+                break;
+            case Constants.NOTIFICATIONS:
+                setTitle("Notifications");
+                fab.setVisibility(View.GONE);
+                break;
+            case Constants.BORROWED_GAMES:
+                setTitle("Borrowed Games");
+                fab.setVisibility(View.GONE);
+                break;
+            case Constants.WATCH_LIST:
+                setTitle("Watch List");
+                fab.setVisibility(View.GONE);
+                break;
+            default:
+                //Default to my Games
+                setTitle("My Games");
+                fab.setVisibility(View.VISIBLE);
+                break;
         }
         showProgress(true);
         ElasticSearcher.receiveGames(this);
 
         //Create Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerListView = (ListView) findViewById(R.id.left_drawer);
+        ListView drawerListView = (ListView) findViewById(R.id.left_drawer);
         // set adapter for drawer ListView
-        drawerListView.setAdapter(new ArrayAdapter<String>(this,
+        drawerListView.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.navigation_drawer_items_section)));
         //Set onclick listener
         drawerListView.setOnItemClickListener(new DrawerItemClickListener());
@@ -128,7 +132,7 @@ public class SearchListActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         //Initialize ListView
-        listView = (ListView) findViewById(R.id.searchListActivityListView);
+        ListView listView = (ListView) findViewById(R.id.searchListActivityListView);
         adapter = new SearchListListViewArrayAdapter(this, games.getGames());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -201,6 +205,7 @@ public class SearchListActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             ElasticSearcher.receiveGamesBySearchTerm(query, searchListActivity);
             setTitle("Results for \"" + query + "\"");
+            showProgress(false);
         }
     }
 
@@ -279,19 +284,17 @@ public class SearchListActivity extends AppCompatActivity {
         //implements US 01.05.01
         //deletes a game from a user's list
         Game mygame = games.getGames().get(position);
-        if (Constants.SEARCHLIST_CONTEXT == Constants.WATCH_LIST){
+        if (Constants.SEARCHLIST_CONTEXT.equals(Constants.WATCH_LIST)){
             ElasticSearcher.removeGameFromList(mygame.getId());
             deleteGame(mygame.getId());
-            return;
-        }else if(Constants.SEARCHLIST_CONTEXT == Constants.MY_GAMES){
+        }else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.MY_GAMES)){
             ElasticSearcher.deleteGame(mygame.getId(), this);
-        }else if(Constants.SEARCHLIST_CONTEXT == Constants.BORROWED_GAMES){
+        }else if(Constants.SEARCHLIST_CONTEXT.equals(Constants.BORROWED_GAMES)){
             CharSequence text = "Cannot delete";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(searchListActivity, text, duration);
             toast.show();
         }
-
     }
 
     /**

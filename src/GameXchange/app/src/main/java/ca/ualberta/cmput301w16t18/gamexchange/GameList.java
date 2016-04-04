@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Vassili Minaev on 2/12/2016.
  */
 public class GameList {
-    private ArrayList<Game> games = new ArrayList<Game>();
+    private ArrayList<Game> games = new ArrayList<>();
 
     public boolean inList(Game game) {
         return games.contains(game);

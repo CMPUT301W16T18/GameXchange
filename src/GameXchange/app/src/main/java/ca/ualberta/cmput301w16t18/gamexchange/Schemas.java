@@ -1,5 +1,7 @@
 package ca.ualberta.cmput301w16t18.gamexchange;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Vassili Minaev on 3/11/2016.
  */
-public class Schemas {
+class Schemas {
 
     public static JSONObject userSchema(User user) {
         JSONObject object = new JSONObject();
@@ -58,12 +60,12 @@ public class Schemas {
             object.put("platform",game.getPlatform());
             object.put("description", game.getDescription());
             object.put("genres", new JSONArray(game.getGenres()));
-            object.put("picture",game.getPicture());
+            object.put("picture", game.getPicture());
             object.put("bids", bidsSchema(game.getBids()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        Log.d("Troubleshooting", "Game Object: " + object.toString());
         return object;
     }
 
@@ -121,6 +123,21 @@ public class Schemas {
         return rv;
     }
 
+    public static JSONObject borrowerSchema(String gameID) {
+        JSONObject borrowerJSON = new JSONObject();
+        JSONObject fieldJSON = new JSONObject();
+        JSONObject matchJSON = new JSONObject();
+        try {
+            fieldJSON.put("borrowing_games", gameID);
+            matchJSON.put("match", fieldJSON);
+            borrowerJSON.put("query", matchJSON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return borrowerJSON;
+    }
+
     private static JSONArray bidsSchema(ArrayList<Bid> bids) {
         JSONArray bidsJSON = new JSONArray();
         for (Bid bid : bids) {
@@ -164,4 +181,6 @@ public class Schemas {
         }
         return reviewJSON;
     }
+
+
 }

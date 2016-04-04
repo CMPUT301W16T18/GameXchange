@@ -12,9 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Vassili Minaev on 2/29/2016.
@@ -25,6 +23,7 @@ class ElasticSearcher {
         @Override
         public void onErrorResponse(VolleyError error) {
             Log.e("ERROR", "Whoops. I couldn't do the thing.");
+            error.printStackTrace();
         }
     };
 
@@ -137,6 +136,10 @@ class ElasticSearcher {
                     other.setUser(user);
                     other.populateFields(user);
                 }
+                else if (activity.getLocalClassName().equals("GameProfileViewActivity")) {
+                    GameProfileViewActivity other = (GameProfileViewActivity) activity;
+                    other.elasticSearcherCallback(user);
+                }
             }
         };
 
@@ -180,16 +183,18 @@ class ElasticSearcher {
                 try {
                     JSONObject source = response.getJSONObject("_source");
                     JSONArray gamesList = new JSONArray();
-                    if (which.equals(Constants.MY_GAMES)) {
-                        gamesList = source.getJSONArray("owned_games");
-                    }
-                    else if (which.equals(Constants.WATCH_LIST)) {
-                        gamesList = source.getJSONArray("watchlist");
-                    }
-                    else if (which.equals(Constants.BORROWED_GAMES)) {
-                        //TODO: remove line when database cleared
-                        if (source.has("borrowing_games"))
-                            gamesList = source.getJSONArray("borrowing_games");
+                    switch (which) {
+                        case Constants.MY_GAMES:
+                            gamesList = source.getJSONArray("owned_games");
+                            break;
+                        case Constants.WATCH_LIST:
+                            gamesList = source.getJSONArray("watchlist");
+                            break;
+                        case Constants.BORROWED_GAMES:
+                            //TODO: remove line when database cleared
+                            if (source.has("borrowing_games"))
+                                gamesList = source.getJSONArray("borrowing_games");
+                            break;
                     }
 
                     for (int i=0; i<gamesList.length(); i++) {
@@ -221,9 +226,6 @@ class ElasticSearcher {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
                 }
-                else {
-                    //TODO: Are we going to call this method from anywhere else? Probably not.
-                }
             }
         };
 
@@ -244,9 +246,6 @@ class ElasticSearcher {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
                 }
-                else {
-                    //TODO: Are we going to call this method from anywhere else? Probably not.
-                }
             }
         };
 
@@ -266,9 +265,6 @@ class ElasticSearcher {
                 if (activity.getLocalClassName().equals("SearchListActivity")) {
                     SearchListActivity searchListActivity = (SearchListActivity) activity;
                     searchListActivity.setDisplayedList(games);
-                }
-                else {
-                    //TODO: Are we going to call this method from anywhere else? Probably not.
                 }
             }
         };
@@ -319,8 +315,41 @@ class ElasticSearcher {
         NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
-    public static void getNotifications(final SearchListActivity activity) {
+    public static void getNotifications(final Activity activity) {
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                GameList games = responseToGameList(response);
 
+                if (activity.getLocalClassName().equals("SearchListActivity")) {
+                    SearchListActivity searchListActivity = (SearchListActivity) activity;
+                    searchListActivity.setDisplayedList(games);
+                }
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(
+                Constants.getPrefix() + "games/_search",
+                Schemas.longListSchema(), responseListener, errorListener);
+
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
+    }
+
+    public static void getBorrowingUser(final GameProfileViewActivity activity, String gameID) {
+        Response.Listener<JSONObject> jsonListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                ArrayList<User> user = responseToUserList(response);
+                System.out.println(user.size());
+                activity.saveReviewAndRemoveBorrowedGame(user.get(0));
+            }
+        };
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET,
+                Constants.getPrefix() + "users/_search",
+                Schemas.borrowerSchema(gameID), jsonListener, errorListener);
+        NetworkSingleton.getInstance().addToRequestQueue(jsonRequest);
     }
 
     private static User responseToUser(JSONObject response) {
@@ -489,4 +518,22 @@ class ElasticSearcher {
         return bid;
     }
 
+    //TODO: Fix this, it returns all users at the moment. the schema should be right though.
+    private static ArrayList<User> responseToUserList(JSONObject response) {
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            JSONObject hits = response.getJSONObject("hits");
+            JSONArray hitsArray = hits.getJSONArray("hits");
+
+            for (int i = 0; i < hitsArray.length(); i++) {
+                JSONObject hit = hitsArray.getJSONObject(i);
+                User user = responseToUser(hit);
+                users.add(user);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
 }
